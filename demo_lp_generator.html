@@ -331,6 +331,23 @@ const IMG={
 '花':{hero:'https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=1200&h=700&fit=crop&q=85',imgs:['https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=500&h=350&fit=crop&q=80','https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=500&h=350&fit=crop&q=80','https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=500&h=350&fit=crop&q=80']},
 };
 
+// ── Keyword → preset type mapping ──
+const KW_PRESET={
+'salon':['よもぎ蒸し','エステ','脱毛','ネイル','まつげ','美容室','ヘアサロン','スパ','整体','マッサージ','リラク','アロマ','フェイシャル','痩身','小顔','ホワイトニング'],
+'gym':['ジム','フィットネス','ヨガ','ピラティス','ボクシング','ダンス','パーソナル','トレーニング','筋トレ'],
+'cafe':['中華','和食','イタリアン','フレンチ','焼肉','寿司','ラーメン','パン','ケーキ','居酒屋','バー','カフェ','レストラン','食堂','定食','うどん','そば','とんかつ','天ぷら','飲食','料理'],
+'consul':['人材','不動産','弁護士','税理士','司法書士','行政書士','社労士','コンサル','会計','保険','金融','士業','法律','経営'],
+'saas':['IT','SaaS','システム','アプリ','Web','ソフトウェア','クラウド','DX','AI','開発','プログラミング','塾','スクール','教育','学習']
+};
+function matchPreset(name){
+for(const[preset,keywords] of Object.entries(KW_PRESET)){
+for(const kw of keywords){
+if(name.includes(kw)) return preset;
+}
+}
+return null;
+}
+
 // ── Image matching function ──
 function matchImages(name){
 const n=name.toLowerCase();
@@ -360,7 +377,9 @@ let si=0,stepIdx=0;
 const st=setInterval(()=>{si+=4;if(si>95)si=95;document.getElementById('lb').style.width=si+'%';const ns=Math.floor(si/20);if(ns!==stepIdx&&ns<steps.length){stepIdx=ns;const el=document.getElementById('lstep');if(el){el.style.opacity='0';setTimeout(()=>{el.textContent=steps[ns];el.style.opacity='1'},150)}}},60);
 
 const name=v('i-n')||pr.n,cta=v('i-c')||pr.cta,price=v('i-p')||pr.p,pnote=v('i-pn')||pr.pn;
-// Dynamic image matching based on business name
+// Dynamic preset + image matching based on business name
+const autoPreset=matchPreset(name);
+if(autoPreset&&D[autoPreset]){pr={...D[autoPreset],n:name};}
 const imgMatch=matchImages(name);
 if(imgMatch){pr={...pr,hero:imgMatch.hero,imgs:imgMatch.imgs};}
 const concept=(pr.concept||'').replace(/\n/g,'<br>');
