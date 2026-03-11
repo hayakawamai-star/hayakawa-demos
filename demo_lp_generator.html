@@ -408,8 +408,11 @@ const imgMatch=matchImages(name);
 if(imgMatch){pr={...pr,hero:imgMatch.hero,imgs:imgMatch.imgs};}
 // solKw should use the entered business name, not the preset default
 pr.solKw=name;
-// Get CTA/price/colors AFTER preset override so they match the correct preset
-const cta=v('i-c')||pr.cta,price=v('i-p')||pr.p,pnote=v('i-pn')||pr.pn;
+// When autoPreset matched, use the preset values for CTA/price/pnote
+// (input fields may still hold values from a previously loaded preset)
+const cta=autoPreset?pr.cta:(v('i-c')||pr.cta);
+const price=autoPreset?pr.p:(v('i-p')||pr.p);
+const pnote=autoPreset?pr.pn:(v('i-pn')||pr.pn);
 const c=CC,g=pr.gold||'#c4a265',ctaC=pr.ctaColor||'#e67e22';
 const concept=(pr.concept||'').replace(/\n/g,'<br>');
 
