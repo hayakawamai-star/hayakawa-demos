@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - 早川まい</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; background: #0a0a1a; color: #fff; }
+
+  /* Navigation */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(10,10,26,0.95); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 16px 40px; display: flex; justify-content: space-between; align-items: center;
+  }
+  nav .logo { font-size: 20px; font-weight: 700; color: #60a5fa; }
+  nav .nav-links { display: flex; gap: 28px; }
+  nav .nav-links a { color: #888; text-decoration: none; font-size: 14px; transition: color 0.3s; }
+  nav .nav-links a:hover { color: #fff; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 100px 60px; position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at 30% 50%, rgba(96,165,250,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(168,85,247,0.06) 0%, transparent 60%);
+  }
+  .hero-content { max-width: 800px; text-align: center; }
+  .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.2; margin-bottom: 20px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero .subtitle { font-size: 20px; color: #94a3b8; margin-bottom: 40px; line-height: 1.6; }
+  .hero .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .tag { padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #cbd5e1; }
+  .tag.highlight { border-color: rgba(96,165,250,0.4); background: rgba(96,165,250,0.08); color: #60a5fa; }
+
+  /* Stats */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    padding: 60px; max-width: 1100px; margin: 0 auto;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px; text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .stat-card:hover { transform: translateY(-4px); border-color: rgba(96,165,250,0.3); }
+  .stat-num { font-size: 48px; font-weight: 800; color: #60a5fa; margin-bottom: 8px; }
+  .stat-label { font-size: 14px; color: #64748b; }
+
+  /* Section */
+  section { padding: 80px 60px; max-width: 1200px; margin: 0 auto; }
+  .section-title {
+    font-size: 36px; font-weight: 700; margin-bottom: 16px;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .section-sub { font-size: 16px; color: #64748b; margin-bottom: 48px; }
+
+  /* Project Cards */
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .project-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; overflow: hidden; transition: transform 0.3s, border-color 0.3s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(96,165,250,0.3); }
+  .project-img {
+    width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(135deg, #1e1b4b, #1e3a5f); display: flex; align-items: center; justify-content: center;
+  }
+  .project-img .icon { font-size: 64px; }
+  .project-body { padding: 28px; }
+  .project-body h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #e2e8f0; }
+  .project-body p { font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 16px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project-tag {
+    font-size: 11px; padding: 4px 12px; border-radius: 20px;
+    background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.2);
+  }
+
+  /* Skills */
+  .skills-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .skill-category {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px;
+  }
+  .skill-category h3 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #60a5fa; }
+  .skill-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .skill-item:last-child { border-bottom: none; }
+  .skill-name { font-size: 14px; color: #cbd5e1; }
+  .skill-bar {
+    width: 120px; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden;
+  }
+  .skill-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .skill-fill.high { background: linear-gradient(90deg, #60a5fa, #a78bfa); width: 90%; }
+  .skill-fill.mid { background: linear-gradient(90deg, #60a5fa, #34d399); width: 70%; }
+  .skill-fill.learning { background: linear-gradient(90deg, #fbbf24, #f97316); width: 50%; }
+
+  /* Career Timeline */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(180deg, #60a5fa, #a78bfa, #f472b6);
+  }
+  .timeline-item { position: relative; margin-bottom: 40px; }
+  .timeline-dot {
+    position: absolute; left: -34px; top: 4px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #60a5fa; border: 3px solid #0a0a1a;
+  }
+  .timeline-item.current .timeline-dot { background: #34d399; box-shadow: 0 0 12px rgba(52,211,153,0.4); }
+  .timeline-date { font-size: 12px; color: #60a5fa; font-weight: 600; margin-bottom: 4px; }
+  .timeline-title { font-size: 18px; font-weight: 700; color: #e2e8f0; margin-bottom: 6px; }
+  .timeline-role { font-size: 14px; color: #a78bfa; margin-bottom: 8px; }
+  .timeline-desc { font-size: 14px; color: #94a3b8; line-height: 1.7; }
+  .timeline-achievement {
+    display: inline-block; margin-top: 8px; padding: 4px 14px; border-radius: 20px;
+    background: rgba(251,191,36,0.1); color: #fbbf24; font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(251,191,36,0.2);
+  }
+
+  /* Strengths */
+  .strengths-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .strength-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 32px; transition: transform 0.3s;
+  }
+  .strength-card:hover { transform: translateY(-4px); }
+  .strength-icon { font-size: 36px; margin-bottom: 16px; }
+  .strength-card h3 { font-size: 18px; font-weight: 700; color: #e2e8f0; margin-bottom: 10px; }
+  .strength-card p { font-size: 14px; color: #94a3b8; line-height: 1.7; }
+
+  /* Contact */
+  .contact {
+    text-align: center; padding: 80px 60px;
+    background: radial-gradient(ellipse at 50% 50%, rgba(96,165,250,0.06) 0%, transparent 60%);
+  }
+  .contact h2 { font-size: 36px; font-weight: 700; margin-bottom: 16px; color: #e2e8f0; }
+  .contact p { font-size: 16px; color: #64748b; margin-bottom: 32px; }
+  .contact-info { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .contact-item { font-size: 15px; color: #94a3b8; }
+  .contact-item span { color: #60a5fa; font-weight: 600; }
+
+  /* Live Demo Section */
+  .demo-section {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 40px; margin-top: 48px;
+  }
+  .demo-section h3 { font-size: 22px; font-weight: 700; color: #e2e8f0; margin-bottom: 24px; }
+  .demo-tabs { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .demo-tab {
+    padding: 10px 24px; border-radius: 50px; font-size: 14px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #94a3b8;
+    transition: all 0.3s;
+  }
+  .demo-tab.active, .demo-tab:hover {
+    background: rgba(96,165,250,0.15); color: #60a5fa; border-color: rgba(96,165,250,0.4);
+  }
+  .demo-content {
+    background: #0f0f2a; border-radius: 12px; padding: 32px; min-height: 300px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .demo-content .code-block {
+    font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; color: #a5f3fc;
+    white-space: pre-wrap; line-height: 1.8;
+  }
+  .demo-content .comment { color: #6b7280; }
+  .demo-content .keyword { color: #c084fc; }
+  .demo-content .string { color: #86efac; }
+  .demo-content .func { color: #fbbf24; }
+
+  /* Chatbot Demo */
+  .chatbot-demo { max-width: 500px; margin: 0 auto; }
+  .chat-messages { max-height: 250px; overflow-y: auto; margin-bottom: 16px; }
+  .chat-msg { display: flex; margin-bottom: 12px; gap: 10px; align-items: flex-start; }
+  .chat-msg.bot .avatar { background: #60a5fa; }
+  .chat-msg.user .avatar { background: #a78bfa; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .chat-bubble {
+    padding: 10px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; max-width: 80%;
+  }
+  .chat-msg.bot .chat-bubble { background: rgba(96,165,250,0.1); color: #cbd5e1; }
+  .chat-msg.user .chat-bubble { background: rgba(167,139,250,0.1); color: #cbd5e1; margin-left: auto; }
+  .chat-msg.user { flex-direction: row-reverse; }
+  .chat-input-row { display: flex; gap: 8px; }
+  .chat-input {
+    flex: 1; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03); color: #fff; font-size: 14px; outline: none;
+  }
+  .chat-send {
+    padding: 12px 20px; border-radius: 12px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa); color: #fff; font-weight: 600;
+  }
+
+  /* Dashboard Demo */
+  .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .dash-card { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px; text-align: center; }
+  .dash-card .num { font-size: 32px; font-weight: 800; margin-bottom: 4px; }
+  .dash-card .label { font-size: 12px; color: #64748b; }
+  .dash-card:nth-child(1) .num { color: #60a5fa; }
+  .dash-card:nth-child(2) .num { color: #34d399; }
+  .dash-card:nth-child(3) .num { color: #fbbf24; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding: 16px 0; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .bar { width: 100%; border-radius: 6px 6px 0 0; transition: height 1s ease; }
+  .bar-label { font-size: 11px; color: #64748b; }
+
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 36px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-section { grid-template-columns: 1fr; }
+    .strengths-grid { grid-template-columns: 1fr; }
+    section { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Mai Hayakawa</div>
+  <div class="nav-links">
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#career">Career</a>
+    <a href="#demo">Live Demo</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>AI x Automation<br>Engineer</h1>
+    <p class="subtitle">
+      GAS自動化・AIチャットボット・LINE/Lステップ構築<br>
+      営業力 x 技術力で、業務課題をまるごと解決します
+    </p>
+    <div class="tags">
+      <span class="tag highlight">Google Apps Script</span>
+      <span class="tag highlight">Claude Code</span>
+      <span class="tag highlight">Lステップ構築</span>
+      <span class="tag">ChatGPT API</span>
+      <span class="tag">Dify / RAG</span>
+      <span class="tag">Chrome拡張</span>
+      <span class="tag">LINE Messaging API</span>
+      <span class="tag">JavaScript</span>
+    </div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-num">11</div>
+    <div class="stat-label">AIコンサル クライアント数</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">6+</div>
+    <div class="stat-label">開発プロジェクト実績</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">No.1</div>
+    <div class="stat-label">インサイドセールス実績</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">5年</div>
+    <div class="stat-label">営業・折衝経験</div>
+  </div>
+</div>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-title">Projects</div>
+  <p class="section-sub">実際に開発・納品した成果物の一部をご紹介します</p>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-img"><span class="icon">🔔</span></div>
+      <div class="project-body">
+        <h3>GAS x Slack 問い合わせ自動通知</h3>
+        <p>Googleフォームからの問い合わせをGASで自動取得し、Slackにリアルタイム通知。通知フォーマットのカスタマイズ、エラーハンドリング、ログ記録機能を実装。</p>
+        <div class="project-tags">
+          <span class="project-tag">GAS</span>
+          <span class="project-tag">Slack Webhook</span>
+          <span class="project-tag">スプレッドシート</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img"><span class="icon">🌐</span></div>
+      <div class="project-body">
+        <h3>Webページ要約 Chrome拡張機能</h3>
+        <p>閲覧中のWebページをChatGPT APIで自動要約し、ワンクリックでSlackに共有。情報収集の効率を大幅に向上。</p>
+        <div class="project-tags">
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">Chrome Extensions API</span>
+          <span class="project-tag">ChatGPT API</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img"><span class="icon">🤖</span></div>
+      <div class="project-body">
+        <h3>社内FAQ AIチャットボット</h3>
+        <p>Difyを活用し、社内FAQデータをもとにGeminiで回答を生成するRAGチャットボットを構築。ナレッジベースからプロンプト設計まで一貫対応。</p>
+        <div class="project-tags">
+          <span class="project-tag">Dify</span>
+          <span class="project-tag">Gemini API</span>
+          <span class="project-tag">RAG</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img"><span class="icon">📊</span></div>
+      <div class="project-body">
+        <h3>月次売上レポート自動生成</h3>
+        <p>スプレッドシートの売上データから月次レポートを自動生成。集計・グラフ作成・PDF出力・メール送信まで全自動化。トリガーによる定期実行対応。</p>
+        <div class="project-tags">
+          <span class="project-tag">GAS</span>
+          <span class="project-tag">スプレッドシート</span>
+          <span class="project-tag">PDF出力</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img"><span class="icon">💬</span></div>
+      <div class="project-body">
+        <h3>LINE自動化システム（11社支援中）</h3>
+        <p>LINE公式アカウントの予約連携・ステップ配信・リッチメニュー構築。個人コンサルで複数社の業務改善を支援中。</p>
+        <div class="project-tags">
+          <span class="project-tag">Lステップ</span>
+          <span class="project-tag">LINE Messaging API</span>
+          <span class="project-tag">Googleカレンダー連携</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-img"><span class="icon">⚡</span></div>
+      <div class="project-body">
+        <h3>MARKELINE AI自動化プロジェクト</h3>
+        <p>Lステップ構築事業の提案書・見積もり・設計図をAIで自動化。月の案件処理数を2〜3件から10件以上に引き上げる。</p>
+        <div class="project-tags">
+          <span class="project-tag">Claude Code</span>
+          <span class="project-tag">GAS</span>
+          <span class="project-tag">Canva</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+  <div class="section-title">Skills</div>
+  <p class="section-sub">技術スキルと習熟度</p>
+
+  <div class="skills-section">
+    <div class="skill-category">
+      <h3>Development</h3>
+      <div class="skill-item"><span class="skill-name">Google Apps Script</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">HTML / CSS</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Chrome拡張開発</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+      <div class="skill-item"><span class="skill-name">API連携設計</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+    </div>
+
+    <div class="skill-category">
+      <h3>AI / Automation</h3>
+      <div class="skill-item"><span class="skill-name">Claude / Claude Code</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">ChatGPT API</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Dify (RAG)</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Gemini API</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+      <div class="skill-item"><span class="skill-name">AIエージェント開発</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+    </div>
+
+    <div class="skill-category">
+      <h3>Marketing / Tools</h3>
+      <div class="skill-item"><span class="skill-name">Lステップ</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">LINE公式アカウント</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Slack連携</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Google Workspace</span><div class="skill-bar"><div class="skill-fill high"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Canva</span><div class="skill-bar"><div class="skill-fill mid"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Demo -->
+<section id="demo">
+  <div class="section-title">Live Demo</div>
+  <p class="section-sub">実際に動くデモをご覧いただけます</p>
+
+  <div class="demo-section">
+    <h3>デモを選択</h3>
+    <div class="demo-tabs">
+      <div class="demo-tab active" onclick="showDemo('chatbot')">AIチャットボット</div>
+      <div class="demo-tab" onclick="showDemo('dashboard')">売上ダッシュボード</div>
+      <div class="demo-tab" onclick="showDemo('gas')">GAS自動化コード</div>
+      <div class="demo-tab" onclick="showDemo('line')">LINE配信フロー</div>
+    </div>
+
+    <!-- Chatbot Demo -->
+    <div class="demo-content" id="demo-chatbot">
+      <div class="chatbot-demo">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-msg bot">
+            <div class="avatar">AI</div>
+            <div class="chat-bubble">こんにちは！社内FAQボットです。ご質問をどうぞ。<br>例: 「有給の申請方法は？」「経費精算のやり方」</div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chat-input" placeholder="質問を入力..." onkeypress="if(event.key==='Enter')sendChat()">
+          <button class="chat-send" onclick="sendChat()">送信</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Demo -->
+    <div class="demo-content" id="demo-dashboard" style="display:none;">
+      <div class="dashboard-grid">
+        <div class="dash-card"><div class="num" id="revenue">0</div><div class="label">月間売上（万円）</div></div>
+        <div class="dash-card"><div class="num" id="clients">0</div><div class="label">アクティブ顧客数</div></div>
+        <div class="dash-card"><div class="num" id="growth">0%</div><div class="label">前月比成長率</div></div>
+      </div>
+      <div style="font-size:14px; color:#94a3b8; margin-bottom:12px;">月別売上推移（自動集計）</div>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+
+    <!-- GAS Code Demo -->
+    <div class="demo-content" id="demo-gas" style="display:none;">
+      <div class="code-block"><span class="comment">// GAS: Googleフォーム → Slack自動通知</span>
+
+<span class="keyword">function</span> <span class="func">onFormSubmit</span>(e) {
+  <span class="keyword">const</span> responses = e.namedValues;
+  <span class="keyword">const</span> name = responses[<span class="string">'お名前'</span>][0];
+  <span class="keyword">const</span> email = responses[<span class="string">'メールアドレス'</span>][0];
+  <span class="keyword">const</span> message = responses[<span class="string">'お問い合わせ内容'</span>][0];
+
+  <span class="comment">// Slack通知を送信</span>
+  <span class="keyword">const</span> payload = {
+    text: <span class="string">`📩 新規お問い合わせ\n`</span> +
+          <span class="string">`👤 ${name}\n`</span> +
+          <span class="string">`✉️ ${email}\n`</span> +
+          <span class="string">`💬 ${message}`</span>
+  };
+
+  <span class="func">UrlFetchApp</span>.fetch(SLACK_WEBHOOK_URL, {
+    method: <span class="string">'post'</span>,
+    contentType: <span class="string">'application/json'</span>,
+    payload: JSON.<span class="func">stringify</span>(payload)
+  });
+
+  <span class="comment">// スプレッドシートにログ記録</span>
+  <span class="func">logToSheet</span>(name, email, message);
+}</div>
+    </div>
+
+    <!-- LINE Flow Demo -->
+    <div class="demo-content" id="demo-line" style="display:none;">
+      <div style="text-align:center; padding: 20px;">
+        <div style="font-size:18px; font-weight:700; color:#e2e8f0; margin-bottom:24px;">Lステップ配信フロー設計例</div>
+        <div style="display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap;">
+          <div style="background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:16px 24px; text-align:center;">
+            <div style="font-size:24px; margin-bottom:8px;">👋</div>
+            <div style="font-size:13px; color:#34d399; font-weight:600;">友だち追加</div>
+            <div style="font-size:11px; color:#64748b;">リッチメニュー表示</div>
+          </div>
+          <div style="color:#60a5fa; font-size:24px;">→</div>
+          <div style="background:rgba(96,165,250,0.1); border:1px solid rgba(96,165,250,0.3); border-radius:12px; padding:16px 24px; text-align:center;">
+            <div style="font-size:24px; margin-bottom:8px;">📋</div>
+            <div style="font-size:13px; color:#60a5fa; font-weight:600;">アンケート</div>
+            <div style="font-size:11px; color:#64748b;">タグ自動付与</div>
+          </div>
+          <div style="color:#60a5fa; font-size:24px;">→</div>
+          <div style="background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.3); border-radius:12px; padding:16px 24px; text-align:center;">
+            <div style="font-size:24px; margin-bottom:8px;">🎯</div>
+            <div style="font-size:13px; color:#a78bfa; font-weight:600;">セグメント配信</div>
+            <div style="font-size:11px; color:#64748b;">属性別コンテンツ</div>
+          </div>
+          <div style="color:#60a5fa; font-size:24px;">→</div>
+          <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); border-radius:12px; padding:16px 24px; text-align:center;">
+            <div style="font-size:24px; margin-bottom:8px;">📅</div>
+            <div style="font-size:13px; color:#fbbf24; font-weight:600;">予約連携</div>
+            <div style="font-size:11px; color:#64748b;">Googleカレンダー同期</div>
+          </div>
+          <div style="color:#60a5fa; font-size:24px;">→</div>
+          <div style="background:rgba(244,114,182,0.1); border:1px solid rgba(244,114,182,0.3); border-radius:12px; padding:16px 24px; text-align:center;">
+            <div style="font-size:24px; margin-bottom:8px;">🔄</div>
+            <div style="font-size:13px; color:#f472b6; font-weight:600;">リマインド</div>
+            <div style="font-size:11px; color:#64748b;">自動フォローアップ</div>
+          </div>
+        </div>
+        <div style="margin-top:32px; display:flex; justify-content:center; gap:24px;">
+          <div style="text-align:center;">
+            <div style="font-size:32px; font-weight:800; color:#34d399;">3x</div>
+            <div style="font-size:12px; color:#64748b;">予約率向上</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:32px; font-weight:800; color:#60a5fa;">80%</div>
+            <div style="font-size:12px; color:#64748b;">手動作業削減</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:32px; font-weight:800; color:#fbbf24;">11社</div>
+            <div style="font-size:12px; color:#64748b;">導入実績</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Career -->
+<section id="career">
+  <div class="section-title">Career</div>
+  <p class="section-sub">営業トップの実績と、AI×自動化エンジニアへの転身</p>
+
+  <div class="timeline">
+    <div class="timeline-item current">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2025年11月 〜 現在</div>
+      <div class="timeline-title">フリーランス</div>
+      <div class="timeline-role">AI×自動化エンジニア / 営業・カスタマーサクセス</div>
+      <div class="timeline-desc">GAS開発・AIチャットボット構築・Chrome拡張開発・業務効率化の受託開発。個人向けAIコンサルで11名のクライアントを運営。</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2023年9月 〜 2025年8月</div>
+      <div class="timeline-title">株式会社リベルタ</div>
+      <div class="timeline-role">営業職（介護看護 人材派遣・紹介）</div>
+      <div class="timeline-desc">企業・スタッフの両面対応。社内業務効率化を並行推進。</div>
+      <div class="timeline-achievement">入社2ヶ月で基本契約5件達成（過去最短記録）</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2022年12月 〜 2023年9月</div>
+      <div class="timeline-title">サングローブ株式会社</div>
+      <div class="timeline-role">インサイドセールス</div>
+      <div class="timeline-desc">Webマーケティング商材のインサイドセールス。</div>
+      <div class="timeline-achievement">入社半年で名古屋支社1位・全社2位</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2021年4月 〜 2022年9月</div>
+      <div class="timeline-title">鬼頭工業株式会社</div>
+      <div class="timeline-role">技術営業職</div>
+      <div class="timeline-desc">大手自動車・航空機メーカーの生産設備メーカーにおける技術営業。仕様調査・見積作成・検収まで担当。</div>
+    </div>
+  </div>
+</section>
+
+<!-- Strengths -->
+<section>
+  <div class="section-title">Strengths</div>
+  <p class="section-sub">他にはない強み</p>
+  <div class="strengths-grid">
+    <div class="strength-card">
+      <div class="strength-icon">🎯</div>
+      <h3>営業力 × 技術力</h3>
+      <p>インサイドセールスで全社トップの実績を持ちながら、AI・自動化の技術スキルも保有。クライアントの課題を理解した上での提案・開発が可能。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">💪</div>
+      <h3>粘り強さ</h3>
+      <p>元レスリング日本代表（至学館大学／全日本2位／アジアジュニア3位）。アスリートとして培った粘り強さで、課題解決まで諦めない。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">⚡</div>
+      <h3>迅速な対応</h3>
+      <p>24時間以内返信・Web会議対応可。Claude Codeを活用し、通常の1/10のスピードで規程策定や開発が完了。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">🔄</div>
+      <h3>一気通貫</h3>
+      <p>要件定義〜開発〜納品まで一貫して対応可能。業務ヒアリングからAI×自動化で課題を解決する設計力。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<div class="contact" id="contact">
+  <h2>Contact</h2>
+  <p>お気軽にご連絡ください</p>
+  <div class="contact-info">
+    <div class="contact-item"><span>Name:</span> 早川 まい</div>
+    <div class="contact-item"><span>Email:</span> 0622hayakawamai@gmail.com</div>
+    <div class="contact-item"><span>Location:</span> 東京都</div>
+  </div>
+  <div style="margin-top: 24px;">
+    <a href="https://timerex.net/s/hayakawa.mai_7f0d/c0faebd4" target="_blank"
+       style="display:inline-block; padding:14px 36px; border-radius:50px;
+              background:linear-gradient(135deg,#60a5fa,#a78bfa); color:#fff;
+              text-decoration:none; font-weight:600; font-size:15px;">
+      面談を予約する
+    </a>
+  </div>
+</div>
+
+<script>
+// Demo Tab Switching
+function showDemo(type) {
+  document.querySelectorAll('.demo-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.demo-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('demo-' + type).style.display = 'block';
+  event.target.classList.add('active');
+  if (type === 'dashboard') animateDashboard();
+}
+
+// Chatbot Demo
+const faqData = {
+  '有給': '有給休暇の申請は、社内ポータルの「勤怠管理」→「有給申請」から行えます。申請は利用日の3営業日前までにお願いします。上長の承認後、自動的にカレンダーに反映されます。',
+  '経費': '経費精算は、領収書の写真をSlackの #経費精算 チャンネルに投稿してください。GASで自動的にスプレッドシートに記録され、月末に一括精算されます。',
+  '会議': '会議室の予約はGoogleカレンダーから行えます。「会議室A」「会議室B」のカレンダーを確認し、空き時間に予約を入れてください。',
+  'パスワード': 'パスワードのリセットは、IT管理者（admin@company.co.jp）にメールでご連絡ください。本人確認後、24時間以内にリセットリンクをお送りします。',
+  'リモート': 'リモートワークは週2日まで可能です。前日までにSlackの #勤怠 チャンネルで「明日リモート」と投稿してください。VPN接続が必要です。'
+};
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const messages = document.getElementById('chat-messages');
+  messages.innerHTML += `<div class="chat-msg user"><div class="avatar">👤</div><div class="chat-bubble">${msg}</div></div>`;
+  input.value = '';
+
+  setTimeout(() => {
+    let answer = 'お問い合わせありがとうございます。該当するFAQが見つかりませんでした。担当者にエスカレーションいたします。';
+    for (const [key, val] of Object.entries(faqData)) {
+      if (msg.includes(key)) { answer = val; break; }
+    }
+    messages.innerHTML += `<div class="chat-msg bot"><div class="avatar">AI</div><div class="chat-bubble">${answer}</div></div>`;
+    messages.scrollTop = messages.scrollHeight;
+  }, 800);
+}
+
+// Dashboard Demo
+function animateDashboard() {
+  const months = ['10月','11月','12月','1月','2月','3月'];
+  const values = [180, 220, 310, 280, 350, 420];
+  const colors = ['#3b82f6','#60a5fa','#818cf8','#a78bfa','#c084fc','#e879f9'];
+
+  const chart = document.getElementById('bar-chart');
+  chart.innerHTML = '';
+  months.forEach((m, i) => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    col.innerHTML = `<div class="bar" style="height:0; background:${colors[i]};"></div><div class="bar-label">${m}</div>`;
+    chart.appendChild(col);
+    setTimeout(() => { col.querySelector('.bar').style.height = (values[i]/420*140) + 'px'; }, i * 150);
+  });
+
+  let rev = 0, cli = 0, grow = 0;
+  const revEl = document.getElementById('revenue');
+  const cliEl = document.getElementById('clients');
+  const growEl = document.getElementById('growth');
+  const animate = setInterval(() => {
+    if (rev < 420) { rev += 14; revEl.textContent = rev; }
+    if (cli < 28) { cli += 1; cliEl.textContent = cli; }
+    if (grow < 20) { grow += 1; growEl.textContent = grow + '%'; }
+    if (rev >= 420 && cli >= 28 && grow >= 20) clearInterval(animate);
+  }, 50);
+}
+</script>
+
+</body>
+</html>

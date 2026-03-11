@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>早川まい - AI × 自動化デモ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI','Hiragino Sans',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;overflow-x:hidden}
+.bg-grid{position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(99,102,241,.07)1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.07)1px,transparent 1px);background-size:50px 50px;z-index:0}
+.container{max-width:1000px;margin:0 auto;padding:40px 20px;position:relative;z-index:1}
+header{text-align:center;margin-bottom:60px}
+h1{font-size:2.4rem;background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;letter-spacing:2px}
+.subtitle{color:#94a3b8;font-size:1.05rem;margin-bottom:20px}
+.badge{display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:#a78bfa;padding:6px 18px;border-radius:20px;font-size:.85rem;margin:4px}
+.demos{display:grid;gap:24px}
+.demo-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px;transition:all .3s;cursor:pointer;text-decoration:none;color:#fff;display:block;position:relative;overflow:hidden}
+.demo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#8b5cf6);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.demo-card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-4px);box-shadow:0 20px 60px rgba(99,102,241,.15)}
+.demo-card:hover::before{transform:scaleX(1)}
+.demo-header{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.demo-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.demo-icon.purple{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.demo-icon.blue{background:linear-gradient(135deg,#3b82f6,#06b6d4)}
+.demo-icon.green{background:linear-gradient(135deg,#10b981,#34d399)}
+.demo-icon.orange{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.demo-title{font-size:1.3rem;font-weight:700;margin-bottom:4px}
+.demo-tag{font-size:.75rem;color:#6366f1;background:rgba(99,102,241,.1);padding:2px 10px;border-radius:10px}
+.demo-desc{color:#94a3b8;line-height:1.7;font-size:.95rem;margin-bottom:16px}
+.demo-techs{display:flex;flex-wrap:wrap;gap:6px}
+.tech{background:rgba(255,255,255,.06);color:#cbd5e1;padding:4px 12px;border-radius:8px;font-size:.8rem}
+.demo-number{position:absolute;top:20px;right:24px;font-size:3rem;font-weight:800;color:rgba(99,102,241,.08);line-height:1}
+footer{text-align:center;margin-top:60px;color:#475569;font-size:.85rem}
+footer a{color:#6366f1;text-decoration:none}
+.live-badge{display:inline-block;background:#10b981;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:8px;margin-left:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@media(max-width:600px){h1{font-size:1.8rem}.demo-card{padding:24px}.demo-icon{width:44px;height:44px;font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="container">
+<header>
+<h1>AI × 自動化 デモ</h1>
+<p class="subtitle">早川まい｜フリーランス AI×自動化エンジニア</p>
+<span class="badge">💬 面談中にその場でお見せできます</span>
+<span class="badge">🚀 すべて実際に動作するデモです</span>
+</header>
+
+<div class="demos">
+<a class="demo-card" href="demo_lp_generator.html">
+<span class="demo-number">01</span>
+<div class="demo-header">
+<div class="demo-icon purple">🎨</div>
+<div>
+<div class="demo-title">LP即時生成ジェネレーター <span class="live-badge">LIVE</span></div>
+<span class="demo-tag">面談中デモ向き</span>
+</div>
+</div>
+<p class="demo-desc">業種を選択して「生成」を押すだけで、完全なランディングページをその場で生成。美容サロン・ジム・カフェ・コンサル・SaaSの5業種プリセット対応。リアルタイムプレビュー付き。<br><strong>「口で言っただけでLPが出来る」を体験できます。</strong></p>
+<div class="demo-techs">
+<span class="tech">HTML/CSS/JS</span>
+<span class="tech">リアルタイム生成</span>
+<span class="tech">5業種プリセット</span>
+<span class="tech">8テーマカラー</span>
+</div>
+</a>
+
+<a class="demo-card" href="demo_ai_quote_generator.html">
+<span class="demo-number">02</span>
+<div class="demo-header">
+<div class="demo-icon blue">📊</div>
+<div>
+<div class="demo-title">AI見積もり自動生成デモ <span class="live-badge">LIVE</span></div>
+<span class="demo-tag">業務効率化デモ</span>
+</div>
+</div>
+<p class="demo-desc">プロジェクト種別を選んでヒアリング項目に回答するだけで、見積書・スケジュール・リスク分析を自動生成。Lステップ構築・GAS開発・チャットボット・LP制作・DXコンサルの5種類に対応。<br><strong>MARKELINE社プロジェクトの実際の自動化イメージです。</strong></p>
+<div class="demo-techs">
+<span class="tech">見積もり自動生成</span>
+<span class="tech">スケジュール算出</span>
+<span class="tech">リスク分析</span>
+<span class="tech">PDF出力対応</span>
+</div>
+</a>
+
+<a class="demo-card" href="portfolio_demo.html">
+<span class="demo-number">03</span>
+<div class="demo-header">
+<div class="demo-icon green">👤</div>
+<div>
+<div class="demo-title">ポートフォリオ＆実績デモ <span class="live-badge">LIVE</span></div>
+<span class="demo-tag">自己紹介・スキル</span>
+</div>
+</div>
+<p class="demo-desc">経歴・スキル・プロジェクト実績を一覧できるインタラクティブポートフォリオ。AIチャットボット・ダッシュボード・GASコード・LINEフロー設計の4つのライブデモ内蔵。</p>
+<div class="demo-techs">
+<span class="tech">ポートフォリオ</span>
+<span class="tech">ライブデモ4種</span>
+<span class="tech">レスポンシブ</span>
+<span class="tech">アニメーション</span>
+</div>
+</a>
+</div>
+
+<footer>
+<p>© 2026 早川まい｜<a href="mailto:0622hayakawamai@gmail.com">0622hayakawamai@gmail.com</a></p>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI見積もり自動生成デモ - 早川まい</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', 'Hiragino Sans', sans-serif;
+    background: #0a0a1a; color: #e2e8f0; min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Particle Background */
+  canvas#particles { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+
+  .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+
+  /* Header */
+  .header {
+    text-align: center; padding: 60px 0 40px;
+  }
+  .badge {
+    display: inline-block; padding: 6px 20px; border-radius: 50px; font-size: 12px;
+    background: rgba(96,165,250,0.1); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3);
+    margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 48px; font-weight: 800; line-height: 1.2; margin-bottom: 16px;
+    background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .header p { font-size: 18px; color: #64748b; max-width: 600px; margin: 0 auto; }
+
+  /* Main Layout */
+  .main { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+
+  /* Input Panel */
+  .panel {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 36px; backdrop-filter: blur(10px);
+  }
+  .panel h2 {
+    font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #e2e8f0;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel h2 .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
+  select, input[type="text"], textarea {
+    width: 100%; padding: 14px 16px; border-radius: 12px; font-size: 15px;
+    border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+    color: #e2e8f0; outline: none; transition: border-color 0.3s; margin-bottom: 20px;
+    font-family: inherit;
+  }
+  select option { background: #1a1a2e; }
+  select:focus, input:focus, textarea:focus { border-color: rgba(96,165,250,0.5); }
+  textarea { min-height: 100px; resize: vertical; }
+
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .checkbox-item {
+    padding: 10px 18px; border-radius: 50px; font-size: 13px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02);
+    color: #94a3b8; transition: all 0.3s; user-select: none;
+  }
+  .checkbox-item.selected {
+    background: rgba(96,165,250,0.15); color: #60a5fa; border-color: rgba(96,165,250,0.4);
+  }
+
+  .generate-btn {
+    width: 100%; padding: 16px; border-radius: 12px; border: none; cursor: pointer;
+    font-size: 16px; font-weight: 700; color: #fff; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+    background-size: 200% 200%; animation: gradientMove 3s ease infinite;
+    transition: transform 0.2s, box-shadow 0.3s;
+  }
+  .generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(96,165,250,0.3);
+  }
+  .generate-btn:active { transform: translateY(0); }
+  @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+  /* Output Panel */
+  .output-panel {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 36px; backdrop-filter: blur(10px);
+    position: relative; overflow: hidden;
+  }
+  .output-panel::before {
+    content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  }
+
+  /* Typing Effect */
+  .typing-cursor { display: inline-block; width: 2px; height: 1em; background: #60a5fa; animation: blink 0.8s infinite; vertical-align: text-bottom; margin-left: 2px; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* Generated Content */
+  .gen-section { margin-bottom: 24px; opacity: 0; transform: translateY(10px); transition: all 0.5s; }
+  .gen-section.visible { opacity: 1; transform: translateY(0); }
+  .gen-section h3 { font-size: 14px; color: #60a5fa; font-weight: 600; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .quote-table { width: 100%; border-collapse: collapse; }
+  .quote-table th, .quote-table td {
+    padding: 12px 16px; text-align: left; font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .quote-table th { color: #64748b; font-weight: 500; font-size: 12px; }
+  .quote-table td { color: #cbd5e1; }
+  .quote-table .price { text-align: right; font-weight: 700; color: #60a5fa; font-variant-numeric: tabular-nums; }
+  .quote-table .total-row td { border-top: 2px solid rgba(96,165,250,0.3); font-weight: 700; font-size: 16px; }
+  .quote-table .total-row .price { color: #34d399; font-size: 20px; }
+
+  .timeline-mini { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tl-step {
+    flex: 1; min-width: 100px; padding: 14px; border-radius: 12px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    text-align: center; position: relative;
+  }
+  .tl-step .week { font-size: 11px; color: #64748b; margin-bottom: 4px; }
+  .tl-step .task { font-size: 13px; color: #cbd5e1; font-weight: 600; }
+
+  .risk-item {
+    display: flex; gap: 10px; align-items: flex-start; padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .risk-badge {
+    padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .risk-high { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .risk-mid { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+  .risk-low { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+
+  /* Loading */
+  .loading { display: flex; align-items: center; gap: 12px; padding: 20px 0; }
+  .loading-dots { display: flex; gap: 6px; }
+  .loading-dots span {
+    width: 8px; height: 8px; border-radius: 50%; background: #60a5fa;
+    animation: dotPulse 1.4s infinite;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+  .empty-state { text-align: center; padding: 80px 20px; color: #475569; }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state p { font-size: 15px; }
+
+  /* Speed indicator */
+  .speed-badge {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+    border-radius: 50px; font-size: 12px; margin-top: 16px;
+    background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2);
+  }
+
+  /* Watermark */
+  .watermark {
+    text-align: center; padding: 40px 0 20px; font-size: 13px; color: #334155;
+  }
+  .watermark a { color: #60a5fa; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <div class="header">
+    <div class="badge">Live Demo</div>
+    <h1>AI見積もり<br>自動生成システム</h1>
+    <p>ヒアリング内容を入力するだけで、見積書・スケジュール・リスク分析をAIが自動生成。口頭で伝えるだけで、この品質のアウトプットが出ます。</p>
+  </div>
+
+  <div class="main">
+    <!-- Input -->
+    <div class="panel">
+      <h2><span class="dot"></span> ヒアリング情報</h2>
+
+      <label>案件タイプ</label>
+      <select id="projectType">
+        <option value="">選択してください</option>
+        <option value="line">LINE公式アカウント / Lステップ構築</option>
+        <option value="gas">GAS業務自動化</option>
+        <option value="chatbot">AIチャットボット構築</option>
+        <option value="lp">LP / Webサイト制作</option>
+        <option value="dx">業務DX / AI導入コンサル</option>
+      </select>
+
+      <label>業種</label>
+      <input type="text" id="industry" placeholder="例: 美容サロン、不動産、飲食店...">
+
+      <label>課題・やりたいこと</label>
+      <textarea id="requirements" placeholder="例: 予約管理を自動化したい、問い合わせ対応を効率化したい..."></textarea>
+
+      <label>必要な機能（複数選択可）</label>
+      <div class="checkbox-group" id="features">
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="予約連携">📅 予約連携</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="ステップ配信">📨 ステップ配信</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="リッチメニュー">🎨 リッチメニュー</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="自動応答">🤖 自動応答</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="データ分析">📊 データ分析</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="Slack連携">💬 Slack連携</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="スプシ自動化">📋 スプシ自動化</div>
+        <div class="checkbox-item" onclick="toggleFeature(this)" data-feature="メール自動送信">✉️ メール自動送信</div>
+      </div>
+
+      <label>予算感</label>
+      <select id="budget">
+        <option value="small">〜10万円</option>
+        <option value="medium" selected>10〜30万円</option>
+        <option value="large">30〜50万円</option>
+        <option value="enterprise">50万円以上</option>
+      </select>
+
+      <button class="generate-btn" onclick="generateQuote()">
+        ⚡ AIで見積もりを自動生成
+      </button>
+    </div>
+
+    <!-- Output -->
+    <div class="output-panel" id="output">
+      <h2 style="font-size:20px; font-weight:700; margin-bottom:24px; display:flex; align-items:center; gap:10px;">
+        📄 生成結果
+      </h2>
+      <div id="output-content">
+        <div class="empty-state">
+          <div class="icon">✨</div>
+          <p>左のフォームに情報を入力して<br>「AIで見積もりを自動生成」をクリック</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="watermark">
+    Built by <a href="#">早川まい</a> — AI × Automation Engineer
+  </div>
+</div>
+
+<script>
+// Particle Background
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const particles = [];
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+    size: Math.random() * 2 + 0.5, alpha: Math.random() * 0.3 + 0.1
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p, i) => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(96,165,250,${p.alpha})`;
+    ctx.fill();
+    // Connect nearby particles
+    particles.slice(i + 1).forEach(p2 => {
+      const dx = p.x - p2.x, dy = p.y - p2.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = `rgba(96,165,250,${0.06 * (1 - dist/120)})`;
+        ctx.stroke();
+      }
+    });
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// Feature Toggle
+function toggleFeature(el) {
+  el.classList.toggle('selected');
+}
+
+// Quote Generation
+function generateQuote() {
+  const type = document.getElementById('projectType').value;
+  const industry = document.getElementById('industry').value || '一般企業';
+  const requirements = document.getElementById('requirements').value || '業務効率化';
+  const budget = document.getElementById('budget').value;
+  const features = [...document.querySelectorAll('.checkbox-item.selected')].map(el => el.dataset.feature);
+
+  const output = document.getElementById('output-content');
+
+  // Show loading
+  output.innerHTML = `
+    <div class="loading">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <span style="font-size:14px; color:#94a3b8;">AIが見積もりを生成中...</span>
+    </div>
+  `;
+
+  const startTime = Date.now();
+
+  // Simulate AI generation with staggered reveals
+  setTimeout(() => {
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    const quote = buildQuote(type, industry, requirements, budget, features);
+
+    output.innerHTML = `
+      <div class="speed-badge">⚡ ${elapsed}秒で生成完了</div>
+
+      <div class="gen-section" id="sec-summary">
+        <h3>📋 案件概要</h3>
+        <div style="background:rgba(255,255,255,0.02); border-radius:12px; padding:20px; border:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:16px; font-weight:700; color:#e2e8f0; margin-bottom:8px;">${quote.title}</div>
+          <div style="font-size:14px; color:#94a3b8; line-height:1.7;">${quote.summary}</div>
+        </div>
+      </div>
+
+      <div class="gen-section" id="sec-quote">
+        <h3>💰 見積もり内訳</h3>
+        <table class="quote-table">
+          <tr><th>項目</th><th>内容</th><th style="text-align:right;">金額</th></tr>
+          ${quote.items.map(item => `
+            <tr><td>${item.name}</td><td style="color:#64748b; font-size:13px;">${item.desc}</td><td class="price">¥${item.price.toLocaleString()}</td></tr>
+          `).join('')}
+          <tr class="total-row"><td colspan="2">合計（税別）</td><td class="price">¥${quote.total.toLocaleString()}</td></tr>
+        </table>
+      </div>
+
+      <div class="gen-section" id="sec-schedule">
+        <h3>📅 スケジュール</h3>
+        <div class="timeline-mini">
+          ${quote.schedule.map(s => `
+            <div class="tl-step">
+              <div class="week">${s.week}</div>
+              <div class="task">${s.task}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="gen-section" id="sec-risk">
+        <h3>⚠️ リスク分析</h3>
+        ${quote.risks.map(r => `
+          <div class="risk-item">
+            <span class="risk-badge risk-${r.level}">${r.level === 'high' ? '高' : r.level === 'mid' ? '中' : '低'}</span>
+            <div>
+              <div style="font-size:14px; color:#cbd5e1; font-weight:600;">${r.title}</div>
+              <div style="font-size:13px; color:#64748b; margin-top:4px;">${r.mitigation}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="gen-section" id="sec-guarantee">
+        <div style="background:rgba(52,211,153,0.05); border:1px solid rgba(52,211,153,0.2); border-radius:12px; padding:20px; text-align:center;">
+          <div style="font-size:24px; margin-bottom:8px;">🛡️</div>
+          <div style="font-size:16px; font-weight:700; color:#34d399; margin-bottom:6px;">全額返金保証付き</div>
+          <div style="font-size:13px; color:#64748b;">ご満足いただけない場合は全額返金いたします</div>
+        </div>
+      </div>
+    `;
+
+    // Staggered reveal
+    const sections = ['sec-summary', 'sec-quote', 'sec-schedule', 'sec-risk', 'sec-guarantee'];
+    sections.forEach((id, i) => {
+      setTimeout(() => {
+        document.getElementById(id)?.classList.add('visible');
+      }, i * 400);
+    });
+
+  }, 2000);
+}
+
+function buildQuote(type, industry, requirements, budget, features) {
+  const configs = {
+    line: {
+      title: `${industry}向け LINE公式アカウント / Lステップ構築`,
+      summary: `${industry}の${requirements}を実現するため、LINE公式アカウントとLステップを活用した自動化システムを構築します。${features.length > 0 ? features.join('・') + 'を含む' : '基本的な'}構成で、顧客コミュニケーションの効率化と売上向上を同時に実現します。`,
+      items: [
+        { name: 'LINE公式アカウント初期設定', desc: 'アカウント設計・プロフィール最適化', price: 30000 },
+        { name: 'Lステップ構築', desc: 'シナリオ設計・配信フロー構築', price: 80000 },
+        ...(features.includes('リッチメニュー') ? [{ name: 'リッチメニューデザイン', desc: 'オリジナルデザイン制作', price: 25000 }] : []),
+        ...(features.includes('予約連携') ? [{ name: '予約システム連携', desc: 'Googleカレンダー自動同期', price: 35000 }] : []),
+        ...(features.includes('ステップ配信') ? [{ name: 'ステップ配信設計', desc: 'セグメント別シナリオ構築', price: 40000 }] : []),
+        ...(features.includes('自動応答') ? [{ name: '自動応答設定', desc: 'キーワード応答・FAQ連携', price: 30000 }] : []),
+        { name: '運用マニュアル作成', desc: '操作手順書・引き継ぎ資料', price: 15000 },
+      ],
+      schedule: [
+        { week: 'Week 1', task: 'ヒアリング\n要件定義' },
+        { week: 'Week 2', task: 'アカウント\n設計・構築' },
+        { week: 'Week 3', task: '配信設計\nテスト' },
+        { week: 'Week 4', task: '納品\n運用開始' },
+      ],
+      risks: [
+        { level: 'mid', title: 'LINE API仕様変更', mitigation: '対策: 最新APIドキュメントを常時監視。変更時は無料で対応' },
+        { level: 'low', title: '配信シナリオの効果不足', mitigation: '対策: A/Bテスト実施。納品後1ヶ月間の無料調整サポート' },
+        { level: 'low', title: 'スタッフの操作不慣れ', mitigation: '対策: 操作マニュアル + Zoom個別レクチャー付き' },
+      ]
+    },
+    gas: {
+      title: `${industry}向け GAS業務自動化システム`,
+      summary: `${industry}の${requirements}を解決するため、Google Apps Scriptを活用した業務自動化システムを開発します。${features.length > 0 ? features.join('・') + 'の' : ''}自動化により、手作業を大幅に削減し、ヒューマンエラーを防止します。`,
+      items: [
+        { name: '要件定義・業務フロー設計', desc: '現状分析・自動化設計', price: 40000 },
+        { name: 'GASスクリプト開発', desc: 'メイン処理・エラーハンドリング', price: 100000 },
+        ...(features.includes('Slack連携') ? [{ name: 'Slack通知連携', desc: 'Webhook設定・通知フォーマット', price: 25000 }] : []),
+        ...(features.includes('スプシ自動化') ? [{ name: 'スプレッドシート自動化', desc: '集計・レポート自動生成', price: 35000 }] : []),
+        ...(features.includes('メール自動送信') ? [{ name: 'メール自動送信', desc: 'テンプレート・トリガー設定', price: 25000 }] : []),
+        ...(features.includes('データ分析') ? [{ name: 'ダッシュボード構築', desc: 'データ可視化・自動更新', price: 40000 }] : []),
+        { name: 'テスト・デバッグ', desc: '動作検証・エッジケース対応', price: 20000 },
+        { name: 'ドキュメント・引き継ぎ', desc: '技術仕様書・操作マニュアル', price: 15000 },
+      ],
+      schedule: [
+        { week: 'Week 1', task: '要件定義\n設計' },
+        { week: 'Week 2-3', task: '開発\n実装' },
+        { week: 'Week 4', task: 'テスト\nデバッグ' },
+        { week: 'Week 5', task: '納品\nサポート' },
+      ],
+      risks: [
+        { level: 'mid', title: 'Google API制限', mitigation: '対策: 実行回数制限を考慮した設計。バッチ処理で回避' },
+        { level: 'low', title: 'データ形式の変更', mitigation: '対策: 柔軟なパーサー設計。変更時の影響を最小化' },
+        { level: 'high', title: '既存業務フローとの不整合', mitigation: '対策: 段階的導入。並行運用期間を設けてリスクを低減' },
+      ]
+    },
+    chatbot: {
+      title: `${industry}向け AIチャットボット構築`,
+      summary: `${industry}の${requirements}を実現するため、RAG構成のAIチャットボットを構築します。社内ナレッジや業務マニュアルをAIに学習させ、正確で自然な自動応答を実現します。`,
+      items: [
+        { name: 'ナレッジベース構築', desc: 'データ整理・ベクトルDB構築', price: 60000 },
+        { name: 'AIチャットボット開発', desc: 'Dify/RAG構成・プロンプト設計', price: 120000 },
+        { name: 'UI/UXデザイン', desc: 'チャットインターフェース構築', price: 40000 },
+        ...(features.includes('Slack連携') ? [{ name: 'Slack連携', desc: 'Slackボット統合', price: 30000 }] : []),
+        { name: 'テスト・チューニング', desc: '回答精度の検証・改善', price: 30000 },
+        { name: '運用ドキュメント', desc: 'メンテナンスガイド', price: 15000 },
+      ],
+      schedule: [
+        { week: 'Week 1', task: 'データ収集\n要件定義' },
+        { week: 'Week 2', task: 'ナレッジ\nベース構築' },
+        { week: 'Week 3', task: 'ボット開発\nUI構築' },
+        { week: 'Week 4', task: 'テスト\nチューニング' },
+        { week: 'Week 5', task: '納品\n運用開始' },
+      ],
+      risks: [
+        { level: 'high', title: 'AI回答の精度不足', mitigation: '対策: RAG構成で根拠ベースの回答。プロンプト最適化で精度向上' },
+        { level: 'mid', title: 'ナレッジデータの品質', mitigation: '対策: データクレンジング工程を含む。不足データは追加ヒアリング' },
+        { level: 'low', title: 'API利用コスト', mitigation: '対策: Gemini API等コスト効率の良いモデルを選定' },
+      ]
+    },
+    lp: {
+      title: `${industry}向け LP / Webサイト制作`,
+      summary: `${industry}の${requirements}を実現する、コンバージョン最適化されたランディングページを制作します。レスポンシブ対応・高速表示・SEO対策を標準装備。`,
+      items: [
+        { name: 'デザイン・構成設計', desc: 'ワイヤーフレーム・ビジュアルデザイン', price: 50000 },
+        { name: 'コーディング', desc: 'HTML/CSS/JS・レスポンシブ対応', price: 80000 },
+        { name: 'コンテンツ制作', desc: 'コピーライティング・画像選定', price: 30000 },
+        { name: 'フォーム構築', desc: 'お問い合わせフォーム・バリデーション', price: 20000 },
+        { name: 'SEO基本設定', desc: 'メタタグ・構造化データ・OGP', price: 15000 },
+        { name: 'テスト・公開', desc: '動作検証・サーバー設定', price: 15000 },
+      ],
+      schedule: [
+        { week: 'Week 1', task: 'ヒアリング\n構成設計' },
+        { week: 'Week 2', task: 'デザイン\n制作' },
+        { week: 'Week 3', task: 'コーディング\n実装' },
+        { week: 'Week 4', task: 'テスト\n公開' },
+      ],
+      risks: [
+        { level: 'low', title: 'デザインイメージの相違', mitigation: '対策: ワイヤーフレーム段階で承認プロセスを実施' },
+        { level: 'low', title: 'ブラウザ互換性', mitigation: '対策: 主要ブラウザ全てでテスト実施' },
+      ]
+    },
+    dx: {
+      title: `${industry}向け 業務DX / AI導入コンサルティング`,
+      summary: `${industry}の${requirements}を実現するため、AI・自動化技術を活用した業務改善を包括的にご支援します。現状分析からツール選定、導入、運用定着まで一気通貫で対応します。`,
+      items: [
+        { name: '現状分析・課題整理', desc: '業務フロー可視化・ボトルネック特定', price: 80000 },
+        { name: 'AI導入戦略策定', desc: 'ツール選定・ROI試算', price: 60000 },
+        { name: 'PoC（実証実験）', desc: 'プロトタイプ構築・効果検証', price: 100000 },
+        { name: '本格導入・実装', desc: 'システム構築・データ連携', price: 150000 },
+        { name: '社内教育・運用定着', desc: 'トレーニング・マニュアル作成', price: 40000 },
+      ],
+      schedule: [
+        { week: 'Month 1', task: '現状分析\n戦略策定' },
+        { week: 'Month 2', task: 'PoC\n検証' },
+        { week: 'Month 3', task: '本格導入\n実装' },
+        { week: 'Month 4', task: '教育\n運用定着' },
+      ],
+      risks: [
+        { level: 'high', title: '社内の変革抵抗', mitigation: '対策: 段階的導入+成功体験の早期創出。キーパーソンの巻き込み' },
+        { level: 'mid', title: 'ROI達成の不確実性', mitigation: '対策: PoC段階で効果を定量測定。数値で判断してから本格導入' },
+        { level: 'low', title: 'ツール選定ミス', mitigation: '対策: 複数ツールを比較検証。無料トライアルを活用' },
+      ]
+    }
+  };
+
+  const config = configs[type] || configs['gas'];
+  config.total = config.items.reduce((sum, item) => sum + item.price, 0);
+  return config;
+}
+</script>
+
+</body>
+</html>
