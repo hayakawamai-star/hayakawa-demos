@@ -210,6 +210,7 @@ flow:['無料カウンセリング','プラン設計','トレーニング開始'
 pricelist:['専属トレーナーがサポート','食事指導・LINE相談無制限','完全個室・手ぶらOK','30日間全額返金保証']},
 
 cafe:{n:'DRIP & CRAFT',kwPre:'一杯の',kw:'特別',kwSuf:'を、毎日の日常に。',s:'自家焙煎スペシャルティコーヒー ── 代官山',t:'food',loc:'代官山駅徒歩2分',tel:'03-3461-XXXX',
+heroNote:'※ テイクアウトもお気軽にどうぞ',priceNote:'最高品質の一杯をお届けします',urgency:'&#9201; 季節限定メニュー ── 数量限定でご提供中',ctaNote:'※ お気軽にお越しください',
 concept:'「ただのコーヒー」では終わらせない。\n世界12ヶ国の農園から届いた豆を、\n一杯ずつ丁寧にハンドドリップ。\nあなたの日常に、小さな贅沢を\nお届けするのが私たちの使命です。',
 badges:['12ヶ国の豆','手作りスイーツ','Wi-Fi完備'],
 f1:'世界12ヶ国から厳選した豆',f1d:'エチオピア、グァテマラ、コスタリカ。産地の農園と直接取引し、<span class="kc">最高品質</span>の生豆だけを仕入れています。',
@@ -232,6 +233,7 @@ flow:['豆の厳選','自家焙煎','ハンドドリップ','至福の一杯'],f
 pricelist:['スペシャルティ豆を使用','バリスタが一杯ずつ抽出','焼きたてスイーツ付き','テイクアウトOK']},
 
 resto:{n:'味処 匠',kwPre:'この街で愛される',kw:'本物の味',kwSuf:'を、あなたへ。',s:'素材にこだわり、一品一品 心を込めて',t:'food',loc:'最寄駅徒歩3分',tel:'03-XXXX-XXXX',
+heroNote:'※ ネット予約なら24時間受付',priceNote:'心を込めた料理をお届けします',urgency:'&#9201; ご予約はお早めに ── 人気のお席から埋まります',ctaNote:'※ ネット予約で24時間受付 ／ お気軽にどうぞ',
 concept:'「美味しい」の先にある、\n心からの「幸せ」をお届けしたい。\n厳選した素材を活かし、\n職人が一品一品丁寧に仕上げる。\nここでしか味わえない特別な時間を\nお約束します。',
 badges:['厳選素材','職人の技','完全個室あり'],
 f1:'厳選素材へのこだわり',f1d:'全国の産地から届く旬の食材を、目利きの料理長が毎朝厳選。<span class="kc">素材本来の旨み</span>を最大限に引き出す調理法でご提供します。',
@@ -391,7 +393,6 @@ function go(){
 const v=id=>document.getElementById(id).value;
 const ap=document.querySelector('.pb.on');let pr=D.salon;
 if(ap){const k=ap.id.replace('p-','');if(D[k])pr=D[k];}
-const c=CC,g=pr.gold||'#c4a265',ctaC=pr.ctaColor||'#e67e22';
 const fm=document.getElementById('fm'),t0=Date.now();
 
 const steps=['構造を生成中...','デザインを適用中...','コンテンツを配置中...','心理設計を反映中...','最終調整中...'];
@@ -399,12 +400,17 @@ fm.innerHTML=`<div class="ldw"><div class="ldo"><div class="ldc"></div></div><di
 let si=0,stepIdx=0;
 const st=setInterval(()=>{si+=4;if(si>95)si=95;document.getElementById('lb').style.width=si+'%';const ns=Math.floor(si/20);if(ns!==stepIdx&&ns<steps.length){stepIdx=ns;const el=document.getElementById('lstep');if(el){el.style.opacity='0';setTimeout(()=>{el.textContent=steps[ns];el.style.opacity='1'},150)}}},60);
 
-const name=v('i-n')||pr.n,cta=v('i-c')||pr.cta,price=v('i-p')||pr.p,pnote=v('i-pn')||pr.pn;
+const name=v('i-n')||pr.n;
 // Dynamic preset + image matching based on business name
 const autoPreset=matchPreset(name);
 if(autoPreset&&D[autoPreset]){pr={...D[autoPreset],n:name};}
 const imgMatch=matchImages(name);
 if(imgMatch){pr={...pr,hero:imgMatch.hero,imgs:imgMatch.imgs};}
+// solKw should use the entered business name, not the preset default
+pr.solKw=name;
+// Get CTA/price/colors AFTER preset override so they match the correct preset
+const cta=v('i-c')||pr.cta,price=v('i-p')||pr.p,pnote=v('i-pn')||pr.pn;
+const c=CC,g=pr.gold||'#c4a265',ctaC=pr.ctaColor||'#e67e22';
 const concept=(pr.concept||'').replace(/\n/g,'<br>');
 
 // CTA Band HTML (reusable)
@@ -667,7 +673,7 @@ ${pr.badges.map(b=>`<div class="gold-badge">${b}</div>`).join('')}
 </div>
 <div class="hero-cta-wrap">
 <button class="hero-cta-btn">${cta}</button>
-<p class="hero-note">&#x203B; 30秒で完了します ／ 無理な勧誘は一切ございません</p>
+<p class="hero-note">${pr.heroNote||'&#x203B; 30秒で完了します ／ 無理な勧誘は一切ございません'}</p>
 </div>
 </div>
 <div class="scroll-ind">
@@ -833,7 +839,7 @@ ${pr.po?`<div style="font-size:14px;color:#bbb;margin-bottom:8px">通常価格 <
 <span style="font-family:'Inter',sans-serif;font-size:64px;font-weight:900;color:${c};line-height:1;letter-spacing:-3px">${price}</span>
 <span style="font-size:13px;font-weight:600;color:#aaa">${price==='0'?'':'（税込）'}</span>
 </div>
-<div style="font-size:11px;color:#aaa;margin-bottom:36px;letter-spacing:1.5px">全額返金保証付き</div>
+<div style="font-size:11px;color:#aaa;margin-bottom:36px;letter-spacing:1.5px">${pr.priceNote||'全額返金保証付き'}</div>
 <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,#ece8e1,transparent);margin-bottom:28px"></div>
 <div style="text-align:left;margin-bottom:36px">
 ${(pr.pricelist||[]).map(t=>`<div class="tick-item">
@@ -842,7 +848,7 @@ ${(pr.pricelist||[]).map(t=>`<div class="tick-item">
 </div>`).join('')}
 </div>
 <button class="price-cta-btn">${cta}</button>
-<div style="font-size:11px;color:#999;margin-top:12px;letter-spacing:1px">&#x203B; 30秒で完了 ／ 無料・営業電話なし</div>
+<div style="font-size:11px;color:#999;margin-top:12px;letter-spacing:1px">${pr.ctaNote||'&#x203B; 30秒で完了 ／ 無料・営業電話なし'}</div>
 </div>
 </div>
 </section>
@@ -883,14 +889,14 @@ ${ctaBand}
 <div class="final-cta-bg" style="background-image:url('${pr.hero}')"></div>
 <div class="final-cta-ov"></div>
 <div class="final-cta-content anim-target">
-<div class="final-urgency">&#9201; 毎月限定10名様 ── 今だけの特別価格</div>
+<div class="final-urgency">${pr.urgency||'&#9201; 毎月限定10名様 ── 今だけの特別価格'}</div>
 <h2 class="final-h">${pr.kwPre}<span style="font-size:48px;display:inline-block;margin:0 4px">${pr.kw}</span>${pr.kwSuf}</h2>
 <p class="final-sub">${pr.s}</p>
 <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
 <button class="final-cta-btn">${cta}</button>
 <button class="final-line-btn">${pr.ctaSub||'LINEで相談する'}</button>
 </div>
-<p style="margin-top:20px;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:1px">&#x203B; 無理な勧誘は一切ございません ／ 30秒で完了</p>
+<p style="margin-top:20px;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:1px">${pr.ctaNote||'&#x203B; 無理な勧誘は一切ございません ／ 30秒で完了'}</p>
 </div>
 </section>
 
