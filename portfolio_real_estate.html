@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グランドステート | 不動産買取・売却</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --navy: #1a2744;
+  --navy-light: #2a3d5e;
+  --gold: #c5a24d;
+  --gold-light: #e8d5a0;
+  --bg-light: #f7f5f2;
+  --bg-section: #f0ede8;
+  --dark: #1a1a1a;
+  --text: #3d3d3d;
+  --text-light: #777;
+  --white: #ffffff;
+  --border: #e5e0da;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Noto Sans JP', 'Inter', sans-serif; color: var(--text); line-height: 1.8; background: var(--white); overflow-x: hidden; }
+.serif { font-family: 'Noto Serif JP', serif; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero */
+.hero {
+  position: relative; min-height: 100vh; display: flex; align-items: center;
+  background: linear-gradient(135deg, rgba(26,39,68,0.85), rgba(26,39,68,0.6)),
+    url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80') center/cover no-repeat;
+}
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; width: 100%; }
+.hero-text { color: var(--white); }
+.hero-tag {
+  display: inline-block; border: 1px solid var(--gold); color: var(--gold); padding: 0.3rem 1.2rem;
+  border-radius: 4px; font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 1.5rem; font-weight: 600;
+}
+.hero h1 { font-family: 'Noto Serif JP', serif; font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.5; margin-bottom: 1.5rem; }
+.hero h1 .gold { color: var(--gold-light); }
+.hero-desc { font-size: 1rem; opacity: 0.85; margin-bottom: 2rem; line-height: 2; }
+.btn-gold {
+  display: inline-block; padding: 1rem 2.5rem; background: linear-gradient(135deg, var(--gold), #d4b45a);
+  color: var(--white); border-radius: 6px; font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.05em; transition: all 0.3s; box-shadow: 0 4px 15px rgba(197,162,77,0.4);
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(197,162,77,0.5); }
+.btn-ghost {
+  display: inline-block; padding: 1rem 2.5rem; border: 2px solid var(--white);
+  color: var(--white); border-radius: 6px; font-weight: 700; font-size: 1rem;
+  transition: all 0.3s; margin-left: 1rem;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+.hero-card {
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 16px;
+  padding: 2.5rem; border: 1px solid rgba(255,255,255,0.15);
+}
+.hero-card h3 { color: var(--gold-light); font-size: 1.1rem; margin-bottom: 1.5rem; font-family: 'Noto Serif JP', serif; }
+.hero-card-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--white); }
+.hero-card-item:last-child { border-bottom: none; }
+.hero-card-icon { font-size: 1.5rem; min-width: 40px; text-align: center; }
+.hero-card-item p { font-size: 0.9rem; opacity: 0.85; }
+.hero-card-item strong { display: block; font-size: 1rem; opacity: 1; }
+
+section { padding: 5rem 1.5rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label { display: inline-block; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 600; }
+.section-title { font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem); color: var(--navy); line-height: 1.5; margin-bottom: 1rem; }
+.section-subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 3rem; }
+.text-center { text-align: center; }
+
+/* Problem */
+.problem { background: var(--bg-light); }
+.problem-list { max-width: 800px; margin: 0 auto; }
+.problem-item {
+  display: flex; align-items: flex-start; gap: 1.2rem; padding: 1.5rem; background: var(--white);
+  border-radius: 12px; margin-bottom: 1rem; box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+  border-left: 4px solid var(--gold); transition: transform 0.3s;
+}
+.problem-item:hover { transform: translateX(4px); }
+.problem-check { color: var(--gold); font-size: 1.3rem; min-width: 30px; padding-top: 0.2rem; }
+.problem-item h3 { font-size: 1rem; color: var(--navy); margin-bottom: 0.2rem; }
+.problem-item p { font-size: 0.85rem; color: var(--text-light); }
+
+/* Reasons */
+.reasons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.reason-card {
+  text-align: center; padding: 2.5rem 2rem; background: var(--white); border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.05); transition: transform 0.3s; position: relative; overflow: hidden;
+}
+.reason-card:hover { transform: translateY(-6px); }
+.reason-number {
+  font-family: 'Inter', sans-serif; font-size: 4rem; font-weight: 800; color: rgba(26,39,68,0.06);
+  position: absolute; top: -10px; right: 15px; line-height: 1;
+}
+.reason-icon {
+  width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.8rem;
+}
+.reason-card h3 { font-size: 1.1rem; color: var(--navy); margin-bottom: 0.8rem; font-family: 'Noto Serif JP', serif; }
+.reason-card p { font-size: 0.9rem; color: var(--text-light); }
+
+/* Numbers */
+.numbers { background: var(--navy); color: var(--white); }
+.numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
+.number-item h3 { font-family: 'Inter', sans-serif; font-size: clamp(2.2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--gold-light); }
+.number-item p { font-size: 0.9rem; opacity: 0.7; margin-top: 0.3rem; }
+.counter { display: inline-block; }
+
+/* Flow */
+.flow-section { background: var(--bg-light); }
+.flow-steps { max-width: 800px; margin: 0 auto; position: relative; }
+.flow-steps::before {
+  content: ''; position: absolute; left: 30px; top: 0; bottom: 0; width: 2px; background: var(--gold-light);
+}
+.flow-step {
+  display: flex; align-items: flex-start; gap: 2rem; margin-bottom: 2.5rem; position: relative;
+}
+.flow-num {
+  min-width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  color: var(--gold-light); display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.2rem; z-index: 1;
+}
+.flow-content { background: var(--white); border-radius: 12px; padding: 1.5rem 2rem; box-shadow: 0 2px 15px rgba(0,0,0,0.04); flex: 1; }
+.flow-content h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: 0.3rem; }
+.flow-content p { font-size: 0.9rem; color: var(--text-light); }
+
+/* Testimonials */
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+.testimonial-card {
+  background: var(--white); border-radius: 16px; padding: 2rem; box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--gold);
+}
+.testimonial-tag { display: inline-block; background: var(--bg-light); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.75rem; color: var(--navy); font-weight: 600; margin-bottom: 1rem; }
+.testimonial-text { font-size: 0.95rem; line-height: 2; margin-bottom: 1.2rem; }
+.testimonial-author { font-weight: 700; font-size: 0.9rem; color: var(--navy); }
+.testimonial-detail { font-size: 0.8rem; color: var(--text-light); }
+
+/* FAQ */
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question {
+  padding: 1.5rem 0; cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-weight: 700; font-size: 1rem; color: var(--navy);
+}
+.faq-question::after { content: '+'; font-size: 1.5rem; color: var(--gold); transition: transform 0.3s; }
+.faq-item.open .faq-question::after { transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner { padding: 0 0 1.5rem; font-size: 0.9rem; color: var(--text-light); line-height: 1.9; }
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  text-align: center; color: var(--white); position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; top: -50%; right: -20%; width: 600px; height: 600px;
+  border-radius: 50%; background: rgba(197,162,77,0.08);
+}
+.cta-section h2 { font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem); margin-bottom: 1rem; position: relative; }
+.cta-section p { margin-bottom: 2rem; opacity: 0.8; font-size: 1rem; position: relative; }
+.cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+/* Floating CTA */
+.floating-cta {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(26,39,68,0.97); backdrop-filter: blur(10px);
+  padding: 0.8rem 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+  transform: translateY(100%); transition: transform 0.4s ease;
+}
+.floating-cta.show { transform: translateY(0); }
+.floating-cta p { font-size: 0.85rem; color: var(--white); font-weight: 500; }
+.floating-cta .btn-gold { padding: 0.7rem 2rem; font-size: 0.9rem; }
+
+/* Footer */
+footer { background: #0f1825; color: rgba(255,255,255,0.5); text-align: center; padding: 3rem 1.5rem 2rem; }
+footer .brand { font-family: 'Noto Serif JP', serif; font-size: 1.3rem; color: var(--gold-light); margin-bottom: 1rem; }
+footer p { font-size: 0.8rem; margin-bottom: 0.3rem; }
+footer .credit { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.5; }
+footer .sample-note { margin-top: 0.5rem; font-size: 0.65rem; opacity: 0.3; }
+
+@media (max-width: 768px) {
+  section { padding: 3.5rem 1.2rem; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-card { display: none; }
+  .hero { min-height: 85vh; }
+  .reasons-grid { grid-template-columns: 1fr; }
+  .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+  .flow-steps::before { left: 29px; }
+  .floating-cta { flex-direction: column; gap: 0.5rem; padding: 0.6rem 1rem; }
+  .btn-ghost { margin-left: 0; margin-top: 0.5rem; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-tag">最短3日で現金化</div>
+      <h1 class="serif">あなたの不動産、<br><span class="gold">想像以上の価格</span>で<br>買い取ります。</h1>
+      <p class="hero-desc">仲介手数料0円。秘密厳守。どんな物件でもまずはご相談ください。<br>累計買取実績<strong>3,200件超</strong>の信頼と実績。</p>
+      <div>
+        <a href="#contact" class="btn-gold">無料査定を依頼する</a>
+        <a href="tel:0120-948-327" class="btn-ghost">0120-948-327</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3 class="serif">グランドステートが選ばれる理由</h3>
+      <div class="hero-card-item">
+        <div class="hero-card-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><text x="16" y="22" text-anchor="middle" font-size="16" fill="#e8d5a0" font-family="serif">&#165;</text></svg></div>
+        <div><strong>業界最高水準の買取価格</strong><p>相場の最大120%で買取実績あり</p></div>
+      </div>
+      <div class="hero-card-item">
+        <div class="hero-card-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><path d="M18 6 L12 17 H18 L14 26" stroke="#e8d5a0" stroke-width="2" fill="none" stroke-linejoin="round"/></svg></div>
+        <div><strong>最短3日でお振込み</strong><p>スピード査定・スピード決済</p></div>
+      </div>
+      <div class="hero-card-item">
+        <div class="hero-card-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><path d="M8 18 L14 18 L16 16 L18 18 L24 18" stroke="#e8d5a0" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div><strong>仲介手数料0円</strong><p>余計なコストは一切かかりません</p></div>
+      </div>
+      <div class="hero-card-item">
+        <div class="hero-card-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><rect x="11" y="15" width="10" height="9" rx="1" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><path d="M13 15 V12 A3 3 0 0 1 19 12 V15" stroke="#e8d5a0" stroke-width="1.5" fill="none"/></svg></div>
+        <div><strong>秘密厳守</strong><p>ご近所に知られず売却完了</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="problem">
+  <div class="container text-center">
+    <span class="section-label">Problem</span>
+    <h2 class="section-title">こんなお悩みを<br>抱えていませんか？</h2>
+    <div class="problem-list fade-in" style="margin-top:2rem;">
+      <div class="problem-item">
+        <div class="problem-check">☑</div>
+        <div><h3>相続した実家、どうすればいいか分からない</h3><p>遠方の実家を相続したが、管理も売却も手が回らない…</p></div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">☑</div>
+        <div><h3>住宅ローンの返済が厳しくなった</h3><p>収入の変化で月々の返済が負担に。売却して身軽になりたい。</p></div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">☑</div>
+        <div><h3>離婚による財産分与が必要</h3><p>できるだけ早く、トラブルなく不動産を現金化したい。</p></div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">☑</div>
+        <div><h3>築年数が古くて売れるか不安</h3><p>築30年以上、リフォームしていない物件でも大丈夫？</p></div>
+      </div>
+      <div class="problem-item">
+        <div class="problem-check">☑</div>
+        <div><h3>仲介では売れず、何ヶ月も経過</h3><p>不動産屋に預けたまま内覧もなく時間だけが過ぎていく…</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reasons -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Why Us</span>
+    <h2 class="section-title serif">グランドステートが<br>選ばれる<span style="color:var(--gold)">3つ</span>の理由</h2>
+    <p class="section-subtitle">20年以上の不動産買取実績で培った、お客様ファーストの対応</p>
+    <div class="reasons-grid fade-in">
+      <div class="reason-card">
+        <div class="reason-number">01</div>
+        <div class="reason-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><polygon points="18,4 30,14 24,32 12,32 6,14" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><line x1="6" y1="14" x2="30" y2="14" stroke="#e8d5a0" stroke-width="1.5"/></svg></div>
+        <h3>業界最高水準の<br>買取価格</h3>
+        <p>自社でリノベーション・再販まで行うため、中間マージンをカット。その分を買取価格に上乗せします。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">02</div>
+        <div class="reason-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M18 6 L4 18 H8 V30 H28 V18 H32 Z" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><rect x="15" y="22" width="6" height="8" stroke="#e8d5a0" stroke-width="1.5" fill="none"/></svg></div>
+        <h3>どんな物件でも<br>買取可能</h3>
+        <p>築古・事故物件・再建築不可・借地権付き…他社で断られた物件もグランドステートなら買取可能です。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">03</div>
+        <div class="reason-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="8" y="4" width="20" height="28" rx="2" stroke="#e8d5a0" stroke-width="1.5" fill="none"/><line x1="13" y1="12" x2="23" y2="12" stroke="#e8d5a0" stroke-width="1.5"/><line x1="13" y1="18" x2="23" y2="18" stroke="#e8d5a0" stroke-width="1.5"/><line x1="13" y1="24" x2="20" y2="24" stroke="#e8d5a0" stroke-width="1.5"/></svg></div>
+        <h3>面倒な手続き<br>すべてお任せ</h3>
+        <p>残置物の処分、各種届出、税金のご相談まで。売却に関わるすべてをワンストップでサポートします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Numbers -->
+<section class="numbers">
+  <div class="container">
+    <div class="numbers-grid fade-in">
+      <div class="number-item">
+        <h3><span class="counter" data-target="3200">0</span>件+</h3>
+        <p>累計買取実績</p>
+      </div>
+      <div class="number-item">
+        <h3><span class="counter" data-target="98">0</span>%</h3>
+        <p>お客様満足度</p>
+      </div>
+      <div class="number-item">
+        <h3><span class="counter" data-target="20">0</span>年</h3>
+        <p>の業界経験</p>
+      </div>
+      <div class="number-item">
+        <h3>最短<span class="counter" data-target="3">0</span>日</h3>
+        <p>で現金化</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Flow -->
+<section class="flow-section">
+  <div class="container text-center">
+    <span class="section-label">Flow</span>
+    <h2 class="section-title serif">買取の流れ</h2>
+    <p class="section-subtitle">お問い合わせから最短3日でお振込みまで完了</p>
+  </div>
+  <div class="flow-steps fade-in">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-content">
+        <h3>無料査定のお申し込み</h3>
+        <p>お電話またはフォームよりお問い合わせ。物件の概要をお伺いします。</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-content">
+        <h3>現地調査・査定</h3>
+        <p>経験豊富なスタッフが物件を調査。最短即日で査定金額をご提示します。</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-content">
+        <h3>買取金額のご提示</h3>
+        <p>査定結果をもとに、最大限の買取価格をご提示。もちろん無料です。</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-content">
+        <h3>ご契約・お引き渡し</h3>
+        <p>条件にご納得いただけましたらご契約。残置物の処理もお任せください。</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">05</div>
+      <div class="flow-content">
+        <h3>お振込み完了</h3>
+        <p>ご契約後、最短3日で指定口座へお振込み。確実にお届けします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Voice</span>
+    <h2 class="section-title serif">お客様の声</h2>
+    <p class="section-subtitle">グランドステートで不動産売却されたお客様から</p>
+    <div class="testimonial-grid fade-in">
+      <div class="testimonial-card">
+        <div class="testimonial-tag">相続物件</div>
+        <p class="testimonial-text">父から相続した築45年の一軒家。他社では「解体費用がかかる」と言われましたが、グランドステートさんは現状のまま高値で買い取ってくれました。対応もとても親切で安心できました。</p>
+        <div class="testimonial-author">T.M 様（60代・男性）</div>
+        <div class="testimonial-detail">神奈川県・一戸建て</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-tag">住み替え</div>
+        <p class="testimonial-text">住み替えで急いでいたのですが、問い合わせから1週間で全て完了。想像以上の金額で買い取っていただき、新居の頭金に充てることができました。スピード感が素晴らしいです。</p>
+        <div class="testimonial-author">S.K 様（50代・女性）</div>
+        <div class="testimonial-detail">東京都・マンション</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-tag">離婚による売却</div>
+        <p class="testimonial-text">デリケートな事情にも配慮いただき、近隣に知られることなく売却できました。手続きも全て代行していただき、精神的な負担が大幅に軽減されました。</p>
+        <div class="testimonial-author">A.H 様（40代・男性）</div>
+        <div class="testimonial-detail">埼玉県・一戸建て</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--bg-light);">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title serif">よくあるご質問</h2>
+      <p class="section-subtitle">不動産買取に関するよくあるご質問</p>
+    </div>
+    <div class="faq-list fade-in" style="max-width:800px;margin:0 auto;">
+      <div class="faq-item">
+        <div class="faq-question">査定は本当に無料ですか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、査定は完全無料です。査定後にお断りいただいても一切費用はかかりません。まずはお気軽にご相談ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">築年数が古くても買い取ってもらえますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、築年数に関わらず買取可能です。築50年以上の物件や、再建築不可物件でも対応しております。まずは査定をご依頼ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">家の中の荷物はそのままでいいですか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、残置物の処分は弊社で行いますので、そのままの状態でお引き渡しいただけます。処分費用は買取価格に含まれており、追加料金はございません。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">近隣に知られずに売却できますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、秘密厳守で対応いたします。広告掲載や看板設置は行わず、ご近所に知られることなく売却が可能です。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">住宅ローンが残っていても大丈夫ですか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、住宅ローンが残っている場合でも買取可能です。残債の精算手続きもサポートいたしますのでご安心ください。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <h2 class="serif">まずは無料査定から。<br>あなたの不動産の「本当の価値」を<br>お伝えします。</h2>
+    <p>お電話でもWebでも。秘密厳守・無理な営業は一切いたしません。</p>
+    <div class="cta-buttons">
+      <a href="tel:0120-948-327" class="btn-gold">0120-948-327</a>
+      <a href="#" class="btn-ghost">無料Web査定はこちら</a>
+    </div>
+    <p style="margin-top:1rem;font-size:0.85rem;opacity:0.6;">受付時間: 9:00〜20:00（土日祝も対応）</p>
+  </div>
+</section>
+
+<!-- Floating CTA -->
+<div class="floating-cta" id="floatingCta">
+  <p>不動産の無料査定 最短即日回答</p>
+  <a href="#contact" class="btn-gold">無料査定を依頼する</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="brand serif">GRAND STATE</div>
+  <p>グランドステート株式会社</p>
+  <p>〒100-0005 東京都千代田区丸の内2-7-3 グランドステートビル8F</p>
+  <p>TEL: 0120-948-327 ｜ info@grandstate.co.jp</p>
+  <p style="margin-top:0.5rem;">宅地建物取引業 東京都知事(3)第48721号</p>
+</footer>
+
+<div style="text-align:center; padding:1.5rem; background:#f5f5f5; border-top:1px solid #e0e0e0;">
+  <p style="font-size:0.75rem; color:#999; line-height:1.8;">
+    ※ 本ページはLP制作のスキルを示すためのポートフォリオ用デモです。<br>
+    実在の店舗・サービス・商品ではありません。画像はイメージです。<br>
+    <span style="margin-top:0.5rem; display:inline-block;">LP制作: 早川まい ｜ <a href="https://github.com/hayakawamai-star" style="color:#888; text-decoration:underline;">GitHub</a></span>
+  </p>
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const isFloat = target % 1 !== 0;
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * target;
+    el.textContent = isFloat ? current.toFixed(1) : Math.floor(current).toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); } });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-answer').style.maxHeight = '0'; });
+    if (!isOpen) { item.classList.add('open'); answer.style.maxHeight = answer.scrollHeight + 'px'; }
+  });
+});
+
+const floating = document.getElementById('floatingCta');
+window.addEventListener('scroll', () => { floating.classList.toggle('show', window.scrollY > 600); });
+</script>
+</body>
+</html>
