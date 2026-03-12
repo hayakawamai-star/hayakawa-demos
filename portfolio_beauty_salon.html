@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière（ルミエール）| 全身脱毛・エステサロン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --pink-gold: #c5956b;
+  --rose: #d4a0a0;
+  --rose-light: #f5e6e0;
+  --rose-bg: #fdf8f6;
+  --dark: #2d2226;
+  --text: #4a3a3f;
+  --text-light: #8a7a7f;
+  --white: #ffffff;
+  --gold: #c9a96e;
+  --gold-light: #e8d5b0;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Noto Sans JP', 'Inter', sans-serif; color: var(--text); line-height: 1.8; background: var(--white); overflow-x: hidden; }
+.serif { font-family: 'Noto Serif JP', serif; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* Fade-in animation */
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero */
+.hero {
+  position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(45,34,38,0.35), rgba(197,149,107,0.25)),
+    url('https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1600&q=80') center/cover no-repeat;
+}
+.hero-content { text-align: center; color: var(--white); padding: 2rem; max-width: 800px; }
+.hero-badge {
+  display: inline-block; padding: 0.4rem 1.6rem; border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 50px; font-size: 0.8rem; letter-spacing: 0.15em; margin-bottom: 1.5rem;
+  backdrop-filter: blur(4px); background: rgba(255,255,255,0.1);
+}
+.hero h1 { font-family: 'Noto Serif JP', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.4; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+.hero h1 span { color: var(--gold-light); }
+.hero p { font-size: clamp(0.95rem, 2vw, 1.15rem); margin-bottom: 2rem; opacity: 0.9; line-height: 1.9; }
+.btn-primary {
+  display: inline-block; padding: 1rem 3rem; background: linear-gradient(135deg, var(--pink-gold), var(--gold));
+  color: var(--white); border-radius: 50px; font-weight: 700; font-size: 1.05rem;
+  letter-spacing: 0.05em; transition: all 0.3s; box-shadow: 0 4px 20px rgba(197,149,107,0.4);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(197,149,107,0.5); }
+.btn-sub { display: block; margin-top: 0.8rem; font-size: 0.85rem; opacity: 0.8; }
+
+/* Section common */
+section { padding: 5rem 1.5rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label {
+  display: inline-block; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--pink-gold);
+  text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 600;
+}
+.section-title {
+  font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  color: var(--dark); line-height: 1.5; margin-bottom: 1rem;
+}
+.section-subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 3rem; }
+.text-center { text-align: center; }
+
+/* Problem section */
+.problem { background: var(--rose-bg); }
+.problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+.problem-card {
+  background: var(--white); border-radius: 16px; padding: 2rem; text-align: center;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04); transition: transform 0.3s;
+}
+.problem-card:hover { transform: translateY(-4px); }
+.problem-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.problem-card h3 { font-size: 1.05rem; color: var(--dark); margin-bottom: 0.5rem; }
+.problem-card p { font-size: 0.9rem; color: var(--text-light); }
+
+/* Menu section */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.menu-card { border-radius: 20px; overflow: hidden; background: var(--white); box-shadow: 0 4px 30px rgba(0,0,0,0.06); transition: transform 0.3s; }
+.menu-card:hover { transform: translateY(-6px); }
+.menu-card img { width: 100%; height: 220px; object-fit: cover; }
+.menu-card-body { padding: 1.5rem; }
+.menu-card-body h3 { font-family: 'Noto Serif JP', serif; font-size: 1.2rem; color: var(--dark); margin-bottom: 0.5rem; }
+.menu-card-body p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem; }
+.menu-price { font-size: 1.3rem; font-weight: 700; color: var(--pink-gold); }
+.menu-price small { font-size: 0.8rem; font-weight: 400; color: var(--text-light); }
+
+/* Before After */
+.ba-section { background: var(--rose-bg); }
+.ba-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.ba-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.05); }
+.ba-images { display: grid; grid-template-columns: 1fr 1fr; position: relative; }
+.ba-images img { width: 100%; height: 200px; object-fit: cover; }
+.ba-arrow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--pink-gold); color: var(--white); width: 40px; height: 40px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.ba-text { padding: 1.5rem; text-align: center; }
+.ba-text h4 { color: var(--dark); margin-bottom: 0.3rem; }
+.ba-text p { font-size: 0.85rem; color: var(--text-light); }
+
+/* Testimonials */
+.testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.testimonial-card {
+  background: var(--white); border-radius: 20px; padding: 2rem;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.05); position: relative;
+}
+.testimonial-card::before {
+  content: '"'; font-family: 'Noto Serif JP', serif; font-size: 4rem;
+  color: var(--rose); position: absolute; top: 0.5rem; left: 1.5rem; line-height: 1;
+}
+.testimonial-text { font-size: 0.95rem; line-height: 1.9; margin-bottom: 1rem; padding-top: 1.5rem; }
+.testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+.testimonial-avatar {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--rose-light);
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.testimonial-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); }
+.testimonial-detail { font-size: 0.8rem; color: var(--text-light); }
+.stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 0.3rem; }
+
+/* Numbers */
+.numbers { background: linear-gradient(135deg, var(--dark), #3d2a30); color: var(--white); }
+.numbers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; }
+.number-item h3 { font-family: 'Inter', sans-serif; font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; color: var(--gold-light); }
+.number-item p { font-size: 0.9rem; opacity: 0.8; margin-top: 0.3rem; }
+.counter { display: inline-block; }
+
+/* Pricing */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.pricing-card {
+  background: var(--white); border-radius: 20px; padding: 2.5rem 2rem;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.06); text-align: center; position: relative; border: 2px solid transparent;
+  transition: all 0.3s;
+}
+.pricing-card.popular { border-color: var(--pink-gold); }
+.pricing-card.popular::before {
+  content: '人気No.1'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--pink-gold), var(--gold)); color: var(--white);
+  padding: 0.3rem 1.5rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700;
+}
+.pricing-card h3 { font-family: 'Noto Serif JP', serif; font-size: 1.2rem; color: var(--dark); margin-bottom: 1rem; }
+.pricing-amount { font-size: 2.5rem; font-weight: 700; color: var(--pink-gold); margin-bottom: 0.5rem; }
+.pricing-amount small { font-size: 1rem; font-weight: 400; }
+.pricing-note { font-size: 0.8rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.pricing-features { list-style: none; text-align: left; margin-bottom: 2rem; }
+.pricing-features li { padding: 0.5rem 0; font-size: 0.9rem; border-bottom: 1px solid #f0e8e5; }
+.pricing-features li::before { content: '✓ '; color: var(--pink-gold); font-weight: 700; }
+
+/* FAQ */
+.faq-item { border-bottom: 1px solid #ede5e2; }
+.faq-question {
+  padding: 1.5rem 0; cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-weight: 700; font-size: 1rem; color: var(--dark);
+}
+.faq-question::after { content: '+'; font-size: 1.5rem; color: var(--pink-gold); transition: transform 0.3s; }
+.faq-item.open .faq-question::after { transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner { padding: 0 0 1.5rem; font-size: 0.9rem; color: var(--text-light); line-height: 1.9; }
+
+/* CTA section */
+.cta-section {
+  background: linear-gradient(135deg, rgba(197,149,107,0.9), rgba(212,160,160,0.9)),
+    url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80') center/cover;
+  text-align: center; color: var(--white);
+}
+.cta-section h2 { font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem); margin-bottom: 1rem; }
+.cta-section p { margin-bottom: 2rem; opacity: 0.9; font-size: 1rem; }
+.btn-white {
+  display: inline-block; padding: 1rem 3rem; background: var(--white); color: var(--pink-gold);
+  border-radius: 50px; font-weight: 700; font-size: 1.05rem; transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+
+/* Floating CTA */
+.floating-cta {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  padding: 0.8rem 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  transform: translateY(100%); transition: transform 0.4s ease;
+}
+.floating-cta.show { transform: translateY(0); }
+.floating-cta p { font-size: 0.85rem; color: var(--dark); font-weight: 500; }
+.floating-cta .btn-primary { padding: 0.7rem 2rem; font-size: 0.9rem; }
+
+/* Footer */
+footer { background: var(--dark); color: rgba(255,255,255,0.6); text-align: center; padding: 3rem 1.5rem 2rem; }
+footer .brand { font-family: 'Noto Serif JP', serif; font-size: 1.3rem; color: var(--gold-light); margin-bottom: 1rem; }
+footer p { font-size: 0.8rem; margin-bottom: 0.3rem; }
+footer .credit { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.5; }
+footer .sample-note { margin-top: 0.5rem; font-size: 0.65rem; opacity: 0.3; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  section { padding: 3.5rem 1.2rem; }
+  .hero { min-height: 90vh; }
+  .ba-images img { height: 150px; }
+  .floating-cta { flex-direction: column; gap: 0.5rem; padding: 0.6rem 1rem; }
+  .floating-cta p { font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">GRAND OPEN CAMPAIGN</div>
+    <h1 class="serif">素肌が、<span>いちばんの</span><br>ドレスになる。</h1>
+    <p>医療提携の最新脱毛×エステで、触れたくなる素肌へ。<br>初回限定 全身脱毛 <strong>月々2,980円〜</strong></p>
+    <a href="#contact" class="btn-primary">無料カウンセリング予約</a>
+    <span class="btn-sub">＼ 30秒で完了・しつこい勧誘なし ／</span>
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="problem">
+  <div class="container text-center">
+    <span class="section-label">Problem</span>
+    <h2 class="section-title">こんなお悩み、<br class="sp-only">ありませんか？</h2>
+    <div class="problem-grid fade-in">
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="#c5956b" stroke-width="2" fill="none"/><line x1="20" y1="8" x2="20" y2="32" stroke="#c5956b" stroke-width="2"/><line x1="15" y1="12" x2="25" y2="12" stroke="#c5956b" stroke-width="2"/></svg></div>
+        <h3>自己処理で肌荒れ…</h3>
+        <p>カミソリ負けや埋没毛、毎日のシェービングにうんざり</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="#c5956b" stroke-width="2" fill="none"/><path d="M15 10 L20 18 L25 10 M14 18 L20 32 L26 18" stroke="#c5956b" stroke-width="2" fill="none"/></svg></div>
+        <h3>肌見せが不安</h3>
+        <p>ノースリーブやスカートに自信が持てず、ファッションを楽しめない</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="#c5956b" stroke-width="2" fill="none"/><text x="20" y="26" text-anchor="middle" font-size="18" fill="#c5956b" font-family="serif">&#165;</text></svg></div>
+        <h3>他サロンで効果が出ない</h3>
+        <p>回数を重ねても満足できず、コストだけがかさんでいく</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="#c5956b" stroke-width="2" fill="none"/><circle cx="20" cy="20" r="12" stroke="#c5956b" stroke-width="1.5" fill="none"/><line x1="20" y1="20" x2="20" y2="13" stroke="#c5956b" stroke-width="2"/><line x1="20" y1="20" x2="26" y2="20" stroke="#c5956b" stroke-width="2"/></svg></div>
+        <h3>時間がもったいない</h3>
+        <p>毎日のムダ毛処理に費やす時間、一生分でどれだけ？</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solution / Menu -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Solution</span>
+    <h2 class="section-title serif">ルミエールの<span style="color:var(--pink-gold)">3つ</span>の施術</h2>
+    <p class="section-subtitle">最新機器×国家資格保有スタッフによる、結果にこだわる施術</p>
+    <div class="menu-grid fade-in">
+      <div class="menu-card">
+        <img src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?w=600&q=80" alt="全身脱毛">
+        <div class="menu-card-body">
+          <h3>全身脱毛コース</h3>
+          <p>顔・VIO含む全身62部位を最新SHR方式で。痛みが少なく、敏感肌でも安心。</p>
+          <div class="menu-price">月々 2,980円〜 <small>(税込)</small></div>
+        </div>
+      </div>
+      <div class="menu-card">
+        <img src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=600&q=80" alt="フェイシャル">
+        <div class="menu-card-body">
+          <h3>プレミアムフェイシャル</h3>
+          <p>ヒト幹細胞×高濃度ビタミンC導入。透明感とハリを同時に叶える。</p>
+          <div class="menu-price">初回 9,800円 <small>(税込)</small></div>
+        </div>
+      </div>
+      <div class="menu-card">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&q=80" alt="ボディケア">
+        <div class="menu-card-body">
+          <h3>痩身ボディケア</h3>
+          <p>キャビテーション+ラジオ波+EMSの3ステップで理想のボディラインへ。</p>
+          <div class="menu-price">初回 12,800円 <small>(税込)</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Before After -->
+<section class="ba-section">
+  <div class="container text-center">
+    <span class="section-label">Before / After</span>
+    <h2 class="section-title serif">お客様の変化</h2>
+    <p class="section-subtitle">※ 効果には個人差があります。施術回数・期間は目安です。写真はイメージです。</p>
+    <div class="ba-grid fade-in">
+      <div class="ba-card">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;">
+          <div style="background:#fce4ec;padding:1.5rem;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;">BEFORE</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--dark);">自己処理 週3回</div>
+            <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.3rem;">カミソリ負けで肌荒れ</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;padding:0 0.5rem;">
+            <div class="ba-arrow" style="position:static;transform:none;">→</div>
+          </div>
+          <div style="background:#e8f5e9;padding:1.5rem;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;">AFTER</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--pink-gold);">自己処理 不要</div>
+            <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.3rem;">すべすべ素肌に</div>
+          </div>
+        </div>
+        <div class="ba-text">
+          <h4>全身脱毛 8回コース</h4>
+          <p>20代女性 / 施術期間：約10ヶ月</p>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;">
+          <div style="background:#fce4ec;padding:1.5rem;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;">BEFORE</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--dark);">くすみ・毛穴</div>
+            <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.3rem;">ファンデが厚塗りに</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;padding:0 0.5rem;">
+            <div class="ba-arrow" style="position:static;transform:none;">→</div>
+          </div>
+          <div style="background:#e8f5e9;padding:1.5rem;text-align:center;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:0.75rem;color:var(--text-light);margin-bottom:0.5rem;">AFTER</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--pink-gold);">透明感UP</div>
+            <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.3rem;">薄づきメイクで自信</div>
+          </div>
+        </div>
+        <div class="ba-text">
+          <h4>フェイシャル 6回コース</h4>
+          <p>30代女性 / 施術期間：約3ヶ月</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Numbers -->
+<section class="numbers">
+  <div class="container">
+    <div class="numbers-grid fade-in">
+      <div class="number-item">
+        <h3><span class="counter" data-target="15000">0</span>+</h3>
+        <p>累計施術実績</p>
+      </div>
+      <div class="number-item">
+        <h3><span class="counter" data-target="96">0</span>%</h3>
+        <p>お客様満足度</p>
+      </div>
+      <div class="number-item">
+        <h3><span class="counter" data-target="8">0</span>年</h3>
+        <p>の施術経験</p>
+      </div>
+      <div class="number-item">
+        <h3><span class="counter" data-target="4.8">0</span></h3>
+        <p>Google口コミ評価</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Voice</span>
+    <h2 class="section-title serif">お客様の声</h2>
+    <p class="section-subtitle">ルミエールにお寄せいただいたリアルな声をご紹介</p>
+    <div class="testimonial-grid fade-in">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">3回目くらいから明らかに毛が細くなり、自己処理がほぼ不要に。スタッフさんの対応も丁寧で、毎回リラックスして通えています。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">A.S 様</div>
+            <div class="testimonial-detail">20代・全身脱毛コース</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">他のサロンでは痛みが強くて断念しましたが、ルミエールはほとんど痛みがなくてびっくり。肌もツルツルになって本当に嬉しいです。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">M.K 様</div>
+            <div class="testimonial-detail">30代・全身脱毛+フェイシャル</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">友人の紹介で通い始めました。予約も取りやすく、完全個室なのでプライバシーも安心。もっと早く来れば良かった！</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">Y</div>
+          <div>
+            <div class="testimonial-name">Y.T 様</div>
+            <div class="testimonial-detail">20代・VIO脱毛コース</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section style="background:var(--rose-bg);">
+  <div class="container text-center">
+    <span class="section-label">Price</span>
+    <h2 class="section-title serif">料金プラン</h2>
+    <p class="section-subtitle">すべて税込価格です。追加料金は一切ありません。</p>
+    <div class="pricing-grid fade-in">
+      <div class="pricing-card">
+        <h3>ライトプラン</h3>
+        <div class="pricing-amount">月々 <small>¥</small>2,980</div>
+        <div class="pricing-note">全身脱毛 6回 / 総額 148,000円</div>
+        <ul class="pricing-features">
+          <li>全身62部位対応</li>
+          <li>顔・VIO含む</li>
+          <li>シェービング無料</li>
+          <li>当日キャンセル無料</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="font-size:0.9rem;padding:0.8rem 2rem;">カウンセリング予約</a>
+      </div>
+      <div class="pricing-card popular">
+        <h3>スタンダードプラン</h3>
+        <div class="pricing-amount">月々 <small>¥</small>4,980</div>
+        <div class="pricing-note">全身脱毛 12回 / 総額 268,000円</div>
+        <ul class="pricing-features">
+          <li>全身62部位対応</li>
+          <li>顔・VIO含む</li>
+          <li>シェービング無料</li>
+          <li>当日キャンセル無料</li>
+          <li>フェイシャル2回付き</li>
+          <li>ホームケアセット進呈</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="font-size:0.9rem;padding:0.8rem 2rem;">カウンセリング予約</a>
+      </div>
+      <div class="pricing-card">
+        <h3>プレミアムプラン</h3>
+        <div class="pricing-amount">月々 <small>¥</small>7,980</div>
+        <div class="pricing-note">全身脱毛 通い放題 / 総額 398,000円</div>
+        <ul class="pricing-features">
+          <li>全身62部位対応</li>
+          <li>顔・VIO含む</li>
+          <li>シェービング無料</li>
+          <li>当日キャンセル無料</li>
+          <li>フェイシャル通い放題</li>
+          <li>ホームケアセット進呈</li>
+          <li>優先予約枠</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="font-size:0.9rem;padding:0.8rem 2rem;">カウンセリング予約</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title serif">よくあるご質問</h2>
+      <p class="section-subtitle">初めての方からよくいただくご質問</p>
+    </div>
+    <div class="faq-list fade-in" style="max-width:800px;margin:0 auto;">
+      <div class="faq-item">
+        <div class="faq-question">痛みはありますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">当サロンで導入しているSHR方式は、従来の脱毛方式と比べて痛みが大幅に軽減されています。温かさを感じる程度で、ほとんどのお客様が「思ったより全然痛くない」とおっしゃいます。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">どのくらいで効果を実感できますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">個人差はございますが、多くのお客様が3〜4回目の施術後から毛量の減少を実感されています。6回コース終了時には、自己処理がほぼ不要になる方がほとんどです。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">カウンセリング当日に施術を受けられますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、ご予約状況によっては当日の施術も可能です。カウンセリングは約30分、施術は全身で約60分です。お時間に余裕を持ってお越しください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">途中で解約できますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、途中解約はいつでも可能です。未消化分の料金は全額返金いたします。クーリングオフにも対応しておりますので、ご安心ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">敏感肌でも大丈夫ですか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">SHR方式は肌への負担が少ないため、敏感肌の方にも多くご利用いただいております。カウンセリング時に肌質を確認し、最適な出力で施術いたします。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <h2 class="serif">あなたの素肌革命、<br>ここから始まる。</h2>
+    <p>まずは無料カウンセリングで、あなたに合ったプランをご提案します。<br>無理な勧誘は一切ありません。</p>
+    <a href="tel:03-6421-7890" class="btn-white">03-6421-7890</a>
+    <p style="margin-top:1rem;font-size:0.85rem;opacity:0.8;">受付時間: 10:00〜21:00（年中無休）</p>
+  </div>
+</section>
+
+<!-- Floating CTA -->
+<div class="floating-cta" id="floatingCta">
+  <p>今月限定 全身脱毛<strong>月々2,980円〜</strong></p>
+  <a href="#contact" class="btn-primary">無料カウンセリング</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="brand serif">Lumière</div>
+  <p>〒150-0001 東京都渋谷区神宮前3-15-8 ルミエールビル3F</p>
+  <p>TEL: 03-6421-7890 ｜ info@lumiere-salon.jp</p>
+  <p style="margin-top:0.5rem;">営業時間: 10:00〜21:00（年中無休）</p>
+</footer>
+
+<div style="text-align:center; padding:1.5rem; background:#f5f5f5; border-top:1px solid #e0e0e0;">
+  <p style="font-size:0.75rem; color:#999; line-height:1.8;">
+    ※ 本ページはLP制作のスキルを示すためのポートフォリオ用デモです。<br>
+    実在の店舗・サービス・商品ではありません。画像はイメージです。<br>
+    <span style="margin-top:0.5rem; display:inline-block;">LP制作: 早川まい ｜ <a href="https://github.com/hayakawamai-star" style="color:#888; text-decoration:underline;">GitHub</a></span>
+  </p>
+</div>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const isFloat = target % 1 !== 0;
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * target;
+    el.textContent = isFloat ? current.toFixed(1) : Math.floor(current).toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+
+// Floating CTA
+const floating = document.getElementById('floatingCta');
+window.addEventListener('scroll', () => {
+  floating.classList.toggle('show', window.scrollY > 600);
+});
+</script>
+</body>
+</html>
