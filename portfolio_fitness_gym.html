@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE（フォージ）| パーソナルジム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --black: #0a0a0a;
+  --dark: #1a1a1a;
+  --dark-gray: #2a2a2a;
+  --gold: #c9a24d;
+  --gold-light: #e8d5a0;
+  --orange: #e8733a;
+  --orange-light: #f5a060;
+  --text: #d0d0d0;
+  --text-light: #888;
+  --white: #ffffff;
+  --bg-dark: #111;
+  --border: #333;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Noto Sans JP', 'Inter', sans-serif; color: var(--text); line-height: 1.8; background: var(--black); overflow-x: hidden; }
+.serif { font-family: 'Noto Serif JP', serif; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero */
+.hero {
+  position: relative; min-height: 100vh; display: flex; align-items: center;
+  background: linear-gradient(135deg, rgba(10,10,10,0.8), rgba(10,10,10,0.5)),
+    url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80') center/cover no-repeat;
+}
+.hero-content { max-width: 800px; padding: 2rem 2rem 2rem 6%; color: var(--white); }
+.hero-tag {
+  display: inline-block; padding: 0.4rem 1.4rem; background: var(--orange);
+  border-radius: 4px; font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 1.5rem;
+  font-weight: 700; text-transform: uppercase;
+}
+.hero h1 {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif; font-size: clamp(2rem, 5.5vw, 4rem);
+  font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero h1 .orange { color: var(--orange); }
+.hero-desc { font-size: 1.05rem; opacity: 0.8; margin-bottom: 2rem; line-height: 2; }
+.btn-orange {
+  display: inline-block; padding: 1rem 2.5rem; background: linear-gradient(135deg, var(--orange), var(--orange-light));
+  color: var(--white); border-radius: 6px; font-weight: 900; font-size: 1.05rem;
+  letter-spacing: 0.05em; transition: all 0.3s; box-shadow: 0 4px 20px rgba(232,115,58,0.4);
+  text-transform: uppercase;
+}
+.btn-orange:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,115,58,0.5); }
+.btn-sub-text { display: block; margin-top: 0.8rem; font-size: 0.85rem; opacity: 0.6; }
+
+section { padding: 5rem 1.5rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label { display: inline-block; font-size: 0.7rem; letter-spacing: 0.25em; color: var(--orange); text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 700; }
+.section-title { font-family: 'Inter', 'Noto Sans JP', sans-serif; font-size: clamp(1.5rem, 3.5vw, 2.4rem); color: var(--white); line-height: 1.4; margin-bottom: 1rem; font-weight: 900; }
+.section-subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 3rem; }
+.text-center { text-align: center; }
+
+/* Results / Before-After numbers */
+.results { background: var(--dark); }
+.results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+.result-card {
+  background: var(--bg-dark); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; text-align: center; transition: transform 0.3s, border-color 0.3s;
+}
+.result-card:hover { transform: translateY(-6px); border-color: var(--gold); }
+.result-label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+.result-before { font-size: 1.5rem; color: var(--text-light); text-decoration: line-through; }
+.result-arrow { font-size: 1.5rem; color: var(--orange); margin: 0.5rem 0; }
+.result-after { font-size: 2.5rem; font-weight: 900; color: var(--gold); font-family: 'Inter', sans-serif; }
+.result-change { display: inline-block; background: var(--orange); color: var(--white); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; margin-top: 0.5rem; }
+.result-detail { font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem; }
+
+/* 3 Features */
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.feature-card {
+  position: relative; border-radius: 16px; overflow: hidden; min-height: 400px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.feature-card img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.feature-overlay {
+  position: relative; z-index: 1; background: linear-gradient(transparent, rgba(10,10,10,0.95));
+  padding: 8rem 1.5rem 2rem;
+}
+.feature-num { font-family: 'Inter', sans-serif; font-size: 3rem; font-weight: 900; color: var(--orange); opacity: 0.5; line-height: 1; }
+.feature-overlay h3 { font-size: 1.2rem; color: var(--white); margin: 0.5rem 0; font-weight: 700; }
+.feature-overlay p { font-size: 0.85rem; color: var(--text-light); }
+
+/* Meal support */
+.meal-section { background: var(--dark); }
+.meal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.meal-img { border-radius: 16px; overflow: hidden; }
+.meal-img img { width: 100%; height: 350px; object-fit: cover; }
+.meal-content h3 { font-size: 1.3rem; color: var(--white); margin-bottom: 1rem; }
+.meal-content p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; line-height: 2; }
+.meal-points { list-style: none; }
+.meal-points li { padding: 0.6rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; }
+.meal-points li::before { content: '✓'; color: var(--orange); font-weight: 700; font-size: 1.1rem; }
+
+/* Trainer */
+.trainer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.trainer-card { border-radius: 16px; overflow: hidden; background: var(--dark); border: 1px solid var(--border); }
+.trainer-card img { width: 100%; height: 280px; object-fit: cover; }
+.trainer-body { padding: 1.5rem; }
+.trainer-body .title { font-size: 0.75rem; color: var(--orange); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.trainer-body h3 { font-size: 1.2rem; color: var(--white); margin: 0.3rem 0 0.5rem; }
+.trainer-body p { font-size: 0.85rem; color: var(--text-light); }
+.trainer-stats { display: flex; gap: 1.5rem; margin-top: 1rem; }
+.trainer-stat { text-align: center; }
+.trainer-stat .num { font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--gold); }
+.trainer-stat .label { font-size: 0.7rem; color: var(--text-light); }
+
+/* Pricing */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.pricing-card {
+  background: var(--dark); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2.5rem 2rem; text-align: center; transition: all 0.3s; position: relative;
+}
+.pricing-card.popular { border-color: var(--gold); }
+.pricing-card.popular::before {
+  content: 'MOST POPULAR'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--white);
+  padding: 0.3rem 1.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 900;
+  letter-spacing: 0.1em;
+}
+.pricing-card h3 { font-size: 1.1rem; color: var(--white); margin-bottom: 1rem; font-weight: 700; }
+.pricing-amount { font-family: 'Inter', sans-serif; font-size: 2.8rem; font-weight: 900; color: var(--gold); margin-bottom: 0.3rem; }
+.pricing-amount small { font-size: 1rem; font-weight: 400; }
+.pricing-period { font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.pricing-features { list-style: none; text-align: left; margin-bottom: 2rem; }
+.pricing-features li { padding: 0.5rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); color: var(--text); }
+.pricing-features li::before { content: '✓ '; color: var(--orange); font-weight: 700; }
+
+/* Guarantee */
+.guarantee {
+  background: linear-gradient(135deg, var(--dark), var(--dark-gray));
+  border: 2px solid var(--gold); border-radius: 20px; max-width: 800px;
+  margin: 0 auto; padding: 3rem; text-align: center;
+}
+.guarantee-icon { font-size: 4rem; margin-bottom: 1rem; }
+.guarantee h3 { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 900; color: var(--gold); margin-bottom: 1rem; text-transform: uppercase; }
+.guarantee p { font-size: 0.95rem; color: var(--text-light); line-height: 2; }
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, rgba(232,115,58,0.9), rgba(201,162,77,0.9)),
+    url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&q=80') center/cover;
+  text-align: center; color: var(--white);
+}
+.cta-section h2 { font-family: 'Inter', 'Noto Sans JP', sans-serif; font-size: clamp(1.5rem, 3.5vw, 2.5rem); margin-bottom: 1rem; font-weight: 900; text-transform: uppercase; }
+.cta-section p { margin-bottom: 2rem; opacity: 0.9; font-size: 1rem; }
+.btn-black {
+  display: inline-block; padding: 1rem 3rem; background: var(--black); color: var(--white);
+  border-radius: 6px; font-weight: 900; font-size: 1.05rem; transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-transform: uppercase;
+}
+.btn-black:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+
+/* Floating CTA */
+.floating-cta {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(10px);
+  padding: 0.8rem 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+  transform: translateY(100%); transition: transform 0.4s ease;
+}
+.floating-cta.show { transform: translateY(0); }
+.floating-cta p { font-size: 0.85rem; color: var(--white); font-weight: 500; }
+.floating-cta .btn-orange { padding: 0.7rem 2rem; font-size: 0.9rem; }
+
+footer { background: var(--black); color: rgba(255,255,255,0.4); text-align: center; padding: 3rem 1.5rem 2rem; border-top: 1px solid var(--border); }
+footer .brand { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.1em; }
+footer p { font-size: 0.8rem; margin-bottom: 0.3rem; }
+footer .credit { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.5; }
+footer .sample-note { margin-top: 0.5rem; font-size: 0.65rem; opacity: 0.3; }
+
+@media (max-width: 768px) {
+  section { padding: 3.5rem 1.2rem; }
+  .hero { min-height: 90vh; }
+  .hero-content { padding: 2rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feature-card { min-height: 300px; }
+  .meal-grid { grid-template-columns: 1fr; }
+  .floating-cta { flex-direction: column; gap: 0.5rem; padding: 0.6rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">30 Days Money-Back Guarantee</div>
+    <h1>FORGE YOUR<br><span class="gold">BEST</span> <span class="orange">BODY.</span></h1>
+    <p class="hero-desc">2ヶ月で人生を変える。科学的トレーニング×食事管理で<br>理想のカラダを確実に手に入れる。</p>
+    <a href="#contact" class="btn-orange">無料カウンセリングに申し込む</a>
+    <span class="btn-sub-text">＼ 入会金0円キャンペーン実施中 ／</span>
+  </div>
+</section>
+
+<!-- Results -->
+<section class="results">
+  <div class="container text-center">
+    <span class="section-label">Results</span>
+    <h2 class="section-title">会員様のリアルな成果</h2>
+    <p class="section-subtitle">※ 効果には個人差があります。食事指導との併用結果です。</p>
+    <div class="results-grid fade-in">
+      <div class="result-card">
+        <div class="result-label">30代男性 / 2ヶ月</div>
+        <div class="result-before">体重 85kg</div>
+        <div class="result-arrow">↓</div>
+        <div class="result-after">72kg</div>
+        <div class="result-change">-13kg</div>
+        <div class="result-detail">体脂肪率 28% → 18%</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">40代女性 / 3ヶ月</div>
+        <div class="result-before">体重 68kg</div>
+        <div class="result-arrow">↓</div>
+        <div class="result-after">55kg</div>
+        <div class="result-change">-13kg</div>
+        <div class="result-detail">ウエスト -15cm</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">30代男性 / 2ヶ月</div>
+        <div class="result-before">体脂肪率 25%</div>
+        <div class="result-arrow">↓</div>
+        <div class="result-after">15%</div>
+        <div class="result-change">-10%</div>
+        <div class="result-detail">筋肉量 +3.5kg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 Features -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Why FORGE</span>
+    <h2 class="section-title">FORGEの<span style="color:var(--gold)">3つ</span>の強み</h2>
+    <p class="section-subtitle">結果を出すために、すべてを科学する</p>
+    <div class="features-grid fade-in">
+      <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80" alt="パーソナルトレーニング">
+        <div class="feature-overlay">
+          <div class="feature-num">01</div>
+          <h3>完全マンツーマン<br>オーダーメイド指導</h3>
+          <p>体組成データに基づき、あなた専用のプログラムを設計。毎回のセッションで進捗を分析し、最適化します。</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80" alt="食事管理">
+        <div class="feature-overlay">
+          <div class="feature-num">02</div>
+          <h3>管理栄養士監修<br>食事プログラム</h3>
+          <p>無理な食事制限はなし。食べて痩せる科学的アプローチ。LINEで毎日の食事をサポート。</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" alt="設備">
+        <div class="feature-overlay">
+          <div class="feature-num">03</div>
+          <h3>最新設備<br>完全個室空間</h3>
+          <p>プロアスリートも使用する最新マシン完備。完全個室で人目を気にせず集中できます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Meal Support -->
+<section class="meal-section">
+  <div class="container">
+    <div class="meal-grid fade-in">
+      <div class="meal-img">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="食事管理">
+      </div>
+      <div class="meal-content">
+        <span class="section-label">Meal Support</span>
+        <h3>食べて痩せる。<br>科学的食事サポート</h3>
+        <p>極端な糖質制限や食事制限はしません。管理栄養士が監修した、あなたの体質・目標に合わせた食事プランで、無理なく理想のカラダへ。</p>
+        <ul class="meal-points">
+          <li>LINEで毎食アドバイス</li>
+          <li>管理栄養士がメニューを監修</li>
+          <li>外食・コンビニ食もOK</li>
+          <li>レシピ集100種類以上プレゼント</li>
+          <li>卒業後も使える一生モノの知識</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trainer -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Trainer</span>
+    <h2 class="section-title">エリートトレーナー陣</h2>
+    <p class="section-subtitle">全員が有資格者。あなたの目標達成にコミットします。</p>
+    <div class="trainer-grid fade-in">
+      <div class="trainer-card">
+        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80" alt="トレーナー">
+        <div class="trainer-body">
+          <div class="title">HEAD TRAINER</div>
+          <h3>佐藤 健太</h3>
+          <p>NSCA-CPT / 元プロアスリート。1,000名以上のボディメイクを担当。</p>
+          <div class="trainer-stats">
+            <div class="trainer-stat"><div class="num">1,200+</div><div class="label">指導実績</div></div>
+            <div class="trainer-stat"><div class="num">12年</div><div class="label">経験年数</div></div>
+            <div class="trainer-stat"><div class="num">98%</div><div class="label">達成率</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="trainer-card">
+        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" alt="トレーナー">
+        <div class="trainer-body">
+          <div class="title">SENIOR TRAINER</div>
+          <h3>田中 美咲</h3>
+          <p>NESTA-PFT / 女性のボディメイク専門。産後ダイエット指導も得意。</p>
+          <div class="trainer-stats">
+            <div class="trainer-stat"><div class="num">800+</div><div class="label">指導実績</div></div>
+            <div class="trainer-stat"><div class="num">8年</div><div class="label">経験年数</div></div>
+            <div class="trainer-stat"><div class="num">97%</div><div class="label">達成率</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section style="background:var(--dark);">
+  <div class="container text-center">
+    <span class="section-label">Price</span>
+    <h2 class="section-title">料金プラン</h2>
+    <p class="section-subtitle">すべて税込価格。ウェア・シューズ・タオル・プロテインレンタル無料。</p>
+    <div class="pricing-grid fade-in">
+      <div class="pricing-card">
+        <h3>ベーシックプラン</h3>
+        <div class="pricing-amount"><small>¥</small>198,000</div>
+        <div class="pricing-period">2ヶ月 / 全16回</div>
+        <ul class="pricing-features">
+          <li>パーソナルトレーニング 50分×16回</li>
+          <li>食事指導（LINE）</li>
+          <li>体組成測定</li>
+          <li>ウェア・タオルレンタル</li>
+          <li>プロテイン提供</li>
+        </ul>
+        <a href="#contact" class="btn-orange" style="font-size:0.9rem;padding:0.8rem 2rem;">無料カウンセリング</a>
+      </div>
+      <div class="pricing-card popular">
+        <h3>プレミアムプラン</h3>
+        <div class="pricing-amount"><small>¥</small>298,000</div>
+        <div class="pricing-period">2ヶ月 / 全24回</div>
+        <ul class="pricing-features">
+          <li>パーソナルトレーニング 50分×24回</li>
+          <li>食事指導（LINE・電話）</li>
+          <li>体組成測定</li>
+          <li>ウェア・タオルレンタル</li>
+          <li>プロテイン提供</li>
+          <li>管理栄養士面談 月2回</li>
+          <li>卒業後3ヶ月フォロー</li>
+        </ul>
+        <a href="#contact" class="btn-orange" style="font-size:0.9rem;padding:0.8rem 2rem;">無料カウンセリング</a>
+      </div>
+      <div class="pricing-card">
+        <h3>ペアプラン</h3>
+        <div class="pricing-amount"><small>¥</small>158,000<small>/人</small></div>
+        <div class="pricing-period">2ヶ月 / 全16回（2名様）</div>
+        <ul class="pricing-features">
+          <li>ペアトレーニング 60分×16回</li>
+          <li>食事指導（LINE）</li>
+          <li>体組成測定</li>
+          <li>ウェア・タオルレンタル</li>
+          <li>プロテイン提供</li>
+        </ul>
+        <a href="#contact" class="btn-orange" style="font-size:0.9rem;padding:0.8rem 2rem;">無料カウンセリング</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Guarantee -->
+<section>
+  <div class="container fade-in">
+    <div class="guarantee">
+      <div class="guarantee-icon"><svg width="64" height="64" viewBox="0 0 64 64" fill="none"><path d="M32 4 L56 16 V34 C56 48 44 58 32 62 C20 58 8 48 8 34 V16 Z" stroke="#c9a24d" stroke-width="2.5" fill="none"/><polyline points="22,32 28,40 42,24" stroke="#c9a24d" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>30-Day Money-Back<br>Guarantee</h3>
+      <p>プログラム開始から30日以内にご満足いただけなかった場合、<br>
+      理由を問わず<strong style="color:var(--gold);">全額返金</strong>いたします。<br>
+      それだけ結果に自信があります。あなたのリスクはゼロです。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <h2>START FORGING<br>YOUR BODY TODAY.</h2>
+    <p>まずは無料カウンセリングで、あなたの目標をお聞かせください。<br>体組成測定＋プラン提案が無料で受けられます。</p>
+    <a href="tel:0120-583-246" class="btn-black">無料カウンセリング予約</a>
+    <p style="margin-top:1rem;font-size:0.85rem;opacity:0.7;">0120-583-246（受付: 7:00〜23:00）</p>
+  </div>
+</section>
+
+<!-- Floating CTA -->
+<div class="floating-cta" id="floatingCta">
+  <p>入会金0円キャンペーン実施中</p>
+  <a href="#contact" class="btn-orange">無料カウンセリング</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="brand">FORGE</div>
+  <p>パーソナルジム FORGE（フォージ）</p>
+  <p>〒106-0032 東京都港区六本木5-9-14 FORGEビル2F</p>
+  <p>TEL: 0120-583-246 ｜ info@forge-gym.jp</p>
+  <p style="margin-top:0.5rem;">営業時間: 7:00〜23:00（年中無休）</p>
+</footer>
+
+<div style="text-align:center; padding:1.5rem; background:#f5f5f5; border-top:1px solid #e0e0e0;">
+  <p style="font-size:0.75rem; color:#999; line-height:1.8;">
+    ※ 本ページはLP制作のスキルを示すためのポートフォリオ用デモです。<br>
+    実在の店舗・サービス・商品ではありません。画像はイメージです。<br>
+    <span style="margin-top:0.5rem; display:inline-block;">LP制作: 早川まい ｜ <a href="https://github.com/hayakawamai-star" style="color:#888; text-decoration:underline;">GitHub</a></span>
+  </p>
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const isFloat = target % 1 !== 0;
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * target;
+    el.textContent = isFloat ? current.toFixed(1) : Math.floor(current).toLocaleString();
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); } });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+const floating = document.getElementById('floatingCta');
+window.addEventListener('scroll', () => { floating.classList.toggle('show', window.scrollY > 600); });
+</script>
+</body>
+</html>
