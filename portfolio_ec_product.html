@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOTANIÉ（ボタニエ）| ナチュラルスキンケア</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --beige: #f5efe6;
+  --beige-dark: #e8ddd0;
+  --moss: #5a7a5a;
+  --moss-light: #8aaa8a;
+  --moss-bg: #eef3ee;
+  --gold: #b8975a;
+  --gold-light: #d4be8a;
+  --dark: #2a2520;
+  --text: #4a4540;
+  --text-light: #8a8580;
+  --white: #ffffff;
+  --cream: #faf8f4;
+  --border: #e5ddd5;
+}
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Noto Sans JP', 'Inter', sans-serif; color: var(--text); line-height: 1.8; background: var(--cream); overflow-x: hidden; }
+.serif { font-family: 'Noto Serif JP', serif; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Hero */
+.hero {
+  min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  background: var(--beige);
+}
+.hero-text { padding: 4rem 3rem 4rem 8%; }
+.hero-badge {
+  display: inline-block; padding: 0.3rem 1.2rem; border: 1px solid var(--moss);
+  color: var(--moss); border-radius: 50px; font-size: 0.75rem; letter-spacing: 0.15em;
+  margin-bottom: 1.5rem; font-weight: 600;
+}
+.hero h1 { font-family: 'Noto Serif JP', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.5; margin-bottom: 1.5rem; color: var(--dark); }
+.hero h1 .moss { color: var(--moss); }
+.hero-desc { font-size: 0.95rem; color: var(--text-light); margin-bottom: 2rem; line-height: 2; }
+.btn-moss {
+  display: inline-block; padding: 1rem 2.5rem; background: var(--moss);
+  color: var(--white); border-radius: 50px; font-weight: 700; font-size: 1rem;
+  transition: all 0.3s; box-shadow: 0 4px 20px rgba(90,122,90,0.3);
+}
+.btn-moss:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(90,122,90,0.4); background: #4a6a4a; }
+.btn-sub-text { display: block; margin-top: 0.8rem; font-size: 0.8rem; color: var(--text-light); }
+.hero-price { margin-top: 1.5rem; }
+.hero-price .original { font-size: 1rem; color: var(--text-light); text-decoration: line-through; }
+.hero-price .sale { font-size: 2rem; font-weight: 700; color: var(--moss); margin-left: 0.5rem; }
+.hero-price .sale small { font-size: 0.9rem; font-weight: 400; }
+.hero-price .off { display: inline-block; background: var(--gold); color: var(--white); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; margin-left: 0.5rem; }
+.hero-img { height: 100%; }
+.hero-img img { width: 100%; height: 100%; object-fit: cover; min-height: 600px; }
+
+section { padding: 5rem 1.5rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label { display: inline-block; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--moss); text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 600; }
+.section-title { font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem); color: var(--dark); line-height: 1.5; margin-bottom: 1rem; }
+.section-subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 3rem; }
+.text-center { text-align: center; }
+
+/* Problem */
+.problem { background: var(--white); }
+.problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.problem-card {
+  background: var(--cream); border-radius: 16px; padding: 2rem; text-align: center;
+  transition: transform 0.3s; border: 1px solid var(--border);
+}
+.problem-card:hover { transform: translateY(-4px); }
+.problem-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+.problem-card h3 { font-size: 1rem; color: var(--dark); margin-bottom: 0.3rem; }
+.problem-card p { font-size: 0.85rem; color: var(--text-light); }
+
+/* Ingredients */
+.ingredients { background: var(--moss-bg); }
+.ingredient-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.ingredient-card {
+  background: var(--white); border-radius: 20px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.3s;
+}
+.ingredient-card:hover { transform: translateY(-4px); }
+.ingredient-card img { width: 100%; height: 200px; object-fit: cover; }
+.ingredient-body { padding: 1.5rem; }
+.ingredient-tag { display: inline-block; background: var(--moss-bg); color: var(--moss); padding: 0.2rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem; }
+.ingredient-body h3 { font-size: 1.1rem; color: var(--dark); margin-bottom: 0.5rem; }
+.ingredient-body p { font-size: 0.85rem; color: var(--text-light); line-height: 1.9; }
+
+/* How to use */
+.howto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; counter-reset: step; }
+.howto-card { text-align: center; position: relative; }
+.howto-card::before {
+  counter-increment: step; content: 'STEP ' counter(step);
+  display: inline-block; background: var(--moss); color: var(--white); padding: 0.3rem 1rem;
+  border-radius: 50px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1rem;
+}
+.howto-img { width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 1rem; overflow: hidden; border: 3px solid var(--beige-dark); }
+.howto-img img { width: 100%; height: 100%; object-fit: cover; }
+.howto-card h3 { font-size: 1.05rem; color: var(--dark); margin-bottom: 0.5rem; }
+.howto-card p { font-size: 0.85rem; color: var(--text-light); }
+
+/* Before After / Transformation */
+.transform-section { background: var(--beige); }
+.transform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.transform-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 2px 15px rgba(0,0,0,0.04); }
+.transform-images { display: grid; grid-template-columns: 1fr 1fr; position: relative; }
+.transform-images img { width: 100%; height: 180px; object-fit: cover; }
+.transform-arrow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--moss); color: var(--white); width: 36px; height: 36px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.transform-text { padding: 1.2rem; text-align: center; }
+.transform-text h4 { font-size: 0.95rem; color: var(--dark); margin-bottom: 0.2rem; }
+.transform-text p { font-size: 0.8rem; color: var(--text-light); }
+.transform-stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 0.3rem; }
+
+/* Reviews */
+.review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.review-card { background: var(--white); border-radius: 16px; padding: 2rem; box-shadow: 0 2px 15px rgba(0,0,0,0.04); }
+.review-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.review-text { font-size: 0.9rem; line-height: 1.9; margin-bottom: 1rem; color: var(--text); }
+.review-author { font-weight: 700; font-size: 0.85rem; color: var(--dark); }
+.review-detail { font-size: 0.75rem; color: var(--text-light); }
+.review-tag { display: inline-block; background: var(--beige); padding: 0.15rem 0.6rem; border-radius: 4px; font-size: 0.7rem; color: var(--moss); font-weight: 600; margin-top: 0.3rem; }
+
+/* Pricing / Subscription */
+.pricing-section { background: var(--white); }
+.pricing-main {
+  max-width: 700px; margin: 0 auto; background: var(--cream); border-radius: 24px;
+  padding: 3rem; text-align: center; border: 2px solid var(--moss); position: relative; overflow: hidden;
+}
+.pricing-main::before {
+  content: '定期便がお得!'; position: absolute; top: 20px; right: -35px; transform: rotate(45deg);
+  background: var(--gold); color: var(--white); padding: 0.3rem 3rem; font-size: 0.75rem; font-weight: 700;
+}
+.pricing-main h3 { font-family: 'Noto Serif JP', serif; font-size: 1.3rem; color: var(--dark); margin-bottom: 0.5rem; }
+.pricing-main .desc { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.pricing-compare { display: flex; justify-content: center; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; }
+.pricing-compare .original { font-size: 1.2rem; color: var(--text-light); text-decoration: line-through; }
+.pricing-compare .sale { font-size: 2.5rem; font-weight: 700; color: var(--moss); }
+.pricing-compare .sale small { font-size: 1rem; font-weight: 400; }
+.pricing-off { display: inline-block; background: var(--gold); color: var(--white); padding: 0.3rem 1rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; }
+.pricing-benefits { list-style: none; text-align: left; max-width: 400px; margin: 0 auto 2rem; }
+.pricing-benefits li { padding: 0.5rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.pricing-benefits li::before { content: '✓ '; color: var(--moss); font-weight: 700; }
+.pricing-note { font-size: 0.8rem; color: var(--text-light); margin-top: 1rem; }
+
+/* FAQ */
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question {
+  padding: 1.5rem 0; cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-weight: 700; font-size: 1rem; color: var(--dark);
+}
+.faq-question::after { content: '+'; font-size: 1.5rem; color: var(--moss); transition: transform 0.3s; }
+.faq-item.open .faq-question::after { transform: rotate(45deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner { padding: 0 0 1.5rem; font-size: 0.9rem; color: var(--text-light); line-height: 1.9; }
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, var(--moss), #4a6a4a);
+  text-align: center; color: var(--white);
+}
+.cta-section h2 { font-family: 'Noto Serif JP', serif; font-size: clamp(1.5rem, 3.5vw, 2.2rem); margin-bottom: 1rem; }
+.cta-section p { margin-bottom: 2rem; opacity: 0.9; font-size: 1rem; }
+.btn-white {
+  display: inline-block; padding: 1rem 3rem; background: var(--white); color: var(--moss);
+  border-radius: 50px; font-weight: 700; font-size: 1.05rem; transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+
+/* Floating CTA */
+.floating-cta {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(10px);
+  padding: 0.8rem 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+  transform: translateY(100%); transition: transform 0.4s ease;
+}
+.floating-cta.show { transform: translateY(0); }
+.floating-cta p { font-size: 0.85rem; color: var(--dark); font-weight: 500; }
+.floating-cta .btn-moss { padding: 0.7rem 2rem; font-size: 0.9rem; }
+
+footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 3rem 1.5rem 2rem; }
+footer .brand { font-family: 'Noto Serif JP', serif; font-size: 1.3rem; color: var(--gold-light); margin-bottom: 1rem; letter-spacing: 0.1em; }
+footer p { font-size: 0.8rem; margin-bottom: 0.3rem; }
+footer .credit { margin-top: 1.5rem; font-size: 0.7rem; opacity: 0.5; }
+footer .sample-note { margin-top: 0.5rem; font-size: 0.65rem; opacity: 0.3; }
+
+@media (max-width: 768px) {
+  section { padding: 3.5rem 1.2rem; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-text { padding: 3rem 1.5rem; order: 2; }
+  .hero-img img { min-height: 350px; }
+  .howto-grid { grid-template-columns: 1fr; }
+  .floating-cta { flex-direction: column; gap: 0.5rem; padding: 0.6rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero" style="padding:0;">
+  <div class="hero-text">
+    <div class="hero-badge">BOTANICAL SKINCARE</div>
+    <h1 class="serif">植物の力で、<br>肌本来の美しさを<br><span class="moss">呼び覚ます。</span></h1>
+    <p class="hero-desc">厳選された7つの植物由来成分と独自のバイオテクノロジーが融合。<br>敏感肌にもやさしい、次世代ボタニカルスキンケア。</p>
+    <div class="hero-price">
+      <span class="original">通常価格 ¥8,800</span>
+      <span class="sale">¥2,980 <small>(税込)</small></span>
+      <span class="off">初回66%OFF</span>
+    </div>
+    <div style="margin-top:1.5rem;">
+      <a href="#purchase" class="btn-moss">初回限定価格で購入する</a>
+      <span class="btn-sub-text">送料無料 / 定期縛りなし / いつでも解約OK</span>
+    </div>
+  </div>
+  <div class="hero-img">
+    <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80" alt="BOTANIÉ">
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="problem">
+  <div class="container text-center">
+    <span class="section-label">Your Concern</span>
+    <h2 class="section-title">こんな肌悩み、<br>ありませんか？</h2>
+    <p class="section-subtitle">年齢とともに変わる肌。でも、諦めなくて大丈夫。</p>
+    <div class="problem-grid fade-in">
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><path d="M18 8 C18 8 10 18 10 22 A8 8 0 0 0 26 22 C26 18 18 8 18 8Z" stroke="#5a7a5a" stroke-width="1.5" fill="none"/></svg></div>
+        <h3>乾燥が止まらない</h3>
+        <p>保湿しても夕方にはカサカサ。インナードライで化粧がヨレる</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><circle cx="16" cy="16" r="7" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><line x1="21" y1="21" x2="28" y2="28" stroke="#5a7a5a" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>毛穴・くすみが目立つ</h3>
+        <p>ファンデーションを重ねるほど毛穴が目立ち、肌がどんより</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><path d="M20 6 L12 20 H20 L16 30" stroke="#5a7a5a" stroke-width="2" fill="none" stroke-linejoin="round"/></svg></div>
+        <h3>敏感肌で合うものがない</h3>
+        <p>新しいスキンケアを試すたびにピリピリ。肌に合うものが見つからない</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><circle cx="18" cy="18" r="10" stroke="#5a7a5a" stroke-width="1.5" fill="none"/><line x1="18" y1="18" x2="18" y2="12" stroke="#5a7a5a" stroke-width="1.5"/><line x1="18" y1="18" x2="23" y2="18" stroke="#5a7a5a" stroke-width="1.5"/></svg></div>
+        <h3>エイジングサインが気になる</h3>
+        <p>ハリ不足、小じわ、たるみ…。高い化粧品を使っても変わらない</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ingredients -->
+<section class="ingredients">
+  <div class="container text-center">
+    <span class="section-label">Key Ingredients</span>
+    <h2 class="section-title serif">科学が証明した<br>7つの植物パワー</h2>
+    <p class="section-subtitle">皮膚科学研究に基づき厳選された、肌に本当に必要な成分だけを配合</p>
+    <div class="ingredient-grid fade-in">
+      <div class="ingredient-card">
+        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" alt="ダマスクローズ">
+        <div class="ingredient-body">
+          <div class="ingredient-tag">保湿・整肌</div>
+          <h3>ダマスクローズ幹細胞エキス</h3>
+          <p>ブルガリア産の希少なダマスクローズから抽出。肌のターンオーバーをサポートし、うるおいとハリを与えます。</p>
+        </div>
+      </div>
+      <div class="ingredient-card">
+        <img src="https://images.unsplash.com/photo-1515150144380-bca9f1650ed9?w=600&q=80" alt="ヒト型セラミド">
+        <div class="ingredient-body">
+          <div class="ingredient-tag">バリア機能</div>
+          <h3>5種のヒト型セラミド</h3>
+          <p>肌のバリア機能を強化する5種のセラミドを高濃度配合。乾燥・敏感肌の根本原因にアプローチ。</p>
+        </div>
+      </div>
+      <div class="ingredient-card">
+        <img src="https://images.unsplash.com/photo-1591261730799-ee4e6c2d16d7?w=600&q=80" alt="ナイアシンアミド">
+        <div class="ingredient-body">
+          <div class="ingredient-tag">美白・シワ改善</div>
+          <h3>ナイアシンアミド（医薬部外品有効成分）</h3>
+          <p>シミ・シワの両方にアプローチする注目成分。メラニンの生成を抑え、シワを改善します。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How to Use -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">How to Use</span>
+    <h2 class="section-title serif">たった3ステップの<br>シンプルケア</h2>
+    <p class="section-subtitle">忙しい毎日でも続けられる。朝晩たった3分のスキンケア。</p>
+    <div class="howto-grid fade-in">
+      <div class="howto-card">
+        <div class="howto-img">
+          <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&q=80" alt="洗顔">
+        </div>
+        <h3>ボタニカルウォッシュ</h3>
+        <p>もっちり泡で汚れを優しく落とし、うるおいはそのまま。洗い上がりはつっぱりません。</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-img">
+          <img src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?w=400&q=80" alt="化粧水">
+        </div>
+        <h3>ボタニカルローション</h3>
+        <p>手のひらで押し込むようになじませるだけ。角質層のすみずみまで、うるおいが浸透。</p>
+      </div>
+      <div class="howto-card">
+        <div class="howto-img">
+          <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=400&q=80" alt="美容液">
+        </div>
+        <h3>ボタニカルセラム</h3>
+        <p>濃密な美容液がうるおいを閉じ込め、翌朝までしっとり。これ1本で乳液・クリーム不要。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Before After -->
+<section class="transform-section">
+  <div class="container text-center">
+    <span class="section-label">Real Voice</span>
+    <h2 class="section-title serif">使い続けた方の変化</h2>
+    <p class="section-subtitle">※ 個人の感想です。効果を保証するものではありません。写真はイメージです。</p>
+    <div class="transform-grid fade-in">
+      <div class="transform-card">
+        <div class="transform-images">
+          <img src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=400&q=80" alt="Before">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" alt="After">
+          <div class="transform-arrow">→</div>
+        </div>
+        <div class="transform-text">
+          <div class="transform-stars">★★★★★</div>
+          <h4>乾燥肌が改善、ファンデ不要に</h4>
+          <p>32歳・使用期間3ヶ月</p>
+        </div>
+      </div>
+      <div class="transform-card">
+        <div class="transform-images">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Before">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80" alt="After">
+          <div class="transform-arrow">→</div>
+        </div>
+        <div class="transform-text">
+          <div class="transform-stars">★★★★★</div>
+          <h4>くすみが取れて透明感アップ</h4>
+          <p>28歳・使用期間2ヶ月</p>
+        </div>
+      </div>
+      <div class="transform-card">
+        <div class="transform-images">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Before">
+          <img src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?w=400&q=80" alt="After">
+          <div class="transform-arrow">→</div>
+        </div>
+        <div class="transform-text">
+          <div class="transform-stars">★★★★★</div>
+          <h4>敏感肌でもピリピリしない</h4>
+          <p>40歳・使用期間4ヶ月</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">Reviews</span>
+    <h2 class="section-title serif">お客様の口コミ</h2>
+    <p class="section-subtitle">SNSや口コミサイトに寄せられたリアルな声</p>
+    <div class="review-grid fade-in">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「今まで何を使ってもダメだった乾燥肌が、2週間で変わり始めました。夕方になっても肌がしっとり。ファンデーションのノリが全然違います！」</p>
+        <div class="review-author">R.M 様（32歳）</div>
+        <div class="review-detail">乾燥肌 / 使用歴3ヶ月</div>
+        <div class="review-tag">リピート3回目</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">「敏感肌で新しいコスメは怖かったのですが、BOTANIÉは全くピリピリしませんでした。肌が強くなった感じがします。もう手放せません。」</p>
+        <div class="review-author">A.K 様（28歳）</div>
+        <div class="review-detail">敏感肌 / 使用歴2ヶ月</div>
+        <div class="review-tag">定期購入中</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">「40代になってハリの低下が気になっていましたが、使い始めて1ヶ月で頬の弾力が戻ってきた気がします。香りも上品で癒されます。」</p>
+        <div class="review-author">Y.S 様（43歳）</div>
+        <div class="review-detail">混合肌 / 使用歴1ヶ月</div>
+        <div class="review-tag">定期購入中</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing / Purchase -->
+<section class="pricing-section" id="purchase">
+  <div class="container text-center">
+    <span class="section-label">Special Offer</span>
+    <h2 class="section-title serif">定期便 初回限定価格</h2>
+    <p class="section-subtitle">今だけの特別価格でお試しいただけます</p>
+    <div class="pricing-main fade-in">
+      <h3 class="serif">BOTANIÉトライアルセット（3点セット）</h3>
+      <p class="desc">ウォッシュ + ローション + セラム / 約1ヶ月分</p>
+      <div class="pricing-compare">
+        <span class="original">¥8,800</span>
+        <span class="sale">¥2,980 <small>(税込)</small></span>
+      </div>
+      <div class="pricing-off">初回限定 66% OFF</div>
+      <ul class="pricing-benefits">
+        <li>全国送料無料</li>
+        <li>定期縛りなし（いつでも解約OK）</li>
+        <li>2回目以降も20%OFF（¥7,040）</li>
+        <li>20日間全額返金保証</li>
+        <li>スキンケアガイドブック付き</li>
+        <li>お届け周期の変更自由</li>
+      </ul>
+      <a href="#" class="btn-moss" style="font-size:1.1rem;padding:1.1rem 3rem;">初回限定 ¥2,980で購入する</a>
+      <p class="pricing-note">※ クレジットカード / Amazon Pay / コンビニ後払い対応<br>※ 定期便2回目以降は¥7,040（税込・送料無料）</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title serif">よくあるご質問</h2>
+      <p class="section-subtitle">ご購入前によくいただくご質問</p>
+    </div>
+    <div class="faq-list fade-in" style="max-width:800px;margin:0 auto;">
+      <div class="faq-item">
+        <div class="faq-question">敏感肌でも使えますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、敏感肌の方にもお使いいただけます。パラベン・鉱物油・合成香料・アルコール・紫外線吸収剤不使用。全製品パッチテスト済みです。万が一お肌に合わない場合は、20日間全額返金保証をご利用ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">定期便の解約は簡単にできますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、定期縛りはございません。次回お届け予定日の10日前までにマイページまたはお電話でご連絡いただければ、いつでも解約・休止が可能です。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">どのくらいで効果を実感できますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">肌のターンオーバーは約28日周期です。多くの方が2〜4週間ほどで肌のうるおい変化を実感されています。3ヶ月以上の継続使用で、よりはっきりとした変化を感じる方が多いです。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">男性でも使えますか？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">はい、男女問わずお使いいただけます。男性のお客様にも多くご愛用いただいており、特にシェービング後の肌荒れ防止に好評です。</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">返金保証の条件は？</div>
+        <div class="faq-answer"><div class="faq-answer-inner">初回ご購入から20日以内にお申し出いただければ、開封済みでも全額返金いたします。お肌に合わなかった場合はお気軽にご連絡ください。返送料のみご負担をお願いしております。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <h2 class="serif">今日から始める、<br>ボタニカル美肌習慣。</h2>
+    <p>初回限定66%OFF。20日間全額返金保証付きだから、リスクゼロでお試しいただけます。</p>
+    <a href="#purchase" class="btn-white">初回限定 ¥2,980 で購入する</a>
+    <p style="margin-top:1rem;font-size:0.85rem;opacity:0.7;">送料無料 / 定期縛りなし / 20日間返金保証</p>
+  </div>
+</section>
+
+<!-- Floating CTA -->
+<div class="floating-cta" id="floatingCta">
+  <p>初回限定66%OFF <strong>¥2,980</strong>（送料無料）</p>
+  <a href="#purchase" class="btn-moss">今すぐ購入する</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="brand serif">BOTANIÉ</div>
+  <p>ボタニエ株式会社</p>
+  <p>〒150-0021 東京都渋谷区恵比寿西2-8-14</p>
+  <p>TEL: 0120-374-815 ｜ support@botanie.jp</p>
+  <p style="margin-top:0.5rem;">カスタマーサポート: 10:00〜18:00（土日祝休）</p>
+</footer>
+
+<div style="text-align:center; padding:1.5rem; background:#f5f5f5; border-top:1px solid #e0e0e0;">
+  <p style="font-size:0.75rem; color:#999; line-height:1.8;">
+    ※ 本ページはLP制作のスキルを示すためのポートフォリオ用デモです。<br>
+    実在の店舗・サービス・商品ではありません。画像はイメージです。<br>
+    <span style="margin-top:0.5rem; display:inline-block;">LP制作: 早川まい ｜ <a href="https://github.com/hayakawamai-star" style="color:#888; text-decoration:underline;">GitHub</a></span>
+  </p>
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-answer').style.maxHeight = '0'; });
+    if (!isOpen) { item.classList.add('open'); answer.style.maxHeight = answer.scrollHeight + 'px'; }
+  });
+});
+
+const floating = document.getElementById('floatingCta');
+window.addEventListener('scroll', () => { floating.classList.toggle('show', window.scrollY > 600); });
+</script>
+</body>
+</html>
