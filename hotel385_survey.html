@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOTEL 385 アンケート</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    background: linear-gradient(135deg, #0f1923 0%, #1a2332 50%, #162029 100%);
+    min-height: 100vh;
+    color: #e8e0d0;
+  }
+
+  .header {
+    text-align: center;
+    padding: 32px 16px 20px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 8px;
+    color: #d4af37;
+    margin-bottom: 4px;
+  }
+  .header .subtitle {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(212, 175, 55, 0.6);
+    text-transform: uppercase;
+  }
+
+  .progress-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 16px 8px;
+  }
+  .progress-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(232, 224, 208, 0.35);
+    transition: color 0.4s;
+  }
+  .progress-step.active { color: #d4af37; }
+  .progress-step.done { color: rgba(212, 175, 55, 0.6); }
+  .progress-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(232, 224, 208, 0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    transition: all 0.4s;
+  }
+  .progress-step.active .progress-dot {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.15);
+    color: #d4af37;
+  }
+  .progress-step.done .progress-dot {
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.2);
+    color: rgba(212, 175, 55, 0.7);
+  }
+  .progress-line {
+    width: 24px; height: 1px;
+    background: rgba(232, 224, 208, 0.15);
+    margin: 0 4px;
+    align-self: center;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 16px 100px;
+  }
+
+  .step-page { display: none; }
+  .step-page.active { display: block; }
+
+  .question-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+  }
+  .question-card h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #d4af37;
+    margin-bottom: 4px;
+    line-height: 1.5;
+  }
+  .question-card .q-note {
+    font-size: 11px;
+    color: rgba(232, 224, 208, 0.4);
+    margin-bottom: 16px;
+  }
+
+  .option-list { list-style: none; }
+  .option-list li {
+    margin-bottom: 10px;
+  }
+  .option-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.25s;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .option-label:hover {
+    background: rgba(212, 175, 55, 0.06);
+    border-color: rgba(212, 175, 55, 0.25);
+  }
+  .option-label.selected {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.5);
+  }
+
+  .radio-dot, .check-box {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.25s;
+  }
+  .check-box { border-radius: 5px; }
+  .option-label.selected .radio-dot,
+  .option-label.selected .check-box {
+    border-color: #d4af37;
+    background: #d4af37;
+  }
+  .option-label.selected .radio-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #1a2332;
+  }
+  .option-label.selected .check-box::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 6px;
+    width: 5px; height: 9px;
+    border: solid #1a2332;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .textarea-wrap {
+    margin-top: 12px;
+  }
+  .textarea-wrap textarea {
+    width: 100%;
+    min-height: 120px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: #e8e0d0;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .textarea-wrap textarea::placeholder { color: rgba(232, 224, 208, 0.25); }
+  .textarea-wrap textarea:focus { border-color: rgba(212, 175, 55, 0.4); }
+
+  .nav-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    padding-bottom: 20px;
+  }
+  .btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+  }
+  .btn-back {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(232, 224, 208, 0.6);
+    border: 1px solid rgba(232, 224, 208, 0.1);
+  }
+  .btn-back:hover { background: rgba(255, 255, 255, 0.1); }
+  .btn-next, .btn-submit {
+    background: linear-gradient(135deg, #d4af37, #b8972e);
+    color: #1a2332;
+  }
+  .btn-next:hover, .btn-submit:hover {
+    background: linear-gradient(135deg, #e0c04a, #d4af37);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  }
+
+  /* Thank you page */
+  .thank-you {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .thank-you.active { display: block; }
+  .thank-you .icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  .thank-you h2 {
+    font-size: 22px;
+    color: #d4af37;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .thank-you p {
+    font-size: 14px;
+    color: rgba(232, 224, 208, 0.6);
+    line-height: 1.8;
+  }
+  .thank-you .gift {
+    margin-top: 28px;
+    padding: 20px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+  }
+  .thank-you .gift h3 {
+    color: #d4af37;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .thank-you .gift p {
+    font-size: 13px;
+  }
+
+  @media (max-width: 360px) {
+    .header h1 { font-size: 24px; letter-spacing: 6px; }
+    .question-card { padding: 20px 16px; }
+    .option-label { padding: 12px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>HOTEL 385</h1>
+  <div class="subtitle">Guest Survey</div>
+</div>
+
+<div class="progress-bar" id="progressBar">
+  <div class="progress-step active" data-step="1">
+    <div class="progress-dot">1</div>
+    <span>STEP1</span>
+  </div>
+  <div class="progress-line"></div>
+  <div class="progress-step" data-step="2">
+    <div class="progress-dot">2</div>
+    <span>STEP2</span>
+  </div>
+  <div class="progress-line"></div>
+  <div class="progress-step" data-step="3">
+    <div class="progress-dot">3</div>
+    <span>STEP3</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1 -->
+  <div class="step-page active" id="step1">
+    <div class="question-card">
+      <h3>当ホテルをお選びいただいた理由を教えてください</h3>
+      <div class="q-note">複数選択可（最大5個）</div>
+      <ul class="option-list" data-type="checkbox" data-max="5" data-q="q1">
+        <li><label class="option-label" onclick="toggleCheck(this)"><div class="check-box"></div>宮古島観光の拠点として便利だったため</label></li>
+        <li><label class="option-label" onclick="toggleCheck(this)"><div class="check-box"></div>市街地に近く、飲食店やコンビニが便利だったため</label></li>
+        <li><label class="option-label" onclick="toggleCheck(this)"><div class="check-box"></div>キッチンや洗濯機など設備が充実していたため</label></li>
+        <li><label class="option-label" onclick="toggleCheck(this)"><div class="check-box"></div>YouTube・SNSなどの口コミを見て</label></li>
+        <li><label class="option-label" onclick="toggleCheck(this)"><div class="check-box"></div>長期滞在・ワーケーションに適していたため</label></li>
+      </ul>
+    </div>
+
+    <div class="question-card">
+      <h3>客室の設備や快適さはいかがでしたか？</h3>
+      <div class="q-note">1つ選択してください</div>
+      <ul class="option-list" data-type="radio" data-q="q2">
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>清潔感があり快適だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>キッチン・調理器具が便利だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>洗濯機があり助かった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>ベッドや寝具が快適だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>部屋の広さがちょうど良かった</label></li>
+      </ul>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-next" onclick="goStep(2)">次へ</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-page" id="step2">
+    <div class="question-card">
+      <h3>スタッフやサービスについてはいかがでしたか？</h3>
+      <div class="q-note">1つ選択してください</div>
+      <ul class="option-list" data-type="radio" data-q="q3">
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>チェックイン・チェックアウトがスムーズだった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>スタッフの対応が丁寧だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>アメニティが充実していた</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>朝食・食事サービスが良かった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>周辺情報の案内が役立った</label></li>
+      </ul>
+    </div>
+
+    <div class="question-card">
+      <h3>立地や周辺環境についてはいかがでしたか？</h3>
+      <div class="q-note">1つ選択してください</div>
+      <ul class="option-list" data-type="radio" data-q="q4">
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>飲食店が近くて便利だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>コンビニ・スーパーが近かった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>静かで落ち着いた環境だった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>観光スポットへのアクセスが良かった</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>レンタカー・レンタサイクルが利用しやすかった</label></li>
+      </ul>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(1)">戻る</button>
+      <button class="btn btn-next" onclick="goStep(3)">次へ</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-page" id="step3">
+    <div class="question-card">
+      <h3>今後のご利用についてお聞かせください</h3>
+      <div class="q-note">1つ選択してください</div>
+      <ul class="option-list" data-type="radio" data-q="q5">
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>また宮古島に来たら利用したい</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>友人・家族にもおすすめしたい</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>長期滞在でまた利用したい</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>SNSでシェア・口コミを投稿したい</label></li>
+        <li><label class="option-label" onclick="selectRadio(this)"><div class="radio-dot"></div>他のお部屋タイプも利用してみたい</label></li>
+      </ul>
+    </div>
+
+    <div class="question-card">
+      <h3>その他、ご意見・ご感想がございましたらご自由にお書きください</h3>
+      <div class="q-note">任意</div>
+      <div class="textarea-wrap">
+        <textarea id="q6" placeholder="ご滞在中に感じたこと、改善してほしい点などお気軽にどうぞ..."></textarea>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(2)">戻る</button>
+      <button class="btn btn-submit" onclick="submitSurvey()">アンケートに回答する</button>
+    </div>
+  </div>
+
+  <!-- Thank You -->
+  <div class="thank-you" id="thankYou">
+    <div class="icon">&#10024;</div>
+    <h2>ご回答ありがとうございます</h2>
+    <p>お忙しい中、貴重なご意見をいただき<br>誠にありがとうございます。</p>
+    <div class="gift">
+      <h3>特典のご案内</h3>
+      <p>フロントにてアイマスクまたはバスソルトを<br>お受け取りください。</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+
+function toggleCheck(el) {
+  const list = el.closest('.option-list');
+  const max = parseInt(list.dataset.max) || 99;
+  const selected = list.querySelectorAll('.selected');
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+  } else if (selected.length < max) {
+    el.classList.add('selected');
+  }
+}
+
+function selectRadio(el) {
+  const list = el.closest('.option-list');
+  list.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function goStep(step) {
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  currentStep = step;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  document.querySelectorAll('.progress-step').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'done');
+    if (s === currentStep) el.classList.add('active');
+    else if (s < currentStep) el.classList.add('done');
+  });
+}
+
+function submitSurvey() {
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('thankYou').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
