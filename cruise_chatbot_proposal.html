@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIチャットボット構築 詳細提案 - 電脳ワークス様向け</title>
+<title>AIチャットボット構築 提案書 - 電脳ワークス様向け</title>
 <style>
 :root { --nv:#0f172a; --bl:#1e40af; --gn:#059669; --or:#ea580c; --sl:#334155; }
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -17,7 +17,7 @@ html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-y:scroll;heigh
 .or{background:linear-gradient(160deg,#7c2d12,#9a3412);color:#fed7aa;}
 .pp{background:linear-gradient(160deg,#312e81,#4338ca);color:#e0e7ff;}
 .pg{position:absolute;bottom:16px;right:24px;font-size:11px;opacity:0.25;}
-.lb{font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:0.4;margin-bottom:10px;}
+.lb{font-size:11px;letter-spacing:2px;opacity:0.4;margin-bottom:10px;}
 h1{font-size:36px;font-weight:800;line-height:1.3;margin-bottom:12px;}
 h2{font-size:28px;font-weight:700;line-height:1.35;margin-bottom:16px;}
 h3{font-size:20px;font-weight:700;margin-bottom:10px;}
@@ -57,6 +57,11 @@ h3{font-size:20px;font-weight:700;margin-bottom:10px;}
 .dots{position:fixed;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:100;}
 .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:0.3s;}
 .dot:hover,.dot.on{background:#34d399;transform:scale(1.3);}
+.analogy{background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:12px 16px;margin-top:10px;font-size:12px;line-height:1.7;}
+.lt .analogy{background:#fefce8;border-color:#fde68a;}
+.analogy .atitle{font-weight:700;color:#f59e0b;font-size:11px;margin-bottom:4px;}
+.lt .analogy .atitle{color:#d97706;}
+.point{font-size:18px;font-weight:800;color:#34d399;text-align:center;margin:14px 0 6px;}
 @media(max-width:768px){.s{padding:24px 16px;}h1{font-size:24px;}h2{font-size:20px;}.g2,.g3,.g4{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -65,671 +70,717 @@ h3{font-size:20px;font-weight:700;margin-bottom:10px;}
 
 <!-- 1: 表紙 -->
 <div class="s dk">
-<div class="lb">Technical Proposal</div>
-<h1>AIチャットボット構築<br>詳細技術提案書</h1>
-<p class="ld">プラットフォーム選定、AIモデル解説、コスト試算、<br>開発フロー、セキュリティまで全て網羅</p>
+<div class="lb">ご提案書</div>
+<h1>クルーズワールド.jp<br>AIチャットボット構築</h1>
+<p class="ld">「よくある質問」に24時間自動で答えてくれる<br>AIチャットボットをホームページに設置するご提案です</p>
 <div style="margin-top:28px;opacity:0.3;font-size:12px;">電脳ワークス様向け | 早川まい | 2026年4月</div>
 <div class="pg">1/20</div>
 </div>
 
 <!-- 2: 目次 -->
 <div class="s lt">
-<div class="lb">Contents</div>
-<h2>目次</h2>
+<div class="lb">目次</div>
+<h2>この資料でお伝えすること</h2>
 <div class="g2">
 <div class="cd">
-<h4>Part 1: 基礎知識</h4>
+<h4>Part 1: そもそもどういう仕組み？</h4>
 <ul>
-<li>チャットボットの仕組み（3ページ）</li>
-<li>RAG（ナレッジ検索）とは（4ページ）</li>
-<li>AIモデルの種類と特徴（5-6ページ）</li>
+<li>チャットボットとは（3ページ）</li>
+<li>「自社の情報で答える」仕組み（4ページ）</li>
+<li>AIの選び方（5〜6ページ）</li>
 </ul>
 </div>
 <div class="cd">
-<h4>Part 2: プラットフォーム</h4>
+<h4>Part 2: 何を使って作るの？</h4>
 <ul>
-<li>Dify とは何か（7ページ）</li>
-<li>他プラットフォームとの比較（8ページ）</li>
-<li>クラウド版 vs セルフホスト（9ページ）</li>
+<li>Dify（ディファイ）というツール（7ページ）</li>
+<li>他のツールとの比較（8ページ）</li>
+<li>料金の違い：2つの使い方（9ページ）</li>
 </ul>
 </div>
 <div class="cd">
-<h4>Part 3: 技術設計</h4>
+<h4>Part 3: 安全性とコスト</h4>
 <ul>
-<li>システム構成図（10ページ）</li>
-<li>AIモデル選定（11ページ）</li>
-<li>セキュリティ設計（12ページ）</li>
+<li>全体の流れ（10ページ）</li>
+<li>毎月かかる費用（11ページ）</li>
+<li>データの安全性（12ページ）</li>
 </ul>
 </div>
 <div class="cd">
-<h4>Part 4: 実行計画</h4>
+<h4>Part 4: 進め方</h4>
 <ul>
-<li>コスト試算（13-14ページ）</li>
-<li>開発フロー（15-16ページ）</li>
-<li>Claude Codeによる高速開発（17ページ）</li>
-<li>納品物・役割分担（18-19ページ）</li>
-<li>Next Step（20ページ）</li>
+<li>費用をさらに抑える工夫（13ページ）</li>
+<li>開発スピードについて（14ページ）</li>
+<li>完成までの流れ（15〜16ページ）</li>
+<li>お届けするもの・役割分担（17〜19ページ）</li>
+<li>次のステップ（20ページ）</li>
 </ul>
 </div>
 </div>
 <div class="pg">2/20</div>
 </div>
 
-<!-- 3: チャットボットの仕組み -->
+<!-- 3: チャットボットとは -->
 <div class="s dk">
-<div class="lb">Part 1: Basics</div>
-<h2>チャットボットの仕組み</h2>
+<div class="lb">仕組みのご説明</div>
+<h2>AIチャットボットとは？</h2>
+<p class="ld" style="margin-bottom:18px;">ホームページに「質問できる窓口」を置くイメージです</p>
 <div class="g2">
 <div class="cd">
-<h4>普通のFAQページとの違い</h4>
-<p style="margin-bottom:8px;">従来のFAQページは、ユーザーが自分で質問を探す必要がありました。チャットボットは「聞けば答えてくれる」ので、ユーザーの手間がなくなります。</p>
-<div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;font-size:12px;margin-top:8px;">
-<div style="margin-bottom:6px;">従来のFAQページ:</div>
-<div style="opacity:0.6;">ユーザー → 一覧から探す → 見つからない → 離脱</div>
-<div style="margin:8px 0 6px;">AIチャットボット:</div>
-<div style="opacity:0.6;">ユーザー → 質問を入力 → すぐ回答 → 予約へ誘導</div>
+<h4>今のホームページ（FAQページ）</h4>
+<div style="font-size:12px;line-height:2;margin-top:8px;">
+<div>お客様 → FAQページを開く</div>
+<div>→ 質問一覧をスクロールして探す</div>
+<div>→ 見つからない…</div>
+<div style="color:#f87171;font-weight:600;">→ あきらめて離脱 😔</div>
+</div>
+<div class="analogy">
+<div class="atitle">💡 たとえると</div>
+分厚い取扱説明書を渡されて「自分で探してね」と言われるようなもの
 </div>
 </div>
-<div class="cd">
-<h4>チャットボットの3つの構成要素</h4>
-<div style="margin-top:8px;">
-<div style="background:rgba(59,130,246,0.15);border-radius:8px;padding:10px;margin-bottom:6px;">
-<div style="font-weight:700;font-size:13px;">1. ナレッジベース（知識の倉庫）</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">クルーズの情報をテキストやCSVで保存。AIの「記憶」になる。</div>
+<div class="cd pk">
+<h4 style="color:#34d399;">AIチャットボットを設置したら</h4>
+<div style="font-size:12px;line-height:2;margin-top:8px;">
+<div>お客様 → チャット欄に質問を入力</div>
+<div>→ AIがすぐに回答</div>
+<div>→ 「予約はこちら」と案内</div>
+<div style="color:#34d399;font-weight:600;">→ そのまま予約・問い合わせへ 🎉</div>
 </div>
-<div style="background:rgba(52,211,153,0.15);border-radius:8px;padding:10px;margin-bottom:6px;">
-<div style="font-weight:700;font-size:13px;">2. AIモデル（考える頭脳）</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">ナレッジから情報を取り出し、自然な日本語で回答を作る。</div>
+<div class="analogy">
+<div class="atitle">💡 たとえると</div>
+クルーズに詳しいスタッフが24時間、ホームページの中で接客してくれるようなもの
 </div>
-<div style="background:rgba(249,115,22,0.15);border-radius:8px;padding:10px;">
-<div style="font-weight:700;font-size:13px;">3. チャットUI（見た目）</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">HPに表示される吹き出し型の画面。ユーザーが質問を入力する場所。</div>
 </div>
+</div>
+<div class="cd" style="max-width:940px;margin-top:16px;">
+<h4>チャットボットの中身はシンプルに3つだけ</h4>
+<div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+<div style="flex:1;min-width:180px;background:rgba(59,130,246,0.15);border-radius:8px;padding:12px;text-align:center;">
+<div style="font-size:22px;margin-bottom:4px;">📚</div>
+<div style="font-weight:700;font-size:13px;">情報の倉庫</div>
+<div style="font-size:11px;opacity:0.7;margin-top:3px;">クルーズの料金・航路・Q&Aなど<br>「答えのもと」を入れておく場所</div>
+</div>
+<div style="flex:1;min-width:180px;background:rgba(52,211,153,0.15);border-radius:8px;padding:12px;text-align:center;">
+<div style="font-size:22px;margin-bottom:4px;">🧠</div>
+<div style="font-weight:700;font-size:13px;">AIの頭脳</div>
+<div style="font-size:11px;opacity:0.7;margin-top:3px;">倉庫から必要な情報を取り出して<br>自然な日本語で回答を作る</div>
+</div>
+<div style="flex:1;min-width:180px;background:rgba(249,115,22,0.15);border-radius:8px;padding:12px;text-align:center;">
+<div style="font-size:22px;margin-bottom:4px;">💬</div>
+<div style="font-weight:700;font-size:13px;">チャット画面</div>
+<div style="font-size:11px;opacity:0.7;margin-top:3px;">ホームページに表示される<br>お客様が質問を入力する画面</div>
 </div>
 </div>
 </div>
 <div class="pg">3/20</div>
 </div>
 
-<!-- 4: RAGとは -->
+<!-- 4: 自社の情報で答える仕組み -->
 <div class="s lt">
-<div class="lb">RAG Explained</div>
-<h2>RAG（ナレッジ検索）とは</h2>
-<p class="ld" style="margin-bottom:16px;">AIに「自社の情報だけ」を使って回答させる技術です</p>
+<div class="lb">仕組みのご説明</div>
+<h2>「自社の情報だけ」で答える仕組み</h2>
+<p class="ld" style="margin-bottom:16px;">普通のAI（ChatGPT等）はクルーズワールドのことを知りません。<br>そこで「自社の情報を教えてから答えさせる」仕組みを使います。</p>
 <div class="g2">
 <div class="cd">
-<h4>RAGなし（普通のAI）</h4>
+<h4>❌ 普通のAIにそのまま聞いた場合</h4>
 <div style="font-size:12px;line-height:1.8;margin-top:6px;">
-<p>ChatGPTに直接聞いた場合:</p>
 <div style="background:#fef2f2;border-radius:6px;padding:10px;margin-top:6px;color:#991b1b;">
 Q: 「クルーズワールドの料金は？」<br>
-A: 「申し訳ございませんが、クルーズワールドという具体的なサービスの料金情報は持っていません...」
+A: 「申し訳ございませんが、クルーズワールドという具体的なサービスの情報は持っておりません...」
 </div>
-<p style="margin-top:8px;color:#dc2626;font-weight:600;">自社の情報を知らないので答えられない</p>
+<p style="margin-top:8px;color:#dc2626;font-weight:600;">→ 自社のことを知らないので答えられない</p>
 </div>
 </div>
 <div class="cd pk">
-<h4 style="color:#059669;">RAGあり（今回のチャットボット）</h4>
+<h4 style="color:#059669;">✅ 自社の情報を教えたAIに聞いた場合</h4>
 <div style="font-size:12px;line-height:1.8;margin-top:6px;">
-<p>ナレッジベースを参照して回答:</p>
 <div style="background:#f0fdf4;border-radius:6px;padding:10px;margin-top:6px;color:#166534;">
 Q: 「クルーズワールドの料金は？」<br>
 A: 「地中海クルーズ7日間が149,800円から、日本発着4日間が59,800円からございます。ご予算に合わせてご提案も可能です！」
 </div>
-<p style="margin-top:8px;color:#059669;font-weight:600;">自社のデータから正確に回答できる</p>
+<p style="margin-top:8px;color:#059669;font-weight:600;">→ 御社のデータから正確に回答できる</p>
 </div>
 </div>
 </div>
 <div class="cd" style="max-width:940px;margin-top:14px;">
-<h4>RAGの仕組み（簡単に）</h4>
-<div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:8px;font-size:12px;flex-wrap:wrap;">
-<div style="background:#dbeafe;padding:8px 14px;border-radius:8px;text-align:center;color:#1e40af;">ユーザーの質問<br>「料金は？」</div>
-<div style="opacity:0.4;">→</div>
-<div style="background:#dcfce7;padding:8px 14px;border-radius:8px;text-align:center;color:#166534;">ナレッジから<br>関連情報を検索</div>
-<div style="opacity:0.4;">→</div>
-<div style="background:#fef3c7;padding:8px 14px;border-radius:8px;text-align:center;color:#92400e;">質問+関連情報を<br>AIに渡す</div>
-<div style="opacity:0.4;">→</div>
-<div style="background:#e0e7ff;padding:8px 14px;border-radius:8px;text-align:center;color:#3730a3;">AIが自然な日本語で<br>回答を生成</div>
+<h4>どういう流れ？ 4ステップで回答が届きます</h4>
+<div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px;font-size:12px;flex-wrap:wrap;">
+<div style="background:#dbeafe;padding:10px 16px;border-radius:8px;text-align:center;color:#1e40af;">
+<div style="font-weight:700;">STEP 1</div>
+お客様が質問
+</div>
+<div style="opacity:0.4;font-size:18px;">→</div>
+<div style="background:#dcfce7;padding:10px 16px;border-radius:8px;text-align:center;color:#166534;">
+<div style="font-weight:700;">STEP 2</div>
+情報の倉庫から<br>関連する部分だけ取り出す
+</div>
+<div style="opacity:0.4;font-size:18px;">→</div>
+<div style="background:#fef3c7;padding:10px 16px;border-radius:8px;text-align:center;color:#92400e;">
+<div style="font-weight:700;">STEP 3</div>
+質問＋関連情報を<br>AIに渡す
+</div>
+<div style="opacity:0.4;font-size:18px;">→</div>
+<div style="background:#e0e7ff;padding:10px 16px;border-radius:8px;text-align:center;color:#3730a3;">
+<div style="font-weight:700;">STEP 4</div>
+AIが自然な日本語で<br>回答を表示
+</div>
+</div>
+<div class="analogy" style="margin-top:12px;">
+<div class="atitle">💡 たとえると</div>
+新人スタッフに「この資料を読んでから、お客様の質問に答えてね」と指示するイメージです。<br>AIは言われた資料の範囲で答えるので、でたらめな回答になりにくくなります。
 </div>
 </div>
 <div class="pg">4/20</div>
 </div>
 
-<!-- 5: AIモデルとは -->
+<!-- 5: AIの選び方 -->
 <div class="s pp">
-<div class="lb">AI Models Explained</div>
-<h2>AIモデルの種類と特徴</h2>
-<p class="ld" style="margin-bottom:14px;">AIモデルとは「考える頭脳」のこと。用途に応じて最適なものを選びます</p>
+<div class="lb">AIの選び方</div>
+<h2>どのAIを使うのがベスト？</h2>
+<p class="ld" style="margin-bottom:14px;">AIにもグレードがあります。高いものほど賢いですが、<br>今回のような「よくある質問に答える」用途なら、お手頃なもので十分です。</p>
 <div class="g2">
-<div class="cd">
-<h4>OpenAI（ChatGPTの会社）</h4>
-<div style="margin-top:8px;">
-<div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px;margin-bottom:6px;">
-<div style="font-weight:700;font-size:13px;">GPT-4o（最上位モデル）</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">
-最も賢い。複雑な推論、長い文章の理解が得意。<br>
-ただしFAQ応答にはオーバースペック。コストも高い。<br>
-<span style="color:#f59e0b;">月約15,000円（3,000回利用時）</span>
-</div>
-</div>
-<div style="background:rgba(52,211,153,0.12);border-radius:8px;padding:10px;">
-<div style="font-weight:700;font-size:13px;">GPT-4o-mini（軽量版）<span class="tg">推奨</span></div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">
-GPT-4oの能力を維持しつつ、速度10倍・コスト1/30。<br>
-FAQ応答には十分すぎる性能。日本語も自然。<br>
-<span style="color:#34d399;">月約1,500円（3,000回利用時）</span>
-</div>
+<div class="cd pk">
+<h4 style="color:#34d399;">おすすめ：GPT-4o-mini <span class="tg">推奨</span></h4>
+<div style="font-size:12px;line-height:1.8;margin-top:8px;">
+<p>ChatGPTの軽量版。FAQ対応に必要な能力は十分あります。</p>
+<ul style="margin-top:8px;">
+<li>日本語が自然で読みやすい</li>
+<li>回答スピードが速い（1〜2秒）</li>
+<li>コストがとても安い</li>
+</ul>
+<div style="margin-top:10px;background:rgba(52,211,153,0.12);border-radius:6px;padding:10px;text-align:center;">
+<div style="font-size:11px;opacity:0.7;">月3,000回の問い合わせで</div>
+<div style="font-size:20px;font-weight:800;color:#34d399;">月額 約1,500円</div>
 </div>
 </div>
 </div>
 <div class="cd">
-<h4>Anthropic（Claudeの会社）</h4>
-<div style="margin-top:8px;">
-<div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px;margin-bottom:6px;">
-<div style="font-weight:700;font-size:13px;">Claude Sonnet 4（高性能モデル）</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">
-日本語の自然さが最高レベル。丁寧で正確。<br>
-ただしコストが高く、FAQ用途には不要。<br>
-<span style="color:#f59e0b;">月約18,000円（3,000回利用時）</span>
+<h4>参考：高性能モデルとの比較</h4>
+<div style="font-size:12px;line-height:1.8;margin-top:8px;">
+<div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;margin-bottom:6px;">
+<div style="font-weight:600;">GPT-4o（ChatGPTの最上位版）</div>
+<div style="opacity:0.7;">とても賢い。でもFAQ対応にはオーバースペック。</div>
+<div style="color:#f59e0b;">月額 約15,000円 → 10倍の費用</div>
+</div>
+<div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;margin-bottom:6px;">
+<div style="font-weight:600;">Claude 3.5 Haiku（別のAI会社の製品）</div>
+<div style="opacity:0.7;">日本語の丁寧さはトップクラス。費用もお手頃。</div>
+<div style="color:#34d399;">月額 約3,000円 → 次点の候補</div>
 </div>
 </div>
-<div style="background:rgba(52,211,153,0.12);border-radius:8px;padding:10px;margin-bottom:6px;">
-<div style="font-weight:700;font-size:13px;">Claude 3.5 Haiku（軽量版）<span class="tg">次点</span></div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">
-日本語の丁寧さはGPT-4o-miniより上。速度も速い。<br>
-コストはGPT-4o-miniの約2倍だが十分に安い。<br>
-<span style="color:#34d399;">月約3,000円（3,000回利用時）</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="cd" style="max-width:940px;margin-top:10px;">
-<h4>Google（Geminiの会社）</h4>
-<div style="display:flex;gap:12px;margin-top:6px;">
-<div style="flex:1;background:rgba(255,255,255,0.06);border-radius:8px;padding:10px;">
-<div style="font-weight:700;font-size:13px;">Gemini 2.0 Flash</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">最速かつ最安。応答速度は0.5秒。月約800円。ただし日本語の自然さはGPT/Claudeに少し劣る。コスト最優先の場合に検討。</div>
+<div class="analogy">
+<div class="atitle">💡 たとえると</div>
+コンビニまで行くのに「軽自動車」と「高級スポーツカー」のどちらに乗るか？という話です。目的に合った選択がコスパ最良。
 </div>
 </div>
 </div>
 <div class="pg">5/20</div>
 </div>
 
-<!-- 6: モデル比較表 -->
+<!-- 6: なぜ高いAIが不要か -->
 <div class="s lt">
-<div class="lb">Model Comparison</div>
-<h2>AIモデル比較 まとめ</h2>
-<table class="tb">
-<tr><th>モデル</th><th>提供元</th><th>日本語</th><th>速度</th><th>月額（3000回）</th><th>GPT-4o比</th><th>おすすめ用途</th></tr>
-<tr class="hi"><td>GPT-4o-mini <span class="tg">推奨</span></td><td>OpenAI</td><td>高い</td><td>1〜2秒</td><td>約1,500円</td><td>1/10のコスト</td><td>コスパ重視のFAQ対応</td></tr>
-<tr class="hi"><td>Claude 3.5 Haiku <span class="tg">次点</span></td><td>Anthropic</td><td>非常に高い</td><td>1〜2秒</td><td>約3,000円</td><td>1/5のコスト</td><td>日本語の自然さ重視</td></tr>
-<tr><td>Gemini 2.0 Flash</td><td>Google</td><td>高い</td><td>0.5〜1秒</td><td>約800円</td><td>1/20のコスト</td><td>最低コスト重視</td></tr>
-<tr><td>GPT-4o</td><td>OpenAI</td><td>非常に高い</td><td>2〜4秒</td><td>約15,000円</td><td>基準</td><td>複雑な推論が必要な場合</td></tr>
-<tr><td>Claude Sonnet 4</td><td>Anthropic</td><td>最高</td><td>2〜3秒</td><td>約18,000円</td><td>1.2倍</td><td>最高品質の応答</td></tr>
-</table>
-<div class="cd" style="max-width:940px;margin-top:14px;">
-<h4>なぜ高性能モデルが不要なのか</h4>
-<p>チャットボットの回答精度は「AIモデルの性能」よりも「ナレッジの質」と「プロンプト設計」で決まります。事前に用意されたFAQに回答するだけなら、GPT-4o-miniで十分。高性能モデルが必要になるのは「複数の条件を組み合わせた複雑な推論」が必要な場合（Phase3以降）です。まずはGPT-4o-miniで始めて、必要に応じてアップグレードするのが最も効率的です。</p>
+<div class="lb">AIの選び方</div>
+<h2>回答の質を決めるのは「AIの頭脳」より「情報の質」</h2>
+<div class="g2" style="align-items:start;">
+<div class="cd">
+<h4>高いAI = 良い回答？</h4>
+<p style="font-size:13px;line-height:1.8;margin-top:6px;">
+いいえ。チャットボットの回答品質は<br>
+<strong>「情報の倉庫にどれだけ良い情報があるか」</strong>で決まります。
+</p>
+<div style="margin-top:12px;font-size:12px;">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+<span style="font-size:22px;">📚</span>
+<div><strong>情報の質が良い</strong> → どのAIでも正確に答えられる</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;">
+<span style="font-size:22px;">📝</span>
+<div><strong>情報がスカスカ</strong> → 高いAIでも答えられない</div>
+</div>
+</div>
+</div>
+<div class="cd pk">
+<h4>今回のおすすめ戦略</h4>
+<div style="font-size:12px;line-height:1.8;margin-top:8px;">
+<div style="background:rgba(5,150,105,0.08);border-radius:6px;padding:10px;margin-bottom:8px;">
+<div style="font-weight:700;color:#059669;">まずはお手頃AIで始める</div>
+<div style="opacity:0.7;margin-top:2px;">GPT-4o-mini（月1,500円）でスタート</div>
+</div>
+<div style="background:rgba(5,150,105,0.08);border-radius:6px;padding:10px;margin-bottom:8px;">
+<div style="font-weight:700;color:#059669;">情報の倉庫をしっかり作り込む</div>
+<div style="opacity:0.7;margin-top:2px;">ここに一番時間をかけます</div>
+</div>
+<div style="background:rgba(5,150,105,0.08);border-radius:6px;padding:10px;">
+<div style="font-weight:700;color:#059669;">必要に応じてAIをグレードアップ</div>
+<div style="opacity:0.7;margin-top:2px;">もっと複雑な回答が必要になったら切り替え可能</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cd" style="max-width:940px;margin-top:14px;text-align:center;">
+<div class="point">AIの切り替えはボタン1つ。あとから自由に変えられます。</div>
+<p>最初から高いAIにする必要はありません。運用しながら最適なものに調整できます。</p>
 </div>
 <div class="pg">6/20</div>
 </div>
 
 <!-- 7: Difyとは -->
 <div class="s dk">
-<div class="lb">What is Dify</div>
-<h2>Dify（ディファイ）とは</h2>
+<div class="lb">ツールのご説明</div>
+<h2>Dify（ディファイ）とは？</h2>
+<p class="ld" style="margin-bottom:16px;">チャットボットを作るための管理ツールです。<br>プログラミングなしで、画面操作だけでチャットボットが作れます。</p>
 <div class="g2">
 <div class="cd">
-<h4>Difyの概要</h4>
-<p>Difyは、AIチャットボットやAIアプリを「プログラミングなし」で作れるオープンソースのプラットフォームです。</p>
-<ul style="margin-top:8px;">
-<li>2023年にリリース。世界で10万以上の組織が利用</li>
-<li>GitHub Star数 60,000以上（人気の指標）</li>
-<li>日本語対応済み</li>
-<li>クラウド版とセルフホスト版の2種類</li>
+<h4>Difyでできること</h4>
+<ul style="font-size:12px;line-height:2;">
+<li>情報ファイルをドラッグ&ドロップで登録</li>
+<li>AIの回答ルールを画面上で設定</li>
+<li>ホームページに貼り付けるコードを自動生成</li>
+<li>お客様とのチャット履歴を確認</li>
+<li>利用状況をグラフで確認</li>
+<li>AIの種類をいつでも切り替え</li>
 </ul>
-<div style="margin-top:10px;font-size:12px;">
-<div style="font-weight:700;margin-bottom:4px;">クラウド版の料金プラン</div>
-<div style="opacity:0.7;line-height:1.8;">
-Sandbox（無料）: メッセージ200回/月、ナレッジ5MB<br>
-Professional（$59/月）: 5,000回/月、ナレッジ5GB<br>
-Team（$159/月）: 10,000回/月、ナレッジ20GB<br>
-Enterprise: カスタム料金
-</div>
-<div style="margin-top:6px;color:#34d399;font-weight:600;">セルフホスト版: 上記の制限なし。全て無料。</div>
-</div>
 </div>
 <div class="cd">
-<h4>Difyでできること</h4>
-<ul>
-<li>ナレッジベースにファイルをアップロードするだけでRAGが動く</li>
-<li>チャットボットのプロンプトをGUI（画面操作）で設定</li>
-<li>HPに埋め込むためのiFrameコードを自動生成</li>
-<li>チャットログの確認・分析</li>
-<li>AIモデルの切り替え（GPT / Claude / Gemini 等）</li>
-<li>APIでの外部連携</li>
-<li>複数のチャットボットを1つの管理画面で管理</li>
+<h4>なぜDifyを選ぶのか？</h4>
+<ul style="font-size:12px;line-height:2;">
+<li>世界10万以上の企業・団体が利用</li>
+<li>日本語に対応済み</li>
+<li>プログラミング知識がなくても管理できる</li>
+<li>情報の追加・修正もかんたん</li>
+<li>無料で使える（オープンソース）</li>
 </ul>
+<div class="analogy">
+<div class="atitle">💡 たとえると</div>
+ホームページ作成に「WordPress」があるように、チャットボット作成に「Dify」があるイメージです。
+</div>
 </div>
 </div>
 <div class="cd" style="max-width:940px;margin-top:14px;">
-<h4>管理画面のイメージ</h4>
+<h4>管理画面でできること（イメージ）</h4>
 <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;">
 <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;text-align:center;">
 <div style="font-size:24px;margin-bottom:4px;">📝</div>
-<div style="font-size:12px;font-weight:600;">プロンプト編集</div>
-<div style="font-size:10px;opacity:0.6;">AIの回答ルールを画面上で設定</div>
+<div style="font-size:12px;font-weight:600;">回答ルールの編集</div>
+<div style="font-size:10px;opacity:0.6;">「こういう聞かれ方にはこう答えて」を設定</div>
 </div>
 <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;text-align:center;">
 <div style="font-size:24px;margin-bottom:4px;">📚</div>
-<div style="font-size:12px;font-weight:600;">ナレッジ管理</div>
-<div style="font-size:10px;opacity:0.6;">ファイルをドラッグ&ドロップで追加</div>
+<div style="font-size:12px;font-weight:600;">情報の追加・更新</div>
+<div style="font-size:10px;opacity:0.6;">ファイルを入れるだけで情報を追加</div>
 </div>
 <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;text-align:center;">
 <div style="font-size:24px;margin-bottom:4px;">💬</div>
-<div style="font-size:12px;font-weight:600;">チャットログ</div>
-<div style="font-size:10px;opacity:0.6;">誰がいつ何を聞いたか確認</div>
+<div style="font-size:12px;font-weight:600;">チャット履歴の確認</div>
+<div style="font-size:10px;opacity:0.6;">誰がいつ何を聞いたか見られる</div>
 </div>
 <div style="flex:1;min-width:140px;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;text-align:center;">
 <div style="font-size:24px;margin-bottom:4px;">📊</div>
-<div style="font-size:12px;font-weight:600;">利用統計</div>
-<div style="font-size:10px;opacity:0.6;">質問数・回答精度をグラフで表示</div>
-</div>
-<div style="flex:1;min-width:140px;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;text-align:center;">
-<div style="font-size:24px;margin-bottom:4px;">🎨</div>
-<div style="font-size:12px;font-weight:600;">UI設定</div>
-<div style="font-size:10px;opacity:0.6;">色・サイズ・初回メッセージを変更</div>
+<div style="font-size:12px;font-weight:600;">利用状況の確認</div>
+<div style="font-size:10px;opacity:0.6;">月に何回使われたかグラフで表示</div>
 </div>
 </div>
 </div>
 <div class="pg">7/20</div>
 </div>
 
-<!-- 8: プラットフォーム比較 -->
+<!-- 8: 他のツールとの比較 -->
 <div class="s lt">
-<div class="lb">Platform Comparison</div>
-<h2>チャットボット構築プラットフォーム比較</h2>
+<div class="lb">ツール比較</div>
+<h2>なぜDifyがベストなのか？</h2>
+<p class="ld" style="margin-bottom:14px;">チャットボットを作る方法はいくつかあります。<br>今回の案件には Dify が一番合っています。</p>
 <div class="g2">
 <div class="cd pk">
-<div class="ic">🟢</div>
-<h4>Dify（推奨）</h4>
-<p>ナレッジベース、チャットUI、管理画面がオールインワン。プログラミング不要でチャットボットが作れる。セルフホスト版はDocker一発でインストール可能。日本語ドキュメントも豊富。</p>
-<ul style="margin-top:6px;">
-<li>ナレッジ: ファイルアップロードだけ</li>
-<li>HP埋め込み: scriptタグ1行</li>
-<li>管理: GUIで全操作可能</li>
-<li>ライセンス: 無料（オープンソース）</li>
+<div class="ic">✅</div>
+<h4>Dify（今回の提案）</h4>
+<p style="margin-bottom:8px;">情報の管理、チャット画面、管理画面が全部セット。プログラミング不要で運用できるので、納品後も安心。</p>
+<ul>
+<li>情報の登録 → ファイルを入れるだけ</li>
+<li>ホームページへの設置 → コード1行を貼るだけ</li>
+<li>管理 → 画面操作だけでOK</li>
+<li>費用 → 無料（自社サーバーに設置する場合）</li>
 </ul>
 </div>
 <div class="cd">
 <div class="ic">🔵</div>
-<h4>Flowise</h4>
-<p>ノードベースのビジュアルエディタでAIワークフローを構築。柔軟性は高いが、Difyより設定が複雑。エンジニア向け。ナレッジ管理はプラグインが必要。</p>
-<ul style="margin-top:6px;">
-<li>ナレッジ: プラグイン設定が必要</li>
-<li>HP埋め込み: iframe可能だが調整要</li>
-<li>管理: エンジニア向けのUI</li>
-<li>ライセンス: 無料（オープンソース）</li>
-</ul>
-</div>
-<div class="cd">
-<div class="ic">🟣</div>
-<h4>Botpress</h4>
-<p>チャットボット特化のプラットフォーム。会話フローの設計が得意。ナレッジベース機能も内蔵。ただし日本語の情報が少なく、サポートも英語中心。</p>
-<ul style="margin-top:6px;">
-<li>ナレッジ: 内蔵あり</li>
-<li>HP埋め込み: ウィジェット提供</li>
-<li>管理: GUIで操作可能</li>
-<li>ライセンス: 無料枠あり、有料プランも</li>
+<h4>他のツール（Flowise・Botpress等）</h4>
+<p style="margin-bottom:8px;">同じようなことはできますが、設定が複雑だったり、日本語の情報が少なかったりします。</p>
+<ul>
+<li>設定がやや複雑（エンジニア向け）</li>
+<li>日本語ドキュメントが少ない</li>
+<li>管理画面の使いやすさでDifyに劣る</li>
 </ul>
 </div>
 <div class="cd">
 <div class="ic">⚫</div>
-<h4>独自開発（Python + LangChain）</h4>
-<p>完全にゼロからプログラミングで構築。自由度は最高だが、開発工数が大きい。チャットUI、管理画面も全て自前開発が必要。今回の予算感では非現実的。</p>
-<ul style="margin-top:6px;">
-<li>ナレッジ: LangChainで自前構築</li>
-<li>HP埋め込み: 自前でUI開発</li>
-<li>管理: 自前で管理画面開発</li>
-<li>開発工数: 2〜4週間</li>
+<h4>ゼロから自作する場合</h4>
+<p style="margin-bottom:8px;">自由度は最高ですが、開発に時間とコストがかかります。</p>
+<ul>
+<li>開発期間：2〜4週間</li>
+<li>チャット画面も管理画面も全て自作</li>
+<li>今回の規模感では費用対効果が合わない</li>
+</ul>
+</div>
+<div class="cd" style="background:#f0fdf4;border-color:#86efac;">
+<div class="ic">🏆</div>
+<h4 style="color:#059669;">Difyを選ぶ理由まとめ</h4>
+<ul>
+<li>納品後、田中さん側でも情報の追加・修正がしやすい</li>
+<li>プログラミング知識なしで管理できる</li>
+<li>世界中で使われている安心感</li>
+<li>費用が安い（無料〜）</li>
+<li>必要に応じてAIの種類を切り替えられる</li>
 </ul>
 </div>
 </div>
 <div class="pg">8/20</div>
 </div>
 
-<!-- 9: クラウド vs セルフホスト -->
+<!-- 9: 2つの使い方（クラウド vs セルフホスト） -->
 <div class="s gn">
-<div class="lb">Cloud vs Self-Hosted</div>
-<h2>Dify クラウド版 vs セルフホスト版</h2>
-<table class="tb">
-<tr><th>比較項目</th><th>クラウド版（dify.ai）</th><th>セルフホスト版（今回採用）</th></tr>
-<tr><td>月額費用</td><td>Sandbox: 無料（200回まで）<br>Pro: $59/月<br>Team: $159/月</td><td style="color:#34d399;font-weight:700;">0円（Difyへの課金なし）</td></tr>
-<tr><td>ナレッジ容量</td><td>Sandbox: 5MB<br>Pro: 5GB<br>Team: 20GB</td><td style="color:#34d399;font-weight:700;">無制限（サーバーのディスク依存）</td></tr>
-<tr><td>データ保存場所</td><td>Dify社のサーバー（海外）</td><td style="color:#34d399;font-weight:700;">自社サーバー（日本国内も可）</td></tr>
-<tr><td>カスタマイズ</td><td>制限あり</td><td style="color:#34d399;font-weight:700;">完全自由</td></tr>
-<tr><td>サーバー管理</td><td style="color:#34d399;">不要（Difyがやってくれる）</td><td>必要（Docker運用）</td></tr>
-<tr><td>初期セットアップ</td><td style="color:#34d399;">アカウント登録だけ</td><td>VPS契約 + Docker設定（1〜2時間）</td></tr>
-<tr><td>年間コスト</td><td>約29万円</td><td style="color:#34d399;font-weight:700;">約1.8万円（VPS代のみ）</td></tr>
-</table>
+<div class="lb">料金プラン</div>
+<h2>Difyの2つの使い方</h2>
+<p class="ld" style="margin-bottom:14px;">「おまかせプラン」と「自前で管理プラン」があります</p>
+<div class="g2">
+<div class="cd">
+<h4>おまかせプラン（Difyクラウド版）</h4>
+<p style="margin-bottom:8px;">Dify社のサーバーを使う。手軽だが毎月の費用がかかる。</p>
+<div style="font-size:12px;line-height:1.8;">
+<div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:8px;margin-bottom:4px;">
+無料枠：月200回まで、情報5MBまで
+</div>
+<div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:8px;margin-bottom:4px;">
+Pro：月$59（約9,000円）、月5,000回
+</div>
+<div style="background:rgba(255,255,255,0.06);border-radius:6px;padding:8px;">
+Team：月$159（約24,000円）、月10,000回
+</div>
+</div>
+<div style="margin-top:8px;font-size:12px;opacity:0.7;">
+46社600隻のデータを入れるには無料枠では足りない<br>
+→ 年間で約29万円かかる計算
+</div>
+</div>
+<div class="cd pk">
+<h4 style="color:#34d399;">自前で管理プラン（今回の提案）<span class="tg">推奨</span></h4>
+<p style="margin-bottom:8px;">自社のサーバーにDifyをインストール。利用回数・情報量に制限なし。</p>
+<div style="font-size:12px;line-height:1.8;">
+<div style="background:rgba(52,211,153,0.12);border-radius:6px;padding:8px;margin-bottom:4px;">
+Dify利用料：0円（無制限）
+</div>
+<div style="background:rgba(52,211,153,0.12);border-radius:6px;padding:8px;margin-bottom:4px;">
+情報の容量：無制限
+</div>
+<div style="background:rgba(52,211,153,0.12);border-radius:6px;padding:8px;">
+サーバー代：月1,500円のみ
+</div>
+</div>
+<div style="margin-top:8px;font-size:12px;color:#34d399;font-weight:600;">
+→ 年間で約1.8万円。おまかせプランの1/16の費用
+</div>
+</div>
+</div>
 <div class="cd pk" style="max-width:940px;margin-top:14px;text-align:center;">
-<h4 style="color:#34d399;">セルフホストで年間27万円のコスト削減</h4>
-<p>46社600隻のデータを入れるにはクラウド版の50MBでは足りない。セルフホストなら容量無制限でコストも1/16。初期セットアップの手間（1〜2時間）は早川が対応するので電脳ワークスの負担はゼロ。</p>
+<div class="point">年間27万円のコスト削減</div>
+<p>サーバーの初期設定は早川が全て対応します。電脳ワークス側の負担はゼロです。</p>
 </div>
 <div class="pg">9/20</div>
 </div>
 
-<!-- 10: システム構成 -->
+<!-- 10: 全体の流れ -->
 <div class="s dk">
-<div class="lb">System Architecture</div>
-<h2>システム構成図</h2>
-<div class="g2" style="align-items:start;">
+<div class="lb">全体像</div>
+<h2>チャットボットが動く仕組み（全体の流れ）</h2>
+<p class="ld" style="margin-bottom:18px;">お客様が質問してから回答が届くまで、裏側でこう動きます</p>
+<div class="cd" style="max-width:800px;width:100%;">
+<div style="font-size:13px;line-height:2.6;">
+<div style="display:flex;align-items:center;gap:10px;">
+<span style="background:#3b82f6;color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">1</span>
+<div>お客様がホームページのチャット欄に質問を入力</div>
+</div>
+<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<span style="background:#3b82f6;color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">2</span>
+<div>質問が専用サーバー上のDifyに届く</div>
+</div>
+<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<span style="background:#3b82f6;color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">3</span>
+<div>Difyが「情報の倉庫」から質問に関連するデータを見つける</div>
+</div>
+<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<span style="background:#3b82f6;color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">4</span>
+<div>質問＋関連データをAI（GPT-4o-mini）に渡す</div>
+</div>
+<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<span style="background:#34d399;color:#064e3b;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;">5</span>
+<div>AIが自然な日本語で回答を作成 → お客様の画面に表示（1〜2秒）</div>
+</div>
+</div>
+</div>
+<div class="g2" style="margin-top:16px;max-width:800px;">
 <div class="cd">
-<h4>データの流れ</h4>
-<div style="font-size:13px;line-height:2.4;margin-top:8px;">
-<div style="display:flex;align-items:center;gap:6px;">
-<span style="background:#3b82f6;padding:2px 8px;border-radius:5px;font-size:11px;">1</span>
-ユーザーがHPのチャット欄に質問を入力
-</div>
-<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
-<div style="display:flex;align-items:center;gap:6px;">
-<span style="background:#3b82f6;padding:2px 8px;border-radius:5px;font-size:11px;">2</span>
-iFrame経由で自社VPS上のDifyに送信
-</div>
-<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
-<div style="display:flex;align-items:center;gap:6px;">
-<span style="background:#3b82f6;padding:2px 8px;border-radius:5px;font-size:11px;">3</span>
-Difyがナレッジベースから関連情報を検索
-</div>
-<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
-<div style="display:flex;align-items:center;gap:6px;">
-<span style="background:#3b82f6;padding:2px 8px;border-radius:5px;font-size:11px;">4</span>
-質問 + 関連情報をOpenAI APIに送信
-</div>
-<div style="text-align:center;opacity:0.2;font-size:10px;">↓</div>
-<div style="display:flex;align-items:center;gap:6px;">
-<span style="background:#3b82f6;padding:2px 8px;border-radius:5px;font-size:11px;">5</span>
-AIが回答を生成 → ユーザーに表示
-</div>
-</div>
+<h4>専用サーバーの中身</h4>
+<p>月1,500円の国内サーバーに、チャットボットに必要なものが全部入っています。細かい技術的な部分は早川が管理するので、ご安心ください。</p>
 </div>
 <div class="cd">
-<h4>VPSサーバーの中身</h4>
-<div style="font-size:12px;margin-top:8px;">
-<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;">
-<div style="font-weight:700;margin-bottom:6px;">ConoHa VPS 2GB（月1,500円）</div>
-<div style="padding-left:10px;border-left:2px solid rgba(255,255,255,0.12);">
-<div style="padding:3px 0;">Docker Engine（コンテナ管理）</div>
-<div style="padding-left:10px;border-left:2px solid rgba(255,255,255,0.08);margin-top:4px;">
-<div style="padding:3px 0;">Dify本体 - チャットボットアプリ</div>
-<div style="padding:3px 0;">PostgreSQL - 設定・ログ保存</div>
-<div style="padding:3px 0;">Redis - キャッシュ（高速化）</div>
-<div style="padding:3px 0;">Weaviate - ナレッジ検索エンジン</div>
-<div style="padding:3px 0;">Nginx - HTTPS通信・セキュリティ</div>
-</div>
-</div>
-</div>
-<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px;margin-top:8px;">
-<div style="font-weight:700;margin-bottom:4px;">外部API連携</div>
-<div style="padding-left:10px;opacity:0.7;">
-OpenAI API（GPT-4o-mini）<br>
-質問ごとに従量課金。データは学習に使われない。
-</div>
-</div>
-</div>
+<h4>AIとのやりとり</h4>
+<p>AIに送るのは「お客様の質問文」と「関連情報の一部」だけです。御社の全データがAIに渡るわけではありません。（セキュリティの詳細は12ページ）</p>
 </div>
 </div>
 <div class="pg">10/20</div>
 </div>
 
-<!-- 11: コスト試算 -->
+<!-- 11: 毎月かかる費用 -->
 <div class="s or">
-<div class="lb">Cost Breakdown</div>
-<h2>月額コスト試算</h2>
+<div class="lb">コストについて</div>
+<h2>毎月かかる費用</h2>
+<p class="ld" style="margin-bottom:14px;">チャットボットを動かし続けるための「ランニングコスト」です</p>
 <div class="g3">
 <div class="cd" style="text-align:center;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.15);">
-<h4>VPSサーバー</h4>
+<h4>サーバー代</h4>
 <div class="nm">1,500円/月</div>
-<p style="margin-top:4px;">ConoHa VPS 2GB<br>日本リージョン<br>SSD 100GB</p>
+<p style="margin-top:4px;">国内サーバーを1台レンタル</p>
 </div>
 <div class="cd" style="text-align:center;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.15);">
-<h4>API従量課金</h4>
+<h4>AI利用料（従量課金）</h4>
 <div class="nm">1,500円/月</div>
-<p style="margin-top:4px;">GPT-4o-mini使用<br>月3,000回の問い合わせ<br>選択肢型UIで削減済み</p>
+<p style="margin-top:4px;">お客様の質問1回ごとに<br>少額の費用が発生<br>月3,000回の場合</p>
 </div>
 <div class="cd" style="text-align:center;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.15);">
 <h4>Dify利用料</h4>
 <div class="nm">0円</div>
-<p style="margin-top:4px;">セルフホストのため<br>ライセンス費なし</p>
+<p style="margin-top:4px;">自前サーバーなので<br>Difyへの支払いなし</p>
 </div>
 </div>
 <div class="cd pk" style="max-width:940px;margin-top:16px;text-align:center;">
-<h4 style="font-size:18px;color:#34d399;">月額インフラコスト合計: 約3,000円</h4>
-<p>AIを動かすために最低限かかるランニングコストです。選択肢型UIの併用やナレッジの最適化でさらに削減可能です。</p>
+<div class="point">月額合計 約3,000円</div>
+<p>人を1人雇うよりはるかに安く、24時間365日対応できます。</p>
 </div>
 <div class="cd" style="max-width:940px;margin-top:10px;">
-<h4>利用量が増えた場合のシミュレーション</h4>
+<h4>もし利用が増えたら？</h4>
 <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;">
 <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;text-align:center;">
 <div style="font-weight:600;">月1,000回</div>
-<div style="opacity:0.7;">API: 約500円<br>合計: 約2,000円</div>
+<div style="opacity:0.7;">合計 約2,000円</div>
 </div>
-<div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;text-align:center;">
-<div style="font-weight:600;">月3,000回</div>
-<div style="opacity:0.7;">API: 約1,500円<br>合計: 約3,000円</div>
+<div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;text-align:center;border:1px solid rgba(52,211,153,0.3);">
+<div style="font-weight:600;">月3,000回（想定）</div>
+<div style="opacity:0.7;">合計 約3,000円</div>
 </div>
 <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;text-align:center;">
 <div style="font-weight:600;">月10,000回</div>
-<div style="opacity:0.7;">API: 約5,000円<br>合計: 約6,500円</div>
+<div style="opacity:0.7;">合計 約6,500円</div>
 </div>
 <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:10px;text-align:center;">
 <div style="font-weight:600;">月30,000回</div>
-<div style="opacity:0.7;">API: 約15,000円<br>合計: 約16,500円</div>
+<div style="opacity:0.7;">合計 約16,500円</div>
 </div>
 </div>
+<p style="margin-top:8px;font-size:11px;opacity:0.6;text-align:center;">利用回数が増えても、コストは緩やかにしか上がりません。</p>
 </div>
 <div class="pg">11/20</div>
 </div>
 
-<!-- 12: セキュリティ -->
+<!-- 12: データの安全性 -->
 <div class="s lt">
-<div class="lb">Security</div>
-<h2>データセキュリティ対策</h2>
+<div class="lb">安全性について</div>
+<h2>データの安全性</h2>
+<p class="ld" style="margin-bottom:14px;">「うちのデータが外部に漏れたりしない？」にお答えします</p>
 <div class="g3">
 <div class="cd">
-<h4>データの保管場所</h4>
+<div class="ic">🔒</div>
+<h4>データはどこにある？</h4>
 <ul>
-<li>ナレッジデータは自社VPS内に保存</li>
-<li>外部サーバーには一切送信されない</li>
-<li>外部AIに送るのは「質問文」と「質問に関連する一部の情報」のみ</li>
-<li>顧客情報や社内情報がAIに学習されることはない</li>
-<li>OpenAI / AnthropicはAPI経由のデータをモデル学習に使用しないと規約で保証</li>
+<li>クルーズの情報は自社サーバー内に保存</li>
+<li>外部サーバーには保存されません</li>
+<li>AIに送るのは「質問に関連する一部の情報だけ」</li>
+<li>AIがデータを学習に使うことはありません（規約で保証）</li>
 </ul>
 </div>
 <div class="cd">
-<h4>データ抽出の防止策</h4>
+<div class="ic">🛡️</div>
+<h4>データの大量コピーを防ぐ対策</h4>
 <ul>
-<li>「全データをCSV形式で出力して」等の悪意ある要求をプロンプトでブロック</li>
-<li>1回の回答で表示するデータを最大10件に制限。一度に全データを取得できない</li>
-<li>複数回の質問でデータを少しずつ抽出する試みも、出力制限により困難にする</li>
-<li>ナレッジを複数に分割し、ユーザーの質問に関連する部分のみAIに参照させる</li>
-<li>46社600隻の運航データ等のユニークなデータセットの一括コピーを防止</li>
+<li>「全データを出力して」等の要求は自動で拒否</li>
+<li>1回の回答で表示するデータ量を制限</li>
+<li>何度も質問してデータを集める行為も困難にする設計</li>
+<li>競争優位性のあるデータ（原価等）はそもそも入れない</li>
 </ul>
 </div>
 <div class="cd">
+<div class="ic">🔑</div>
 <h4>運用面の対策</h4>
 <ul>
-<li>競争優位性のある生データ（運賃原価等）はナレッジに含めない設計</li>
-<li>チャットログを定期的に確認し、不審な利用パターンを検知</li>
-<li>通信は全てHTTPS（SSL暗号化）で保護</li>
-<li>VPSへのアクセスはSSH鍵認証のみ。パスワードログイン無効</li>
-<li>Dify管理画面はパスワード+IPアドレス制限で保護</li>
+<li>通信は全て暗号化（https）</li>
+<li>管理画面はパスワード保護</li>
+<li>チャット履歴を定期チェックし、不審な利用を検知</li>
+<li>サーバーへの不正アクセス対策も実施</li>
 </ul>
 </div>
 </div>
 <div class="cd" style="max-width:940px;margin-top:14px;">
-<h4>よくあるご質問：「チャットボット経由でナレッジが全部抜かれないか？」</h4>
-<p>チャットボットを通じてナレッジベースに直接アクセスすることはできません。ユーザーの質問に対してAIが回答を生成する際、関連する一部の情報のみが参照されます。1回あたりの出力量を制限し、CSV/JSON等での一括出力を拒否するプロンプト設定を行うことで、データの大量抽出を防ぎます。ただし、ナレッジに含まれるデータは回答の中で部分的に開示される可能性があるため、絶対に公開したくない機密情報（原価、仕入れ先等）はナレッジに含めない設計にします。</p>
+<h4>よくあるご質問：「チャットボットから情報が全部抜かれない？」</h4>
+<p>チャットボットは「お客様の質問に関連する一部の情報だけ」を使って回答します。情報の倉庫に直接アクセスすることはできません。さらに、1回あたりの回答量を制限し、一括出力の要求も拒否する設定にします。<br><br>ただし、回答の中で情報が部分的に見えることはあります。そのため、<strong>絶対に公開したくない情報（仕入れ値・原価など）は最初から入れない</strong>設計にします。</p>
 </div>
 <div class="pg">12/20</div>
 </div>
 
-<!-- 13: API削減 -->
+<!-- 13: コスト削減の工夫 -->
 <div class="s bl">
-<div class="lb">Cost Optimization</div>
-<h2>API使用量を削減する3つの工夫</h2>
+<div class="lb">コスト最適化</div>
+<h2>AI利用料をさらに抑える3つの工夫</h2>
 <div class="g3">
 <div class="cd">
 <div class="ic">🎯</div>
-<h4>1. 選択肢型UIの併用</h4>
-<p>よくある質問はボタン選択で定型回答を返す。AIを呼び出さないためAPI費用ゼロ。「その他」を選んだ時だけAIが回答。これだけでAPI呼び出しを50%以上削減。</p>
+<h4>1. よくある質問はボタン式に</h4>
+<p>「料金について」「持ち物は？」「予約方法」など定番の質問はボタンで選べるように。ボタンで答える場合はAIを使わないので費用ゼロ。<strong>これだけでAI利用料を半分以下に。</strong></p>
+<div class="analogy">
+<div class="atitle">💡 イメージ</div>
+電話の自動音声案内のように、まず選択肢で絞って、複雑な質問だけAIが対応
+</div>
 </div>
 <div class="cd">
 <div class="ic">📏</div>
-<h4>2. 回答の文字数制限</h4>
-<p>プロンプトで「回答は200文字以内」と指定。長い回答はトークン消費が増えるため、簡潔に回答して詳細はHP記事リンクへ誘導。トークン消費40%削減。</p>
+<h4>2. 回答を短くまとめる設定</h4>
+<p>AIの回答が長いほど費用がかかります。「200文字以内で答えて、詳しくはこのページへ」とルール設定。<strong>費用を約40%カット。</strong></p>
 </div>
 <div class="cd">
-<div class="ic">🧠</div>
-<h4>3. ナレッジの質を上げる</h4>
-<p>ナレッジが整理されているほどAIが正確に情報を見つけ、再質問が減る。初期のナレッジ構築に時間をかけることが結果的にコスト削減につながる。</p>
+<div class="ic">📚</div>
+<h4>3. 情報をしっかり整理する</h4>
+<p>情報がきちんと整理されていると、AIが一発で正しい回答を返せます。お客様の「もう1回聞き直し」が減り、結果的にAIの利用回数が減ります。</p>
 </div>
 </div>
 <div class="pg">13/20</div>
 </div>
 
-<!-- 14: Claude Codeによる高速開発 -->
+<!-- 14: 開発スピード -->
 <div class="s pp">
-<div class="lb">Development Speed</div>
-<h2>Claude Codeを使った高速開発</h2>
+<div class="lb">開発について</div>
+<h2>なぜ短期間で作れるのか</h2>
+<p class="ld" style="margin-bottom:14px;">AIを使った開発支援ツール（Claude Code）により<br>通常の1/10の時間で開発できます</p>
 <div class="g2">
 <div class="cd">
-<h4>Claude Codeとは</h4>
-<p>AIがプログラミングやファイル操作を自動で行うツール。要件を伝えるだけで、コードの生成、設定ファイルの作成、テストまで自動実行します。</p>
-<div style="margin-top:10px;">
-<div style="font-weight:700;font-size:13px;margin-bottom:6px;">従来の開発 vs Claude Code</div>
-<div style="display:flex;gap:8px;">
-<div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:8px;font-size:11px;text-align:center;">
-<div style="font-weight:600;">従来</div>
-<div style="opacity:0.6;">プロンプト設計: 2時間<br>ナレッジ整理: 4時間<br>テスト: 3時間<br>合計: 約1〜2日</div>
-</div>
-<div style="flex:1;background:rgba(52,211,153,0.1);border-radius:6px;padding:8px;font-size:11px;text-align:center;">
-<div style="font-weight:600;color:#34d399;">Claude Code</div>
-<div style="opacity:0.8;">プロンプト設計: 10分<br>ナレッジ整理: 30分<br>テスト: 30分<br>合計: 約1〜2時間</div>
+<h4>一般的な開発の場合</h4>
+<div style="font-size:12px;line-height:2;margin-top:8px;">
+<div>回答ルールの設計：2時間</div>
+<div>情報の整理・変換：4時間</div>
+<div>動作テスト：3時間</div>
+<div style="font-weight:700;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.1);">合計：約1〜2日</div>
 </div>
 </div>
+<div class="cd pk">
+<h4 style="color:#34d399;">早川の場合（AI開発ツール使用）</h4>
+<div style="font-size:12px;line-height:2;margin-top:8px;">
+<div>回答ルールの設計：10分</div>
+<div>情報の整理・変換：30分</div>
+<div>動作テスト：30分</div>
+<div style="font-weight:700;margin-top:6px;padding-top:6px;border-top:1px solid rgba(52,211,153,0.3);color:#34d399;">合計：約1〜2時間</div>
 </div>
 </div>
-<div class="cd">
-<h4>Claude Codeで自動化できること</h4>
-<ul>
-<li>ヒアリングシートの回答からプロンプトを自動生成</li>
-<li>クルーズガイドのテキストをナレッジ用に自動整形</li>
-<li>FAQ集の自動作成（ガイドから質問と回答を抽出）</li>
-<li>テスト用の質問パターンを自動生成</li>
-<li>HP埋め込み用のHTMLコードを自動生成</li>
-<li>月次レポートの自動作成</li>
-</ul>
-<div style="margin-top:10px;background:rgba(52,211,153,0.1);border-radius:8px;padding:10px;">
-<div style="font-weight:700;font-size:13px;color:#34d399;">要件定義が固まれば、チャットボット本体は1時間で構築可能</div>
-<div style="font-size:11px;opacity:0.7;margin-top:3px;">一番時間がかかるのは要件定義とナレッジデータの準備。構築自体はClaude Codeで高速化。</div>
 </div>
-</div>
+<div class="cd" style="max-width:940px;margin-top:14px;">
+<h4>一番時間がかかるのは「情報の準備」</h4>
+<p>チャットボット本体の構築は短時間で終わります。<strong>時間がかかるのは、クルーズの情報を集めて整理する作業</strong>です。ここはフォースウェーブ様にご協力いただく部分になります。情報さえ揃えば、チャットボットはすぐに動きます。</p>
 </div>
 <div class="pg">14/20</div>
 </div>
 
-<!-- 15: 開発フロー -->
+<!-- 15: 完成までの流れ -->
 <div class="s dk">
-<div class="lb">Development Flow</div>
-<h2>開発フロー</h2>
+<div class="lb">進め方</div>
+<h2>完成までの流れ</h2>
 <div class="fw">
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd nw">1</div><div class="fc2"></div></div><div class="ft"><h4>デモ作成・提示（現在）</h4><p>動くデモを見せてフォースウェーブ社長のイメージを固める</p><span class="wh">早川 | 1〜2日</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">2</div><div class="fc2"></div></div><div class="ft"><h4>契約・金額確定</h4><p>契約書送付 → 社内承認 → 正式契約</p><span class="wh">電脳ワークス + フォースウェーブ</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">3</div><div class="fc2"></div></div><div class="ft"><h4>VPSセットアップ</h4><p>ConoHa VPS契約 → Docker + Difyインストール → ドメイン・SSL設定</p><span class="wh">早川 | 半日</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">4</div><div class="fc2"></div></div><div class="ft"><h4>ヒアリング・ナレッジ収集</h4><p>フォースウェーブからクルーズガイド・FAQ・運航データを収集。テキスト/CSVに変換</p><span class="wh">全員 | 2〜3日</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">5</div><div class="fc2"></div></div><div class="ft"><h4>チャットボット構築</h4><p>Difyにアプリ作成 → ナレッジ投入 → プロンプト設計 → UI設定 → セキュリティ設定</p><span class="wh">早川（Claude Code使用）| 1日</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">6</div><div class="fc2"></div></div><div class="ft"><h4>テスト・HP設置</h4><p>30パターン以上のQ&Aで検証 → iFrameコードでHPに埋め込み → PC/スマホ確認</p><span class="wh">早川 + 電脳ワークス | 2〜3日</span></div></div>
-<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">7</div></div><div class="ft"><h4>納品・運用開始</h4><p>マニュアル納品 → 月次保守開始 → 段階的ナレッジ拡張</p><span class="wh">早川 | 継続</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd nw">1</div><div class="fc2"></div></div><div class="ft"><h4>デモをお見せする（今ここ）</h4><p>実際に動くデモを見て、完成イメージを掴んでいただく</p><span class="wh">早川 | 完了</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">2</div><div class="fc2"></div></div><div class="ft"><h4>契約・金額の確定</h4><p>内容に問題なければ契約書送付 → 正式にスタート</p><span class="wh">電脳ワークス + フォースウェーブ</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">3</div><div class="fc2"></div></div><div class="ft"><h4>サーバーの準備</h4><p>専用サーバーを契約し、Difyをインストール</p><span class="wh">早川 | 半日</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">4</div><div class="fc2"></div></div><div class="ft"><h4>クルーズ情報の収集</h4><p>フォースウェーブ様からガイド・FAQ・運航データをいただく。形式はPDF/Excel/テキスト等なんでもOK</p><span class="wh">全員 | 2〜3日</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">5</div><div class="fc2"></div></div><div class="ft"><h4>チャットボットの構築</h4><p>情報を登録 → 回答ルールを設定 → チャット画面を調整 → セキュリティ設定</p><span class="wh">早川 | 1日</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">6</div><div class="fc2"></div></div><div class="ft"><h4>テスト → ホームページに設置</h4><p>30パターン以上のQ&Aで動作確認 → ホームページに設置 → PC・スマホ両方で確認</p><span class="wh">早川 + 電脳ワークス | 2〜3日</span></div></div>
+<div class="fi"><div style="min-width:40px;display:flex;flex-direction:column;align-items:center;"><div class="fd">7</div></div><div class="ft"><h4>納品 → 運用スタート</h4><p>マニュアルをお渡し → 毎月の改善・保守を開始</p><span class="wh">早川 | 継続</span></div></div>
 </div>
 <div class="cd" style="max-width:720px;margin-top:10px;text-align:center;">
-<h4>契約から納品まで: 約1週間</h4>
-<p>要件定義とナレッジデータの準備が完了すれば、構築からテストまで3〜4日で完了します。</p>
+<div class="point">契約から納品まで 約1週間</div>
 </div>
 <div class="pg">15/20</div>
 </div>
 
-<!-- 16: ナレッジ段階 -->
+<!-- 16: 情報の段階的な充実 -->
 <div class="s lt">
-<div class="lb">Knowledge Phases</div>
-<h2>ナレッジベースの段階的構築</h2>
+<div class="lb">情報の段階</div>
+<h2>情報は段階的に充実させていきます</h2>
+<p class="ld" style="margin-bottom:14px;">最初から全データを入れる必要はありません。<br>3つのステップで徐々に賢くしていきます。</p>
 <div class="g3">
 <div class="cd pk">
 <div class="ic">📖</div>
-<h4>Phase 1: 初心者ガイド（初期）</h4>
+<h4>ステップ1：基本情報（最初に対応）</h4>
 <ul>
-<li>クルーズ完全ガイド（初心者向け）</li>
-<li>FAQ 20〜50問</li>
-<li>料金の仕組み解説</li>
+<li>クルーズの基本ガイド</li>
+<li>よくある質問 20〜50問</li>
+<li>料金の仕組み</li>
 <li>持ち物リスト</li>
 <li>予約の流れ</li>
 </ul>
-<p style="margin-top:6px;font-size:11px;">データ形式: テキスト(.txt)<br>容量目安: 1〜5MB<br>期間: 初期納品時に完了</p>
+<p style="margin-top:6px;font-size:11px;">データ形式：テキスト・PDF・Excelなど何でもOK<br>納品時に完了</p>
 </div>
 <div class="cd">
 <div class="ic">🚢</div>
-<h4>Phase 2: 船会社・航路（拡張）</h4>
+<h4>ステップ2：船会社・航路の追加</h4>
 <ul>
-<li>46社の船会社プロフィール</li>
-<li>主要航路データ</li>
-<li>寄港地情報</li>
+<li>46社の船会社の特徴</li>
+<li>主な航路の情報</li>
+<li>寄港地の紹介</li>
 <li>船の設備・特徴</li>
 </ul>
-<p style="margin-top:6px;font-size:11px;">データ形式: CSV<br>容量目安: 10〜50MB<br>期間: 納品後1〜2ヶ月で追加</p>
+<p style="margin-top:6px;font-size:11px;">納品後 1〜2ヶ月で追加</p>
 </div>
 <div class="cd">
 <div class="ic">🎯</div>
-<h4>Phase 3: 高度な提案（将来）</h4>
+<h4>ステップ3：おすすめ提案機能</h4>
 <ul>
 <li>600隻の運航スケジュール</li>
-<li>シーズン別おすすめ</li>
-<li>予算別マッチング</li>
-<li>目的別（家族/カップル/一人旅）提案</li>
+<li>季節別のおすすめ</li>
+<li>予算に合わせた提案</li>
+<li>目的別（家族・カップル・ひとり旅）の提案</li>
 </ul>
-<p style="margin-top:6px;font-size:11px;">データ形式: CSV + テキスト<br>容量目安: 100MB〜1GB<br>期間: 運用3ヶ月後以降</p>
+<p style="margin-top:6px;font-size:11px;">運用開始3ヶ月後以降</p>
 </div>
+</div>
+<div class="cd" style="max-width:940px;margin-top:14px;text-align:center;">
+<p>ステップ1だけでも十分に役立つチャットボットが動きます。<br>ステップ2・3は<strong>運用しながら、お客様の質問傾向を見て</strong>優先順位をつけて追加していきます。</p>
 </div>
 <div class="pg">16/20</div>
 </div>
 
-<!-- 17: 納品物 -->
+<!-- 17: お届けするもの -->
 <div class="s dk">
-<div class="lb">Deliverables</div>
-<h2>納品物一覧</h2>
+<div class="lb">納品内容</div>
+<h2>お届けするもの</h2>
 <div class="g2">
 <div class="cd">
-<h4>初期納品物</h4>
-<ul>
-<li>Difyセルフホスト環境（VPS上に構築済み）</li>
-<li>チャットボットアプリ（本番稼働状態）</li>
-<li>ナレッジベース（Phase 1分）</li>
-<li>HP埋め込み用コード</li>
-<li>Dify管理画面の操作マニュアル</li>
-<li>FAQ追加・修正の手順書</li>
-<li>テスト結果レポート</li>
-<li>システム構成ドキュメント</li>
+<h4>最初にお届けするもの</h4>
+<ul style="line-height:2;">
+<li>チャットボット本体（稼働状態でお渡し）</li>
+<li>専用サーバー（セットアップ済み）</li>
+<li>基本情報のデータ登録済み</li>
+<li>ホームページへの設置用コード</li>
+<li>管理画面の使い方マニュアル</li>
+<li>情報の追加・修正の手順書</li>
+<li>テスト結果のレポート</li>
 </ul>
 </div>
 <div class="cd">
-<h4>月次保守で提供</h4>
-<ul>
-<li>月次利用レポート（質問数、回答精度、人気質問TOP10）</li>
-<li>回答できなかった質問への対応（ナレッジ追加）</li>
-<li>プロンプト調整・改善</li>
-<li>サーバー・API監視・障害対応</li>
-<li>HPコンテンツの改善提案（チャットログ分析から）</li>
-<li>段階的なナレッジ拡張（Phase 2, 3）</li>
+<h4>毎月の保守で提供するもの</h4>
+<ul style="line-height:2;">
+<li>月次レポート（利用回数・よく聞かれる質問TOP10）</li>
+<li>回答できなかった質問への対応（情報追加）</li>
+<li>回答ルールの調整・改善</li>
+<li>サーバーの監視・障害対応</li>
+<li>ホームページ改善の提案（チャット履歴から分析）</li>
+<li>段階的な情報の拡充（ステップ2・3）</li>
 </ul>
 </div>
 </div>
@@ -738,93 +789,92 @@ OpenAI API（GPT-4o-mini）<br>
 
 <!-- 18: 役割分担 -->
 <div class="s lt">
-<div class="lb">Roles</div>
-<h2>役割分担</h2>
+<div class="lb">役割分担</div>
+<h2>誰が何をするか</h2>
 <div class="g3">
 <div class="cd">
 <div class="ic">👩‍💻</div>
-<h4>早川まい</h4>
+<h4>早川まい（開発・運用）</h4>
 <ul>
-<li>VPS構築・Difyセットアップ</li>
-<li>チャットボット開発全般</li>
-<li>プロンプト・ナレッジ設計</li>
-<li>テスト・デバッグ</li>
-<li>月次保守・改善提案</li>
-<li>デモ作成</li>
-<li>要件定義シート・ヒアリング</li>
+<li>サーバーの構築・管理</li>
+<li>チャットボットの開発全般</li>
+<li>回答ルール・情報の設計</li>
+<li>テスト・動作確認</li>
+<li>毎月の保守・改善提案</li>
+<li>デモ・資料の作成</li>
+<li>ヒアリング対応</li>
 </ul>
 </div>
 <div class="cd">
 <div class="ic">🏢</div>
 <h4>電脳ワークス（田中さん）</h4>
 <ul>
-<li>HP制作・iFrame埋め込み</li>
-<li>技術仕様の調整</li>
-<li>フォースウェーブとの窓口</li>
-<li>契約書・金額の送付</li>
-<li>インフラ費（API・サーバー）の負担</li>
-<li>ナレッジデータの整備支援</li>
-<li>品質確認・受入テスト</li>
+<li>ホームページへの設置作業</li>
+<li>技術面の調整</li>
+<li>フォースウェーブとの連絡窓口</li>
+<li>契約書・金額の取りまとめ</li>
+<li>ランニングコスト（サーバー・AI利用料）</li>
+<li>情報データの整備サポート</li>
+<li>品質チェック・最終確認</li>
 </ul>
 </div>
 <div class="cd">
 <div class="ic">🚢</div>
-<h4>フォースウェーブ（社長）</h4>
+<h4>フォースウェーブ（エンドクライアント）</h4>
 <ul>
 <li>クルーズデータの提供</li>
-<li>FAQ内容の監修・承認</li>
+<li>FAQ内容の確認・OK出し</li>
 <li>テスト・フィードバック</li>
-<li>社内承認</li>
-<li>費用の支払い</li>
+<li>社内の承認</li>
 </ul>
 </div>
 </div>
 <div class="pg">18/20</div>
 </div>
 
-<!-- 19: 付属資料 -->
+<!-- 19: 添付資料一覧 -->
 <div class="s bl">
-<div class="lb">Appendix</div>
-<h2>別添資料一覧</h2>
+<div class="lb">添付資料</div>
+<h2>この提案書と一緒にお渡しするもの</h2>
 <div class="g2">
 <div class="cd">
 <div class="ic">📋</div>
-<h4>1. 要件定義シート（スプレッドシート）</h4>
-<p>プロジェクト概要、機能要件、インフラ要件、AIモデル要件、運用要件をまとめた一覧。会議で決まったこと・未決定事項を整理。</p>
+<h4>1. 要件まとめシート</h4>
+<p>「何を作るか」の全体像をまとめた一覧。打ち合わせで決まったこと・まだ決まっていないことを整理しています。</p>
 </div>
 <div class="cd">
 <div class="ic">📝</div>
-<h4>2. 詳細ヒアリングシート（スプレッドシート）</h4>
-<p>フォースウェーブ向けのヒアリング項目。サイト概要、ユーザー像、チャットボット要件、ナレッジ内容、デザイン、セキュリティを網羅。</p>
+<h4>2. ヒアリングシート</h4>
+<p>フォースウェーブ様に確認したい項目のリスト。サイトの情報、お客様像、チャットボットの要件、デザインなど。</p>
 </div>
 <div class="cd">
 <div class="ic">📚</div>
-<h4>3. ナレッジ設計シート（スプレッドシート）</h4>
-<p>Phase 1〜3で投入するナレッジの一覧。データ名、形式、提供元、容量目安、ステータスを管理。</p>
+<h4>3. 情報設計シート</h4>
+<p>ステップ1〜3で登録する情報の一覧。データ名・形式・提供元・ステータスを管理します。</p>
 </div>
 <div class="cd">
 <div class="ic">💻</div>
-<h4>4. チャットボットデモ（HTML）</h4>
-<p>クルーズワールド.jpにチャットボットを埋め込んだイメージのデモページ。20パターン以上の回答を実装。</p>
+<h4>4. チャットボットデモ</h4>
+<p>クルーズワールド.jpにチャットボットを設置したイメージのデモ。20パターン以上の回答を体験できます。</p>
 </div>
 </div>
 <div class="pg">19/20</div>
 </div>
 
-<!-- 20: Next -->
+<!-- 20: 次のステップ -->
 <div class="s gn" style="text-align:center;">
-<div class="lb">Next Step</div>
-<h1>Next Step</h1>
+<div class="lb">次のステップ</div>
+<h1>次にやること</h1>
 <div class="g3" style="margin-top:24px;">
 <div class="cd" style="text-align:center;border-color:#34d399;">
 <div class="ic">🎯</div>
-<h4>すぐ</h4>
-<p>デモ用ナレッジデータ<br>（クルーズ完全ガイド）を<br>早川に共有</p>
+<h4>まず</h4>
+<p>クルーズの基本ガイドや<br>FAQ素材を<br>早川に共有</p>
 </div>
 <div class="cd" style="text-align:center;">
 <div class="ic">🔨</div>
 <h4>1〜2日後</h4>
-<p>Dify上で動くデモ版完成<br>フォースウェーブ社長に<br>デモを見せる</p>
+<p>実際に動くデモ版を完成<br>フォースウェーブ社長に<br>お見せする</p>
 </div>
 <div class="cd" style="text-align:center;">
 <div class="ic">📋</div>
@@ -833,8 +883,8 @@ OpenAI API（GPT-4o-mini）<br>
 </div>
 </div>
 <div style="margin-top:28px;opacity:0.6;font-size:13px;">
-まずはナレッジデータの共有をお願いします。<br>
-デモは1〜2日で作成できます。
+まずは情報データの共有をお願いします。<br>
+形式はPDF・Excel・テキストなど何でもOKです。
 </div>
 <div class="pg">20/20</div>
 </div>
