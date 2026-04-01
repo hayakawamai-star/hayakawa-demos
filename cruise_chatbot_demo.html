@@ -382,10 +382,6 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f5f7fa
 </head>
 <body>
 
-<!-- デモ注釈バナー -->
-<div class="demo-banner">
-  [ デモ画面 ] 実際のクルーズワールド.jpにAIチャットボットを設置した場合のイメージです
-</div>
 
 <!-- サイトヘッダー -->
 <header class="site-header">
@@ -440,74 +436,6 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', sans-serif; background: #f5f7fa
   </div>
 </div>
 
-<!-- システム構成図 -->
-<div class="architecture">
-  <h2>AIチャットボット システム構成</h2>
-  <div class="arch-flow">
-    <div class="arch-box">
-      <h4>ユーザー</h4>
-      <p>HPにアクセス</p>
-    </div>
-    <div class="arch-arrow">→</div>
-    <div class="arch-box orange">
-      <h4>チャットボットUI</h4>
-      <p>iFrame埋め込み</p>
-    </div>
-    <div class="arch-arrow">→</div>
-    <div class="arch-box green">
-      <h4>Dify サーバー</h4>
-      <p>API連携</p>
-    </div>
-    <div class="arch-arrow">→</div>
-    <div class="arch-box purple">
-      <h4>AIモデル (LLM)</h4>
-      <p>ChatGPT / Claude</p>
-    </div>
-  </div>
-  <div class="arch-flow">
-    <div class="arch-box green" style="min-width: 200px;">
-      <h4>ナレッジベース（Dify内）</h4>
-      <p>クルーズ完全ガイド<br>46社600隻の運航情報<br>FAQ・よくある質問</p>
-    </div>
-    <div class="arch-arrow">↑ 参照</div>
-    <div class="arch-box" style="min-width: 200px;">
-      <h4>システムプロンプト</h4>
-      <p>応答ルール・出力制限<br>データ保護設定<br>1回最大10件表示</p>
-    </div>
-  </div>
-
-  <div class="arch-detail">
-    <div class="arch-detail-item">
-      <h4>セキュリティ対策</h4>
-      <ul>
-        <li>ナレッジへの直接アクセス不可</li>
-        <li>一度の出力データ量を制限（最大10件）</li>
-        <li>CSV出力等の悪意ある要求をブロック</li>
-        <li>機密データはナレッジに含めない</li>
-      </ul>
-    </div>
-    <div class="arch-detail-item">
-      <h4>コスト構造</h4>
-      <ul>
-        <li>API: 従量課金（使った分だけ）</li>
-        <li>サーバー: VPS月額費用</li>
-        <li>Dify利用料: 月$159</li>
-        <li>API: 従量課金（使った分だけ）</li>
-        <li>選択肢型UIでAPI使用量を節約</li>
-      </ul>
-    </div>
-    <div class="arch-detail-item">
-      <h4>開発スケジュール</h4>
-      <ul>
-        <li>要件定義: 1〜2日</li>
-        <li>チャットボット構築: 1日</li>
-        <li>テスト・調整: 2〜3日</li>
-        <li>合計: 約1週間で納品</li>
-        <li>POCとして段階的にアップグレード</li>
-      </ul>
-    </div>
-  </div>
-</div>
 
 <!-- フッター -->
 <footer class="site-footer">
