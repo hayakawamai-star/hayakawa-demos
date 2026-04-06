@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code セットアップガイド</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+:root{--bg:#0f0f17;--card:#181822;--border:#2a2a3a;--text:#e4e4ef;--dim:#8888a0;--accent:#6c5ce7;--acl:#a29bfe;--green:#00d2a0;--red:#ff6b6b;--orange:#ffa726;--blue:#4fc3f7}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.8;padding:0 16px}
+
+.wrap{max-width:800px;margin:0 auto}
+
+/* Header */
+.hero{text-align:center;padding:60px 0 40px;border-bottom:1px solid var(--border)}
+.hero h1{font-size:2.6em;font-weight:900;background:linear-gradient(135deg,var(--acl),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.hero .sub{color:var(--dim);font-size:1.05em;margin-bottom:24px}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--border);padding:8px 20px;border-radius:50px;font-size:0.95em;margin-bottom:16px}
+
+/* Steps */
+.step{padding:40px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step-head{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.step-num{width:48px;height:48px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.4em;font-weight:900;color:#fff;flex-shrink:0}
+.step-num.g{background:var(--green)}.step-num.o{background:var(--orange)}.step-num.r{background:var(--red)}.step-num.b{background:var(--blue)}
+.step-title{font-size:1.5em;font-weight:900}
+.step-sub{font-size:0.9em;color:var(--dim)}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px}
+.card h3{font-size:1.05em;font-weight:700;margin-bottom:10px}
+
+/* Code */
+.code{position:relative;background:#0a0a12;border:1px solid var(--border);border-radius:10px;padding:14px 80px 14px 16px;font-family:'JetBrains Mono',monospace;font-size:0.9em;color:var(--green);margin:10px 0;overflow-x:auto;white-space:nowrap}
+.code.err{color:var(--red);border-color:rgba(255,107,107,.3)}
+.code.inf{color:var(--blue)}
+.copy{position:absolute;top:6px;right:6px;background:var(--accent);color:#fff;border:none;padding:5px 14px;border-radius:7px;cursor:pointer;font-family:'Noto Sans JP';font-size:.78em;font-weight:700}
+.copy:hover{background:var(--acl)}
+.copy.ok{background:var(--green)}
+
+/* URL */
+.url{background:#0a0a12;border:1px solid var(--border);border-radius:8px;padding:10px 80px 10px 14px;font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--blue);margin:8px 0;position:relative;word-break:break-all}
+
+/* Alert boxes */
+.box{border-radius:10px;padding:14px 16px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;font-size:.95em}
+.box.warn{background:rgba(255,167,38,.1);border:1px solid rgba(255,167,38,.3)}
+.box.err-b{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3)}
+.box.ok{background:rgba(0,210,160,.1);border:1px solid rgba(0,210,160,.3)}
+.box.info{background:rgba(79,195,247,.1);border:1px solid rgba(79,195,247,.3)}
+.box-icon{font-size:1.2em;flex-shrink:0;line-height:1.6}
+
+/* Mock screens */
+.mock{background:#1e1e2e;border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:14px 0}
+.mock-bar{background:#2a2a3a;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:.75em;color:var(--dim)}
+.mock-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.mock-dot.r{background:#ff5f56}.mock-dot.y{background:#ffbd2e}.mock-dot.g{background:#27c93f}
+.mock-body{padding:20px}
+.mock-btn{display:inline-block;padding:8px 20px;border-radius:6px;font-weight:700;font-size:.9em;margin:4px 2px;cursor:default}
+.mock-btn.primary{background:#00a67e;color:#fff}
+.mock-btn.secondary{background:#555;color:#fff}
+.mock-btn.blue{background:#4488ff;color:#fff}
+.mock-btn.outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+.mock-input{background:#333;border:1px solid #555;border-radius:4px;padding:6px 12px;color:var(--text);width:100%;margin:4px 0;font-family:'JetBrains Mono',monospace;font-size:.85em}
+.mock-radio{margin-right:6px}
+.mock-label{display:block;padding:4px 0;cursor:default}
+.highlight{color:var(--acl);font-weight:700}
+.hl-green{color:var(--green);font-weight:700}
+.hl-red{color:var(--red);font-weight:700}
+.hl-orange{color:var(--orange);font-weight:700}
+.arrow-label{display:inline-block;background:var(--red);color:#fff;padding:2px 10px;border-radius:4px;font-size:.85em;font-weight:700;margin:2px 4px}
+
+/* Keyboard */
+kbd{background:#2a2a3a;border:1px solid #3a3a4a;border-radius:5px;padding:2px 7px;font-family:'JetBrains Mono',monospace;font-size:.82em;box-shadow:0 2px 0 #1a1a2a}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em}
+th,td{padding:10px 14px;border:1px solid var(--border);text-align:left}
+th{background:var(--accent);color:#fff;font-weight:700}
+tr:nth-child(even){background:var(--card)}
+.rec{background:rgba(108,92,231,.15);border-left:3px solid var(--accent)}
+
+/* Checklist */
+.check-list{list-style:none;margin:14px 0}
+.check-list li{padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.check-list li .ck{width:22px;height:22px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}
+.check-list li.done .ck{background:var(--green);border-color:var(--green);color:#fff}
+.check-list li.done{border-color:var(--green);opacity:.7}
+
+/* FAQ */
+.faq{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;overflow:hidden}
+.faq-q{padding:14px 16px;cursor:pointer;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.faq-q:hover{background:#1f1f2c}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s;padding:0 16px}
+.faq.open .faq-a{max-height:600px;padding:0 16px 14px}
+.faq.open .faq-q .ar{transform:rotate(180deg)}
+.ar{transition:transform .3s}
+
+/* Steps list */
+ol.sl{counter-reset:st;list-style:none}
+ol.sl li{counter-increment:st;padding:6px 0 6px 32px;position:relative}
+ol.sl li::before{content:counter(st);position:absolute;left:0;top:6px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:.7em;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+a{color:var(--acl);text-decoration:none}a:hover{text-decoration:underline}
+
+/* Troubleshoot flow */
+.ts{background:var(--card);border:1px solid var(--border);padding:14px 16px}
+.ts:first-child{border-radius:10px 10px 0 0}
+.ts:last-child{border-radius:0 0 10px 10px}
+.ts h4{color:var(--acl);margin-bottom:4px;font-size:.95em}
+.ts-con{text-align:center;color:var(--dim);padding:2px;font-size:1.1em}
+
+@media(max-width:600px){.hero h1{font-size:1.8em}.step-title{font-size:1.2em}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="badge">&#9201; 所要時間: 約15〜20分</div>
+  <h1>Claude Code<br>セットアップガイド</h1>
+  <p class="sub">上から順番に進めるだけ。コマンドは全て<span class="highlight">コピーボタン</span>で貼り付けできます。</p>
+</div>
+
+<!-- ===== STEP 1: Cursor ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num">1</div>
+    <div><div class="step-title">Cursor をダウンロード</div><div class="step-sub">AIが動く作業場所をインストール（無料）</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#127758; このリンクを開く</h3>
+    <div class="url"><a href="https://cursor.com/" target="_blank">https://cursor.com/</a><button class="copy" onclick="cp('https://cursor.com/',this)">コピー</button></div>
+    <p>開いたら<span class="highlight">「Download for Free」</span>ボタンをクリック</p>
+
+    <div class="mock" style="margin-top:14px">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> cursor.com</div>
+      <div class="mock-body" style="text-align:center;padding:30px">
+        <div style="font-size:1.8em;font-weight:900;margin-bottom:8px">&#9001; CURSOR</div>
+        <p style="color:var(--dim);margin-bottom:16px">The AI Code Editor</p>
+        <div class="mock-btn primary" style="font-size:1.1em;padding:12px 32px">&#11015; Download for Free</div>
+        <span class="arrow-label">&#8592; これをクリック!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128187; ダウンロードしたファイルを開く</h3>
+    <p><code>CursorSetup-xxx.exe</code> をダブルクリック → Next → Next → Install → Finish</p>
+
+    <div class="mock" style="margin-top:12px">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Cursor セットアップ</div>
+      <div class="mock-body">
+        <p style="font-weight:700;margin-bottom:8px">使用許諾契約書の同意</p>
+        <p style="font-size:.85em;color:var(--dim);margin-bottom:12px">インストールを続行するにはこの契約書に同意する必要があります。</p>
+        <label class="mock-label"><input type="radio" class="mock-radio" checked disabled>&#9679; 同意する(A) <span class="arrow-label">&#8592; こっちを選ぶ</span></label>
+        <label class="mock-label"><input type="radio" class="mock-radio" disabled>&#9675; 同意しない(D)</label>
+        <div style="text-align:right;margin-top:16px">
+          <span class="mock-btn blue">次へ(N)</span> <span class="arrow-label">&#8592; クリック</span>
+          <span class="mock-btn outline">キャンセル</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box warn"><div class="box-icon">&#9888;&#65039;</div><div><strong>青い警告画面が出たら</strong>→「詳細情報」→「実行」をクリック。正常です。</div></div>
+  </div>
+</div>
+
+<!-- ===== STEP 2: Cursor初回設定 ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num">2</div>
+    <div><div class="step-title">Cursor の初回設定</div><div class="step-sub">起動したら順番に選ぶだけ</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#128100; サインイン画面</h3>
+    <p>Cursorを初めて起動すると、サインイン画面が出ます。</p>
+    <div class="mock" style="margin-top:12px">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Cursor</div>
+      <div class="mock-body" style="text-align:center;padding:30px;background:#111">
+        <div style="font-size:2em;margin-bottom:4px">&#9001;</div>
+        <div style="font-weight:700;margin-bottom:2px">Cursor</div>
+        <div style="color:var(--dim);font-size:.85em;margin-bottom:20px">The best way to code with AI</div>
+        <div class="mock-btn primary" style="width:250px;display:block;margin:8px auto">Sign Up</div>
+        <span class="arrow-label">&#8593; 初めての方はこちら</span>
+        <div class="mock-btn secondary" style="width:250px;display:block;margin:8px auto">Log In</div>
+        <span style="color:var(--dim);font-size:.8em">&#8593; アカウントある方</span>
+      </div>
+    </div>
+    <p style="margin-top:8px">Googleアカウントでサインインできます。普段使っているGoogleアカウントでOK。</p>
+  </div>
+
+  <div class="card">
+    <h3>&#9881;&#65039; 初期設定の選択肢</h3>
+    <table>
+      <tr><th>画面の質問</th><th>選ぶもの</th></tr>
+      <tr><td>Import Settings</td><td><span class="highlight">Start from Scratch</span></td></tr>
+      <tr><td>Theme（見た目）</td><td>好きなもの（<span class="highlight">Dark</span>が人気）</td></tr>
+      <tr><td>Keybindings</td><td><span class="highlight">Cursor (Default)</span></td></tr>
+      <tr class="rec"><td>Privacy Mode</td><td><span class="hl-green">&#9989; 必ず Enable にする</span>（データ保護のため必須！）</td></tr>
+      <tr><td>AI Model</td><td>デフォルトのまま</td></tr>
+      <tr><td>Connect GitHub</td><td><span class="hl-orange">Skip でスキップ</span>（後でOK）</td></tr>
+    </table>
+  </div>
+
+  <div class="box ok"><div class="box-icon">&#9989;</div><div>初期設定が終わったら次のステップへ進みます。Cursorは開いたままでOK。</div></div>
+</div>
+
+<!-- ===== STEP 3: 一括インストール ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num g">3</div>
+    <div><div class="step-title">必要なツールを一括インストール</div><div class="step-sub">Cursorのターミナルにコピペするだけ！</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#128421; Cursorのターミナルを開く</h3>
+    <p>Cursorの画面の中に「ターミナル」という黒い入力画面を出します。</p>
+
+    <ol class="sl">
+      <li>Cursorを開いた状態で、キーボードの <kbd>Ctrl</kbd> + <kbd>`</kbd> を押す<br><span style="font-size:.82em;color:var(--dim)">（<kbd>`</kbd> は数字 <kbd>1</kbd> の左にあるキー。<kbd>Shift</kbd>は押さない）</span></li>
+      <li>画面の下半分に黒い画面が出る → これが「ターミナル」</li>
+    </ol>
+
+    <div class="mock" style="margin-top:12px">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Cursor</div>
+      <div class="mock-body" style="padding:0">
+        <div style="background:#1e1e2e;padding:16px;color:var(--dim);text-align:center;font-size:.9em;border-bottom:1px solid var(--border)">
+          &#8593; ここはコードの編集エリア（今は使わない）
+        </div>
+        <div style="background:#0a0a12;padding:16px;font-family:'JetBrains Mono',monospace;font-size:.85em">
+          <div style="color:#666;font-size:.75em;margin-bottom:4px">TERMINAL</div>
+          <div style="color:#ccc">PS C:\Users\あなたの名前> <span style="color:var(--green)">&#9608;</span></div>
+          <div style="color:var(--green);margin-top:6px;font-weight:700">&#8593; ここにコマンドを貼り付けます</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box info"><div class="box-icon">&#128161;</div><div><strong>ターミナルが出ない場合：</strong>Cursor上部のメニュー「<strong>Terminal</strong>」→「<strong>New Terminal</strong>」をクリック</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#9889; 下のコマンドをコピーして、ターミナルに貼り付けて Enter</h3>
+    <p>Git・Node.js・Claude Code を全部まとめてインストールします。</p>
+    <div class="code" style="font-size:.82em">winget install --id Git.Git -e --source winget; winget install OpenJS.NodeJS.LTS; npm install -g @anthropic-ai/claude-code<button class="copy" onclick="cp('winget install --id Git.Git -e --source winget; winget install OpenJS.NodeJS.LTS; npm install -g @anthropic-ai/claude-code',this)">コピー</button></div>
+
+    <div class="box info"><div class="box-icon">&#128161;</div><div>
+      <strong>貼り付け方：</strong><br>
+      &#9312; 上の「<strong>コピー</strong>」ボタンを押す<br>
+      &#9313; ターミナルの黒い画面をクリック<br>
+      &#9314; <kbd>Ctrl</kbd> + <kbd>V</kbd> で貼り付け（または<strong>右クリック</strong>）<br>
+      &#9315; <kbd>Enter</kbd> を押して実行
+    </div></div>
+    <p style="font-size:.85em;color:var(--dim)">数分かかります。途中で「Y/N」と聞かれたら <kbd>Y</kbd> → <kbd>Enter</kbd></p>
+  </div>
+
+  <div class="box err-b"><div class="box-icon">&#128680;</div><div><strong>超重要：</strong>インストールが終わったら<span class="hl-red">Cursorを一度完全に閉じて（右上の×）、もう一度開いてください</span>。これをしないと次のステップでエラーになります！</div></div>
+
+  <div class="card">
+    <h3>&#9989; 確認（ターミナルで実行して数字が出ればOK）</h3>
+    <div class="code">git --version<button class="copy" onclick="cp('git --version',this)">コピー</button></div>
+    <div class="code">node --version<button class="copy" onclick="cp('node --version',this)">コピー</button></div>
+    <div class="box ok"><div class="box-icon">&#9989;</div><div><code>git version 2.44.0</code> / <code>v20.11.1</code> のように数字が出ればOK</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#128308; wingetが使えない場合（手動インストール）</h3>
+    <p>以下から手動でダウンロード → インストール → Cursor再起動</p>
+    <div class="url"><a href="https://git-scm.com/download/win" target="_blank">Git: https://git-scm.com/download/win</a><button class="copy" onclick="cp('https://git-scm.com/download/win',this)">コピー</button></div>
+    <div class="url"><a href="https://nodejs.org/" target="_blank">Node.js: https://nodejs.org/ （LTS版をダウンロード）</a><button class="copy" onclick="cp('https://nodejs.org/',this)">コピー</button></div>
+    <p style="margin-top:8px">その後、Claude Codeだけ別途インストール：</p>
+    <div class="code">npm install -g @anthropic-ai/claude-code<button class="copy" onclick="cp('npm install -g @anthropic-ai/claude-code',this)">コピー</button></div>
+  </div>
+</div>
+
+<!-- ===== STEP 4: Claude Code起動 ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num g">4</div>
+    <div><div class="step-title">Claude Code を起動してログイン</div><div class="step-sub">AI本体を起動します</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#9654;&#65039; ターミナルに入力して Enter</h3>
+    <div class="code" style="font-size:1.3em;text-align:center">claude<button class="copy" onclick="cp('claude',this)">コピー</button></div>
+  </div>
+
+  <div class="card">
+    <h3>&#128100; 初回ログイン</h3>
+    <div class="mock">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Terminal - claude</div>
+      <div class="mock-body" style="background:#0a0a12;font-family:'JetBrains Mono',monospace;font-size:.85em">
+        <p style="color:#aaa">Welcome to Claude Code!</p>
+        <p style="color:#fff">Do you accept the Anthropic Terms of Service? (y/n)</p>
+        <p style="color:var(--green);font-weight:700">→ <kbd>y</kbd> と入力して Enter</p>
+        <br>
+        <p style="color:#fff">How would you like to authenticate?</p>
+        <p style="color:var(--blue)">  ❯ Log in with Anthropic Console (browser)</p>
+        <p style="color:#666">    Use an API key</p>
+        <p style="color:var(--green);font-weight:700">→ そのまま Enter（一番上が選択済み）</p>
+        <br>
+        <p style="color:#aaa">→ ブラウザが自動で開く → Googleでログイン → 「許可」 → タブ閉じる</p>
+        <br>
+        <p style="color:#fff">Choose a theme:</p>
+        <p style="color:var(--green);font-weight:700">→ 好きなもの選んで Enter</p>
+        <br>
+        <p style="color:var(--green);font-size:1.3em;font-weight:700">></p>
+        <p style="color:var(--green)">&#8593; これが出たら起動成功！ここに日本語で指示を入力します。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box warn"><div class="box-icon">&#9888;&#65039;</div><div><strong>ブラウザが自動で開かない場合：</strong>ターミナルに表示されている <code>https://...</code> のURLをコピーしてChromeに貼り付けて開く</div></div>
+</div>
+
+<!-- ===== 料金 ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num b">$</div>
+    <div><div class="step-title">料金プラン</div><div class="step-sub">Claude Code を使うには有料プランが必要</div></div>
+  </div>
+
+  <div class="card">
+    <div class="url"><a href="https://claude.ai/pricing" target="_blank">https://claude.ai/pricing</a><button class="copy" onclick="cp('https://claude.ai/pricing',this)">コピー</button></div>
+    <table>
+      <tr><th>プラン</th><th>月額</th><th>特徴</th></tr>
+      <tr class="rec"><td><strong>Pro &#11088;</strong></td><td>$20（約3,000円）</td><td>まず始めるならこれ</td></tr>
+      <tr><td>Max 5x</td><td>$100（約15,000円）</td><td>Proの5倍使える</td></tr>
+      <tr><td>Max 20x</td><td>$200（約30,000円）</td><td>Proの20倍使える</td></tr>
+    </table>
+    <div class="box info" style="margin-top:10px"><div class="box-icon">&#128161;</div><div><strong>企業の場合：</strong>共有アカウントでも使えますが、複数人同時だとトークン不足になりやすい。<span class="highlight">1人1アカウント（Pro $20/月）</span>がおすすめ。足りなくなったらMaxにアップグレード。</div></div>
+    <p style="font-size:.9em;color:var(--dim);margin-top:8px">※ Cursor（作業アプリ）は無料。Chrome拡張も無料。課金はClaude本体のみ。</p>
+  </div>
+</div>
+
+<!-- ===== STEP 5: Chrome拡張 ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num g">5</div>
+    <div><div class="step-title">Claude in Chrome をインストール</div><div class="step-sub">AIがブラウザを自動操作できるようにする拡張機能（無料）</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#129513; Chrome Web Store で追加</h3>
+    <p><strong>Google Chrome</strong> で以下を開く（Edge/Firefox/Safari不可）：</p>
+    <div class="url" style="font-size:.78em"><a href="https://chromewebstore.google.com/detail/claude-in-chrome/fcoeoabgfenejglbffodgkkbkcdhcgfn" target="_blank">chromewebstore.google.com/detail/claude-in-chrome/...</a><button class="copy" onclick="cp('https://chromewebstore.google.com/detail/claude-in-chrome/fcoeoabgfenejglbffodgkkbkcdhcgfn',this)">コピー</button></div>
+
+    <div class="mock" style="margin-top:12px">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Chrome Web Store</div>
+      <div class="mock-body" style="background:#fff;color:#333;padding:20px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:48px;height:48px;background:#d4a574;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.5em">&#9001;</div>
+          <div>
+            <div style="font-weight:700;font-size:1.1em">Claude in Chrome</div>
+            <div style="font-size:.8em;color:#888">Anthropic</div>
+          </div>
+        </div>
+        <div class="mock-btn blue" style="font-size:1em;padding:10px 24px">Chromeに追加</div>
+        <span class="arrow-label">&#8592; これをクリック!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128204; 拡張機能をピン留め</h3>
+    <p>追加したら、Chrome右上の<strong>パズルアイコン</strong>をクリック → Claude in Chrome の横の<strong>ピン</strong>をクリック</p>
+
+    <div class="mock">
+      <div class="mock-bar"><span class="mock-dot r"></span><span class="mock-dot y"></span><span class="mock-dot g"></span> Chrome ブラウザ右上</div>
+      <div class="mock-body" style="display:flex;align-items:center;gap:6px;justify-content:flex-end;background:#333;padding:10px 16px">
+        <span style="font-size:.85em;color:var(--dim)">...アドレスバー...</span>
+        <span style="background:#444;padding:4px 8px;border-radius:4px;font-size:1.2em;border:2px solid var(--orange)">&#129513;</span>
+        <span class="arrow-label" style="background:var(--orange)">&#8592; これがパズルアイコン</span>
+        <span style="background:#444;padding:4px 8px;border-radius:4px">&#128100;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128279; AIとChromeを接続（重要！）</h3>
+    <p>Cursorのターミナルで入力して Enter：</p>
+    <div class="code" style="font-size:1.2em;text-align:center">/chrome<button class="copy" onclick="cp('/chrome',this)">コピー</button></div>
+    <div class="box ok" style="margin-top:10px"><div class="box-icon">&#127881;</div><div><strong>テスト：</strong>「Chromeで新しいタブを開いて」と入力。Chromeが自動で動けば成功！</div></div>
+  </div>
+</div>
+
+<!-- ===== チェックリスト ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num g">&#10003;</div>
+    <div><div class="step-title">完了チェック</div><div class="step-sub">全部チェックついたら完了！</div></div>
+  </div>
+  <ul class="check-list" id="cl">
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span>Cursor が起動している</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span>Privacy Mode が Enable</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span>ターミナルが開ける</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span><code>git --version</code> で数字が出る</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span><code>node --version</code> で数字が出る</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span><code>claude</code> で <code>></code> が出る</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span>Claude有料プラン加入済み</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span>Chrome拡張インストール済み</li>
+    <li onclick="tgl(this)"><span class="ck">&#10003;</span><code>/chrome</code> で接続済み</li>
+  </ul>
+  <div class="box ok" id="alldone" style="display:none"><div class="box-icon" style="font-size:1.8em">&#127881;</div><div><strong style="font-size:1.2em">セットアップ完了！</strong><br>お疲れ様でした！研修当日はこの状態でスタートします。</div></div>
+</div>
+
+<!-- ===== エラー対処 ===== -->
+<div class="step">
+  <div class="step-head">
+    <div class="step-num r">!</div>
+    <div><div class="step-title">エラーが出たとき</div><div class="step-sub">「コマンドが見つからない」系のエラーはここ</div></div>
+  </div>
+
+  <div class="card">
+    <h3>&#128308; こんなエラーが出たら</h3>
+    <div class="code err">'git' is not recognized as an internal or external command</div>
+    <div class="code err">'node' is not recognized as an internal or external command</div>
+    <div class="code err">'claude' is not recognized as an internal or external command</div>
+    <p style="margin-top:8px">= <span class="hl-red">「パスが通っていない」</span>エラー。PCが「そのプログラムどこ？」と迷ってる状態。</p>
+  </div>
+
+  <div class="card">
+    <h3>&#128295; 順番に試す</h3>
+    <div class="ts"><h4>STEP 1: Cursorを再起動</h4><p>右上の×で完全に閉じる → もう一度開く → ターミナル開く → コマンド再実行</p></div>
+    <div class="ts-con">&#8595; ダメなら</div>
+    <div class="ts"><h4>STEP 2: PC再起動</h4><p>スタートメニュー → 電源 → 再起動。パスが反映される。</p></div>
+    <div class="ts-con">&#8595; ダメなら</div>
+    <div class="ts"><h4>STEP 3: パスを手動で通す（PowerShell）</h4>
+      <div class="code" style="font-size:.78em">$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")<button class="copy" onclick="cp('$env:Path = [System.Environment]::GetEnvironmentVariable(&quot;Path&quot;,&quot;Machine&quot;) + &quot;;&quot; + [System.Environment]::GetEnvironmentVariable(&quot;Path&quot;,&quot;User&quot;)',this)">コピー</button></div>
+    </div>
+    <div class="ts-con">&#8595; ダメなら</div>
+    <div class="ts"><h4>STEP 4: 環境変数を手動設定</h4>
+      <ol class="sl">
+        <li>Windowsの検索バーに「環境変数」と入力</li>
+        <li>「環境変数を編集」をクリック</li>
+        <li>「Path」を選んで「編集」</li>
+        <li>「新規」で以下を追加：</li>
+      </ol>
+      <div class="code inf">C:\Program Files\Git\cmd<button class="copy" onclick="cp('C:\\Program Files\\Git\\cmd',this)">コピー</button></div>
+      <div class="code inf">C:\Program Files\nodejs<button class="copy" onclick="cp('C:\\Program Files\\nodejs',this)">コピー</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#128161; ターミナルの種類の見分け方</h3>
+    <p>Cursorのターミナル右の「<strong>+</strong>」横の「<strong>v</strong>」で種類を選べます。</p>
+    <table>
+      <tr><th>種類</th><th>行の先頭に出る文字</th><th>おすすめ</th></tr>
+      <tr><td>PowerShell</td><td><code>PS C:\</code></td><td>&#11088; 推奨</td></tr>
+      <tr><td>Command Prompt</td><td><code>C:\></code></td><td>OK</td></tr>
+      <tr><td>Git Bash</td><td><code>$</code></td><td>OK</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>&#128170; 万能対処法</h3>
+    <ol class="sl">
+      <li>Cursorを閉じて開き直す</li>
+      <li>PCを再起動する</li>
+      <li>Claude Codeに聞く：「〇〇というエラーが出ました。どうすればいい？」</li>
+      <li>スクリーンショットを講師に送る</li>
+    </ol>
+    <div class="box info" style="margin-top:12px"><div class="box-icon">&#128247;</div><div><strong>スクショの撮り方：</strong><br>Windows: <kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> → 範囲を選択 → LINEやメールに貼り付け<br>Mac: <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd></div></div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:30px 0;color:var(--dim);font-size:.85em">
+  Claude Code セットアップ完全版ガイド — AI研修資料<br>作成: 早川まい
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function cp(t,b){navigator.clipboard.writeText(t).then(()=>{b.textContent='&#10003; OK';b.classList.add('ok');setTimeout(()=>{b.innerHTML='コピー';b.classList.remove('ok')},1500)})}
+function tgl(li){li.classList.toggle('done');const n=document.querySelectorAll('#cl li.done').length;document.getElementById('alldone').style.display=n===document.querySelectorAll('#cl li').length?'flex':'none'}
+document.querySelectorAll('.faq').forEach(f=>f.querySelector('.faq-q').addEventListener('click',()=>f.classList.toggle('open')))
+</script>
+</body>
+</html>
